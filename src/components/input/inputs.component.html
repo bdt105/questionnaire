@@ -12,19 +12,17 @@
         </h3>
         <div *ngIf="questionnaire.showQuestions">
             <!-- Questions -->
-            <div *ngFor="let question of questionnaire.questions" class="list-group-item">
+            <div *ngFor="let question of questionnaire.questions" class="list-group-item row">
                 <i (click)="question.edit = !question.edit" class="fa fa-pencil" style="cursor: pointer;"></i>
-                <i *ngIf="!question.showAnwsers" (click)="question.showAnwsers = !question.showAnwsers" class="fa fa-plus-circle"></i>
-                <i *ngIf="question.showAnwsers" (click)="question.showAnwsers = !question.showAnwsers" class="fa fa-minus-circle"></i>
-                <span style="cursor: pointer;" (click)="question.showAnwsers = !question.showAnwsers">{{ question.questionLabel}}</span><br><br>
+                <i *ngIf="!question.showAnwsers" (click)="question.showAnwsers = !question.showAnwsers" class="fa fa-plus-circle" style="cursor: pointer;" ></i>
+                <i *ngIf="question.showAnwsers" (click)="question.showAnwsers = !question.showAnwsers" class="fa fa-minus-circle" style="cursor: pointer;" ></i>
+                <span *ngIf="question.questionLabel" style="cursor: pointer;" (click)="question.showAnwsers = !question.showAnwsers">{{ question.questionLabel}} <br></span>
                 <input *ngIf="question.edit" type="text" class="form-control" placeholder="Question" [(ngModel)]="question.question">
-                <span *ngIf="!question.edit">                     
-                    <span style="cursor: pointer;" (click)="question.showAnwsers = !question.showAnwsers">{{question.question}}</span>
-                </span>                
-                <div *ngIf="question.showAnwsers">
-                    <br>
+                <div *ngIf="!question.edit" class="col-6" style="cursor: pointer;" (click)="question.showAnwsers = !question.showAnwsers">{{question.question}}</div>
+                <div *ngIf="question.showAnwsers" class="col-6">
                     <!-- Answers -->
                     <div *ngFor="let answer of question.answers" class="list-group-item">
+                        <!-- Modifications -->
                         <form *ngIf="question.edit">
                             <div class="form-group">       
                                 <div class="input-group-prepend">
@@ -56,10 +54,13 @@
                                 <i class="fa fa-trash"></i> {{translate('Delete answer')}}
                             </button>
                         </form>
-                        <div *ngIf="!question.edit" class="form-group" style="margin: 0px">       
-                            <span>{{answer.answer}}</span>
-                            <span *ngIf="answer.correctDistance">{{translate('Distance')}} {{answer.correctDistance}}</span>
-                            <span *ngIf="answer.point">{{translate('Reward')}} {{answer.point}}</span>
+                        <!-- Read only -->
+                        <div *ngIf="!question.edit" class="row" style="margin: 0px">
+                            <div class="col-10">{{answer.answer}}</div>
+                            <div class="col-2 text-right">
+                                <span class="badge badge-pill badge-warning" *ngIf="answer.correctDistance">{{answer.correctDistance}}</span>
+                                <span class="badge badge-pill badge-success" *ngIf="answer.point">{{answer.point}}</span>
+                            </div>
                         </div>
                     </div>
                     <br>
