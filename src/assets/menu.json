@@ -1,0 +1,113 @@
+{
+    "title": "appName",
+    "contactEmail": "bernard.deregnaucourt@vidal.fr",
+    "copyright": "",
+    "version": "v1.0",
+    "logo": "./assets/logo.png",
+    "logoHref": "/home",
+    "brand": "Marque",
+    "inputZone": true,
+    "inputButtonLabel": "",
+    "inputButtonIcon": "search",
+    "inputPlaceHolder": "Search in help...",
+    "inputButtonHref": "/help/",
+    "aboutHref": "/about",
+    "navbarMenu":
+    [
+        {
+            "label": "Menu 1",
+            "href": "/help",
+            "icon": "life-ring",
+            "title": "Help !",
+            "align": "left"
+        },
+        {
+            "label": "Menu 2",
+            "href": "/play",
+            "icon": "play",
+            "title": "Play a query",
+            "align": "right"
+        },
+        {
+            "label": "Menu3",
+            "href": "/menu1",
+            "icon": "users",
+            "submenu":[
+                {
+                    "label": "Menu31",
+                    "href": "/menu31",
+                    "icon": "star"
+                },
+                {
+                    "label": "Menu31",
+                    "href": "/menu31",
+                    "icon": "star"
+                },
+                {
+                    "label": "divider"
+                },
+                {
+                    "label": "Menu32",
+                    "href": "/menu32",
+                    "icon": "star"
+                }
+            ]
+        },
+        {
+            "label": "",
+            "href": "/about",
+            "image": "./assets/logo.png",
+            "title": "About",
+            "submenu":[
+                {
+                    "label": "My profile",
+                    "href": "/user",
+                    "icon": "user"
+                },
+                {
+                    "label": "Sign in / sign out",
+                    "href": "/login",
+                    "icon": "sign-in"
+                },
+                {
+                    "label": "divider"
+                },
+                {
+                    "label": "About",
+                    "href": "/about",
+                    "icon": "star"
+                }
+            ]
+        }
+    ],
+    "sidebarMenu":
+    [
+        {
+            "label": "Menu1",
+            "href": "/menu1",
+            "icon": "users",
+            "submenu":[
+                {
+                    "label": "Menu11",
+                    "href": "/menu11",
+                    "icon": "star"
+                },
+                {
+                    "label": "Menu12",
+                    "href": "/menu12",
+                    "icon": "star"
+                }
+            ]
+        },
+        {
+            "label": "Menu2",
+            "href": "/menu2",
+            "icon": "star"
+        },
+        {
+            "label": "Login",
+            "href": "/login",
+            "icon": "user"
+        }     
+    ]
+}

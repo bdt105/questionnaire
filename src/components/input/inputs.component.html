@@ -1,0 +1,63 @@
+<h1>Questionnaires</h1>
+<div class="list-group">
+    <div *ngFor="let questionnaire of data" class="list-group-item">
+        <h3><i (click)="questionnaire.edit = !questionnaire.edit"class="fa fa-pencil"></i>
+            <span (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
+                <i *ngIf="!questionnaire.showQuestions" class="fa fa-plus-circle"></i>
+                <i *ngIf="questionnaire.showQuestions" class="fa fa-minus-circle"></i></span>
+                <input *ngIf="questionnaire.edit" type="text" class="form-control" placeholder="Question" [(ngModel)]="questionnaire.title" name="title">
+                <span *ngIf="!questionnaire.edit"  (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">{{questionnaire.title}}</span>
+            <span *ngIf="!questionnaire.edit" class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>
+        </h3>
+        <div *ngIf="questionnaire.showQuestions">
+            <div *ngFor="let question of questionnaire.questions" class="list-group-item">
+                <i (click)="question.edit = !question.edit" class="fa fa-pencil" style="cursor: pointer;"></i>
+                <i *ngIf="!question.showAnwsers" (click)="question.showAnwsers = !question.showAnwsers" class="fa fa-plus-circle"></i>
+                <i *ngIf="question.showAnwsers" (click)="question.showAnwsers = !question.showAnwsers" class="fa fa-minus-circle"></i>
+                <span style="cursor: pointer;" (click)="question.showAnwsers = !question.showAnwsers">{{ question.questionLabel}}</span><br><br>
+                <input *ngIf="question.edit" type="text" class="form-control" placeholder="Question" [(ngModel)]="question.question">
+                <span *ngIf="!question.edit">                     
+                    <span style="cursor: pointer;" (click)="question.showAnwsers = !question.showAnwsers">{{question.question}}</span>
+                </span>                
+                <div *ngIf="question.showAnwsers">
+                    <br>
+                    <div *ngFor="let answer of question.answers" class="list-group-item">
+                        <form *ngIf="question.edit">
+                            <div class="form-group">       
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Answer</span>                 
+                                    <input type="text" class="form-control" placeholder="Answer" [(ngModel)]="answer.answer" name="answer"> 
+                                </div>
+                            </div>
+                            <div class="form-group">                        
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Distance</span>
+                                    <input type="number" class="form-control" placeholder="Correct answer distance" [(ngModel)]="answer.correctDistance" name="correctDistance"> 
+                                </div>
+                            </div>
+                            <div class="form-group">                        
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Reward</span>
+                                    <input type="number" class="form-control" placeholder="Correct answer reward" [(ngModel)]="answer.point" name="point"> 
+                                    <span class="input-group-text" id="basic-addon1">points</span>
+                                </div>
+                            </div>
+                            <button type="button" (click)="deleteAnswer(answer)" class="btn btn-danger"><i class="fa fa-trash"></i> Delete answer</button>
+                        </form>
+                        <div *ngIf="!question.edit" class="form-group" style="margin: 0px">       
+                            <span>{{answer.answer}}</span>
+                            <span *ngIf="answer.correctDistance">Distance {{answer.correctDistance}}</span>
+                            <span *ngIf="answer.point">Reward {{answer.point}}</span>
+                        </div>
+                    </div>
+                    <br>
+                    <button *ngIf="question.edit" type="button" (click)="newAnswer(question)" class="btn btn-primary"><i class="fa fa-plus"></i> New answer</button>
+                </div>
+            </div>
+            <br>
+            <button type="button" class="btn btn-primary" (click)="newQuestion(questionnaire)"><i class="fa fa-plus"></i> New question</button>
+        </div>
+    </div>
+</div>
+<br>
+<button type="button" class="btn btn-primary" (click)="newQuestionnaire()"><i class="fa fa-plus"></i> New questionnaire</button>

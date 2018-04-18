@@ -1,0 +1,32 @@
+{
+    "common":
+    {
+        "applicationName": "appName",
+        "homeUrl": "/home",
+        "logToFile": true,
+        "logToConsole": true,
+        "authentificationApiBaseUrl": "http://145.239.75.15/auth/",
+        "language": "FR",
+        "contactEmail": "bdt105@gmail.com",
+        "dataUrl": "./assets/data.json"
+    },
+    "questionnaires":
+    [
+        {
+            "id": "importantWord",
+            "questionLabel": "Please translate the word",
+            "answerLabelOk": "It's correct",
+            "answerLabelNok": "It's not correct",
+            "correctDistance": 0,
+            "point": 1
+        },
+        {
+            "id": "irregularVerbs",
+            "questionLabel": "Please conjugate the verb",
+            "answerLabelOk": "It's correct",
+            "answerLabelNok": "It's not correct",
+            "correctDistance": 0,
+            "point": 1
+        }
+    ]
+}

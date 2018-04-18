@@ -1,0 +1,104 @@
+[
+    {
+        "id": "importantWord",
+        "title": "Important words",
+        "questions":
+        [
+            {
+                "id": 1,
+                "questionLabel": "Please translate",
+                "answerLabelOk": "It's correct",
+                "answerLabelNok": "It's not correct",
+                "question": "chien",
+                "answers":
+                [
+                    {
+                        "answer": "cão",
+                        "correctDistance": 2,
+                        "point": 1
+                    },
+                    {
+                        "answer": "cacharro"
+                    }
+                ],
+                "point": 1
+            },
+            {
+                "id": 2,
+                "questionLabel": "Please translate",
+                "answerLabelOk": "It's correct",
+                "answerLabelNok": "It's not correct",
+                "question": "chat",
+                "answers":
+                [
+                    {
+                        "answer": "gato"
+                    }
+                ]
+            },
+            {
+                "id": 1,
+                "questionLabel": "Please translate",
+                "answerLabelOk": "It's correct",
+                "answerLabelNok": "It's not correct",
+                "question": "garçon",
+                "answers":
+                [
+                    {
+                        "answer": "menino"
+                    },
+                    {
+                        "answer": "rapaz"
+                    },
+                    {
+                        "answer": "garoto"
+                    }
+                ],
+                "correctDistance": 0,
+                "point": 1
+            }
+            
+        ]
+    },
+    {
+        "id": "irregularVerbs",
+        "title": "Conjugate irregular verbs",
+        "questions":
+        [
+            {
+                "id": 1,
+                "questionLabel": "Please conjugate",
+                "answerLabelOk": "It's correct",
+                "answerLabelNok": "It's not correct",
+                "question": "Querer [eu]",
+                "answers":
+                [
+                    {
+                        "answer": "Eu quero"
+                    }
+                ],
+                "correctDistance": 0,
+                "point": 1
+            },
+            {
+                "id": 2,
+                "questionLabel": "Please translate",
+                "answerLabelOk": "It's correct",
+                "answerLabelNok": "It's not correct",
+                "question": "Querer [eles]",
+                "answers":
+                [
+                    {
+                        "answer": "queram"
+                    }
+                ],
+                "tips":[
+                    "Eles"
+                ],
+                "answerExplanation": "",
+                "correctDistance": 0,
+                "point": 1
+            }
+        ]
+    }
+]

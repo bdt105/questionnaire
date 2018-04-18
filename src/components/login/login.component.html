@@ -1,0 +1,41 @@
+<h5 style="text-align: center;
+    max-width: 500px;
+    margin: 20px auto;">
+<img src="./assets/logo.png" style="height: 50px">
+    <br>{{translate('Sign in to ') + getApplicationName()}}
+</h5>
+<div class="card" style="
+    padding: 20px;
+    max-width: 500px;
+	margin: 20px auto;">
+    <form name="elementForm" class="form-horizontal" [formGroup]="formGroup">
+        <fieldset>
+            <div class="form-group">
+                <label for="inputEmail" class="control-label">{{translate('Login')}}</label>
+                <input formControlName="login" type="text" class="form-control" id="inputEmail" placeholder="{{translate('Email or login')}}">
+            </div>
+            <div class="form-group">
+                <label for="inputPassword" class="control-label">{{translate('Password')}}</label>
+                <input type="password" formControlName="password" class="form-control" id="inputPassword" placeholder="{{translate('Password')}}">
+                <div class="checkbox" style="margin-top: 20px">
+                    <label>
+                        <input formControlName="rememberMe" type="checkbox"> {{translate('Remember me')}}
+                    </label>
+                </div>
+                <i *ngIf="loading" class="fa fa-spinner fa-spin" style="font-size: 2em"></i>
+            </div>
+            <div class="form-group">
+                <button type="submit" [disabled]="!formGroup.valid" class="btn btn-primary btn-block" (click)="connect()">{{translate('Connect')}}</button>
+                <button type="submit" *ngIf="isConnected" class="btn btn-danger btn-block" (click)="disconnect()">
+                    {{translate('Disconnect')}}
+                </button>
+                <small *ngIf="isConnected">{{translate('You are connected as ') + getCurrentUser().email}}</small>
+            </div>
+        </fieldset>
+        <div *ngIf="!loading && connexionAttempt && !isConnected" class="alert alert-danger">
+            {{translate('Incorrect username or password.')}}
+        </div>
+        
+        <small>{{translate('Wanna know more ? Contact ')}}<a href="{{'mailto: ' + contactEmail}}">{{contactEmail}}</a></small>
+    </form>
+</div>

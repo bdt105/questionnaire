@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="padding-bottom: 0px;padding-top: 0px;">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <i (click)="toggleSidebar()" class="fa fa-bars navbar-brand" style="font-size: 2em; cursor: pointer"></i> 
+            <a *ngIf="menu" class="navbar-brand" href="{{ menu.logoHref }}"><img src="{{ menu.logo }}" style="height: 40px"> {{translate(menu.title)}}</a>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarRestPlayer" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div *ngIf="menu && menu.navbarMenu" class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav">
+                <li *ngFor="let men of menu.navbarMenu" class="{{men.submenu ? 'nav-item dropdown' : 'nav-item'}}">
+                    <a *ngIf="!men.submenu" class="nav-link" [routerLink]="men.href" [title]="translate(men.title)">
+                        <i *ngIf="men.icon" class="fa fa-{{men.icon}}" [ngStyle]="{'color': men.color}"></i> 
+                        <img *ngIf="men.image" src="{{men.image}}" style="height: 25px">
+                        {{translate(men.label)}}
+                    </a>
+                    <a *ngIf="men.submenu" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [title]="translate(men.title)">
+                        <i *ngIf="men.icon" class="fa fa-{{men.icon}}"></i> 
+                        <img *ngIf="men.image" src="{{men.image}}" style="height: 25px">
+                        {{translate(men.label)}}<span class="caret"></span>
+                    </a>
+                    <div *ngIf="men.submenu" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <div *ngFor="let submen of men.submenu">
+                            <a *ngIf="submen && !submen.label.startsWith('divider')" class="dropdown-item" [routerLink]="submen.href" [title]="translate(men.title)">
+                                <i *ngIf="submen.icon" class="fa fa-{{submen.icon}}"></i> 
+                                {{translate(submen.label)}}
+                                <img *ngIf="submen.image" src="{{submen.image}}" style="height: 25px">                                
+                            </a>
+                            <div *ngIf="submen && submen.label == 'divider'" class="dropdown-divider"></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <form *ngIf="menu.inputZone" class="form-inline">
+                    <div class="input-group">
+                        <input [(ngModel)]="inputZone" type="text" class="form-control" placeholder="{{menu.inputPlaceHolder}}" [ngModelOptions]="{standalone: true}">
+                        <button [routerLink]="inputZone ? menu.inputButtonHref + inputZone : '/'" type="submit" class="btn btn-secondary"><i class="fa fa-search"></i> {{translate(menu.inputButtonLabel)}}</button>
+                    </div>
+                </form>
+            </ul>
+        </div>
+    </div>
+</nav>

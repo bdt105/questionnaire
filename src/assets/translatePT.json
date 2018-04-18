@@ -1,0 +1,30 @@
+[
+    {
+        "key": "Hello",
+        "value": "Bonjour"
+    },
+    {
+        "key": "Good bye",
+        "value": "Au revoir"
+    },
+    {
+        "key": "Password",
+        "value": "Senha"
+    },
+    {
+        "key": "Remember me",
+        "value": "Lembrar-me"
+    },
+    {
+        "key": "Please connect",
+        "value": "Conecte-se por favor"
+    },
+    {
+        "key": "You are connected as",
+        "value": "Você é connectado como"
+    },
+    {
+        "key": "You are not connected.",
+        "value": "Você não é connectado."
+    }
+]

@@ -1,0 +1,18 @@
+[
+    {
+        "key": "Hello",
+        "value": "Bonjour"
+    },
+    {
+        "key": "Good bye",
+        "value": "Au revoir"
+    },
+    {
+        "key": "Password",
+        "value": "Mot de passe"
+    },
+    {
+        "key": "Remember me",
+        "value": "Se souvenir de moi"
+    }    
+]
