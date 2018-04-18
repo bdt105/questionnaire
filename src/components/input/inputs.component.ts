@@ -37,8 +37,12 @@ export class InputsComponent extends GenericComponent {
     }
 
     private manageData(data: any){
-        this.data = JSON.parse(data._body);
-        this.toolbox.writeToStorage("data", this.data, true);
+        if (data && data._body){
+            this.data = JSON.parse(data._body);
+        }else{
+            this.data = [];
+        }
+        this.questionnaireService.save(this.data);
     }
 
     private manageError(error: any){
@@ -46,12 +50,15 @@ export class InputsComponent extends GenericComponent {
     }
 
     load(){        
-        this.questionnaireService.load((data: any) => this.manageData(data),
-        (error: any) => this.manageError(error));
+        this.questionnaireService.load((data: any) => this.manageData(data), (error: any) => this.manageError(error));
     }
 
     newQuestion(questionnaire: any){
         this.questionnaireService.newQuestion(questionnaire);
+    }
+
+    newQuestionnaire(questionnaire: any){
+        this.questionnaireService.newQuestionnaire(this.data);
     }
 
     newAnswer(question: any){
@@ -60,5 +67,17 @@ export class InputsComponent extends GenericComponent {
 
     deleteAnswer(question: any, answer: any){
         this.questionnaireService.deleteAnswer(question, answer);
+    }
+
+    deleteQuestion(questionnaire: any, question: any){
+        this.questionnaireService.deleteQuestion(questionnaire, question);
+    }
+
+    save(){
+        this.questionnaireService.save(this.data);
+    }
+
+    importQuestions(questionnaire: any, importQuestions: string){
+        this.questionnaireService.importQuestions(questionnaire, importQuestions);
     }
 }

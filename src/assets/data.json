@@ -13,11 +13,13 @@
                 "answers":
                 [
                     {
+                        "id": 2,
                         "answer": "cão",
                         "correctDistance": 2,
                         "point": 1
                     },
-                    {
+                    {   
+                        "id": 3,
                         "answer": "cacharro"
                     }
                 ],
@@ -32,6 +34,7 @@
                 "answers":
                 [
                     {
+                        "id": 5,
                         "answer": "gato"
                     }
                 ]
@@ -45,12 +48,15 @@
                 "answers":
                 [
                     {
+                        "id": 6,
                         "answer": "menino"
                     },
                     {
+                        "id": 7,
                         "answer": "rapaz"
                     },
                     {
+                        "id": 8,
                         "answer": "garoto"
                     }
                 ],
@@ -74,6 +80,7 @@
                 "answers":
                 [
                     {
+                        "id": 9,
                         "answer": "Eu quero"
                     }
                 ],
@@ -89,6 +96,7 @@
                 "answers":
                 [
                     {
+                        "id": 10,
                         "answer": "queram"
                     }
                 ],

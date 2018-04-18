@@ -7,7 +7,7 @@ import { ConfigurationService } from './configuration.service';
 export class QuestionnaireService {
 
     private toolbox: Toolbox = new Toolbox(); 
-    private storageKey = "data";
+    public storageKey = "data";
     public data: any;
     public error: any;
 
@@ -26,23 +26,26 @@ export class QuestionnaireService {
         return this.data;
     }
 
-    newQuestionnaire(title: string){
-        let id = this.toolbox.uniqueId();
+    newQuestionnaire(data: any){
+        let id = this.toolbox.getUniqueId();
         let q = {
             "id": id,
-            "title": title,
+            "title": "",
             "questions":
             [
             ]
         };
-    
+        if (!data){
+            data = [];
+        }
+        data.push(q);
         return q;
     }
 
-    newQuestion(questionnaire: any){
-        let id = this.toolbox.uniqueId();
+    newQuestion(questionnaire: any = null){
+        let id = this.toolbox.getUniqueId();
         let q = {
-            "id": id,
+            "id": (questionnaire ? questionnaire.id + "_" : "") + id,
             "questionLabel": "",
             "answerLabelOk": "",
             "answerLabelNok": "",
@@ -61,10 +64,10 @@ export class QuestionnaireService {
         return q;
     }
 
-    newAnswer(question: any){
-        let id = this.toolbox.uniqueId();
+    newAnswer(question: any = null){
+        let id = this.toolbox.getUniqueId();
         let a =  {
-            "id": id,
+            "id": (question ? question.id + "_" : "") + id,
             "answer": "",
             "correctDistance": 0,
             "point": 1
@@ -78,8 +81,49 @@ export class QuestionnaireService {
         return a;
     }
 
-    deleteAnswer(question: any, answer: any){
+    deleteQuestion(questionnaire: any, question: any){
+        if (questionnaire.questions){
+            for (var i=0; i < questionnaire.questions.length; i++){
+                if (questionnaire.questions[i].id == question.id){
+                    questionnaire.questions.splice(i, 1);
+                }
+            }
+        }
+    }
 
+    deleteAnswer(question: any, answer: any){
+        if (question.answers){
+            for (var i=0; i < question.answers.length; i++){
+                if (question.answers[i].id == answer.id){
+                    question.answers.splice(i, 1);
+                }
+            }
+        }
+    }
+
+    save(data: any){
+        this.toolbox.writeToStorage(this.storageKey, this.data, true);
+    }
+
+    importQuestions(questionnaire: any, questionsToImport: string){
+        // Format questionLabel|answerLabelOk|answerLabelNok|question1|answer1|answer2|answerN|..|
+        if (questionsToImport && questionsToImport.length > 0){
+            let lines = questionsToImport.split("\n");
+            for (var l = 0 ; l < lines.length ; l++){
+                var qs = lines[l].split("|");
+                let q = this.newQuestion();
+                q.questionLabel = qs[0];
+                q.answerLabelOk = qs[1];
+                q.answerLabelNok = qs[2];
+                q.question = qs[3];
+                for (var i = 4; i < qs.length; i++){
+                    let a = this.newAnswer();
+                    a.answer = qs[i];
+                    q.answers.push(a);
+                }
+                questionnaire.questions.push(q);
+            }
+        }
     }
 
 }

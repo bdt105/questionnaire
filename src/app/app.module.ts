@@ -23,6 +23,9 @@ import { TypeaheadModule } from 'ngx-bootstrap';
 import { PaginationModule } from 'ngx-bootstrap';
 import { ModalModule } from 'ngx-bootstrap';
 
+// Confirmations https://mattlewis92.github.io/angular-confirmation-popover/
+import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
+
 // App
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -62,6 +65,7 @@ export function init (config: ConfigurationService) {
         AccordionModule,
         HttpModule,
         ReactiveFormsModule,
+        ConfirmationPopoverModule.forRoot({"confirmButtonType": "danger"}),
         SidebarModule.forRoot()
     ],
     providers: [

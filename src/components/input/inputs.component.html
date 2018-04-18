@@ -1,5 +1,6 @@
-<h1>Questionnaires</h1>
+<h1>{{translate('Questionnaires')}}</h1>
 <div class="list-group">
+    <!-- Questionnaires -->
     <div *ngFor="let questionnaire of data" class="list-group-item">
         <h3><i (click)="questionnaire.edit = !questionnaire.edit"class="fa fa-pencil"></i>
             <span (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
@@ -10,6 +11,7 @@
             <span *ngIf="!questionnaire.edit" class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>
         </h3>
         <div *ngIf="questionnaire.showQuestions">
+            <!-- Questions -->
             <div *ngFor="let question of questionnaire.questions" class="list-group-item">
                 <i (click)="question.edit = !question.edit" class="fa fa-pencil" style="cursor: pointer;"></i>
                 <i *ngIf="!question.showAnwsers" (click)="question.showAnwsers = !question.showAnwsers" class="fa fa-plus-circle"></i>
@@ -21,41 +23,82 @@
                 </span>                
                 <div *ngIf="question.showAnwsers">
                     <br>
+                    <!-- Answers -->
                     <div *ngFor="let answer of question.answers" class="list-group-item">
                         <form *ngIf="question.edit">
                             <div class="form-group">       
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">Answer</span>                 
+                                    <span class="input-group-text" id="basic-addon1">{{translate('Answer')}}</span>                 
                                     <input type="text" class="form-control" placeholder="Answer" [(ngModel)]="answer.answer" name="answer"> 
                                 </div>
                             </div>
                             <div class="form-group">                        
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">Distance</span>
+                                    <span class="input-group-text" id="basic-addon1">{{translate('Distance')}}</span>
                                     <input type="number" class="form-control" placeholder="Correct answer distance" [(ngModel)]="answer.correctDistance" name="correctDistance"> 
                                 </div>
                             </div>
                             <div class="form-group">                        
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">Reward</span>
+                                    <span class="input-group-text" id="basic-addon1">{{translate('Reward')}}</span>
                                     <input type="number" class="form-control" placeholder="Correct answer reward" [(ngModel)]="answer.point" name="point"> 
-                                    <span class="input-group-text" id="basic-addon1">points</span>
+                                    <span class="input-group-text" id="basic-addon1">{{translate('points')}}</span>
                                 </div>
                             </div>
-                            <button type="button" (click)="deleteAnswer(answer)" class="btn btn-danger"><i class="fa fa-trash"></i> Delete answer</button>
+                            <button type="button" class="btn btn-danger"
+                            mwlConfirmationPopover
+                                [popoverTitle]="translate('Delete answer')"
+                                [popoverMessage]="translate('Are you sure you want to delete that element?')"
+                                [confirmText]="translate('Yes')"
+                                [cancelText]="translate('No')"
+                                placement="right"
+                                (confirm)="deleteAnswer(question, answer)">
+                                <i class="fa fa-trash"></i> {{translate('Delete answer')}}
+                            </button>
                         </form>
                         <div *ngIf="!question.edit" class="form-group" style="margin: 0px">       
                             <span>{{answer.answer}}</span>
-                            <span *ngIf="answer.correctDistance">Distance {{answer.correctDistance}}</span>
-                            <span *ngIf="answer.point">Reward {{answer.point}}</span>
+                            <span *ngIf="answer.correctDistance">{{translate('Distance')}} {{answer.correctDistance}}</span>
+                            <span *ngIf="answer.point">{{translate('Reward')}} {{answer.point}}</span>
                         </div>
                     </div>
                     <br>
-                    <button *ngIf="question.edit" type="button" (click)="newAnswer(question)" class="btn btn-primary"><i class="fa fa-plus"></i> New answer</button>
+                    <button *ngIf="question.edit" type="button" (click)="newAnswer(question)" class="btn btn-primary"><i class="fa fa-plus"></i> {{translate('New answer')}}</button>
+                    <button *ngIf="question.edit" type="button" class="btn btn-danger" 
+                    mwlConfirmationPopover
+                                [popoverTitle]="translate('Delete question')"
+                                [popoverMessage]="translate('Are you sure you want to delete that element?')"
+                                [confirmText]="translate('Yes')"
+                                [cancelText]="translate('No')"
+                                placement="right"
+                                (confirm)="deleteQuestion(questionnaire, question)">
+                        <i class="fa fa-trash"></i> {{translate('Delete question')}}
+                    </button>
                 </div>
             </div>
             <br>
-            <button type="button" class="btn btn-primary" (click)="newQuestion(questionnaire)"><i class="fa fa-plus"></i> New question</button>
+            <button *ngIf="questionnaire.edit" type="button" class="btn btn-primary" (click)="newQuestion(questionnaire)"><i class="fa fa-plus"></i> {{translate('New question')}}</button>
+            <button *ngIf="questionnaire.edit" type="button" class="btn btn-danger" 
+                mwlConfirmationPopover
+                            [popoverTitle]="translate('Delete questionnaire')"
+                            [popoverMessage]="translate('Are you sure you want to delete that element?')"
+                            [confirmText]="translate('Yes')"
+                            [cancelText]="translate('No')"
+                            placement="right"
+                            (confirm)="deleteQuestionnaire(questionnaire)">
+                <i class="fa fa-trash"></i> {{translate('Delete questionnaire')}}
+            </button>
+            <button *ngIf="questionnaire.edit" type="button" class="btn btn-warning" (click)="questionnaire.importQuestions = !questionnaire.importQuestions">
+                <i class="fa fa-download"></i> {{translate('Import questions')}}
+            </button>
+            <div *ngIf="questionnaire.edit && questionnaire.importQuestions">
+                <br>
+                <textarea class="form-control" placeholder="{{translate('Copy and paste yours questions. Format questionLabel|answerLabelOk|answerLabelNok|question1|answer1|answer2|answerN|..| etc. Each line is a queston, all columns are mandatory but can be empty.')}}"
+                [(ngModel)]="questionnaire.qestionsToImport">
+                </textarea>
+                <br>
+                <button type="button" class="btn btn-warning" (click)="importQuestions(questionnaire, questionnaire.qestionsToImport)"><i class="fa fa-download"></i> {{translate('Import')}}</button>
+            </div>
         </div>
     </div>
 </div>
