@@ -11,7 +11,10 @@ import { LoginComponent } from '../components/login/login.component';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { UserComponent } from '../components/user/user.component';
-import { InputsComponent } from '../components/input/inputs.component';
+import { QuestionnairesComponent } from '../components/questionnaire/questionnaires.component';
+import { TestComponent } from '../components/test/test.component';
+import { QuestionComponent } from '../components/question/question.component';
+import { QuestionCheckComponent } from '../components/question/questionCheck.component';
 
 // Sidebar module https://github.com/arkon/ng-sidebar
 import { SidebarModule } from 'ng-sidebar';
@@ -22,6 +25,7 @@ import { TabsModule } from 'ngx-bootstrap';
 import { TypeaheadModule } from 'ngx-bootstrap';
 import { PaginationModule } from 'ngx-bootstrap';
 import { ModalModule } from 'ngx-bootstrap';
+import { ProgressbarModule } from 'ngx-bootstrap';
 
 // Confirmations https://mattlewis92.github.io/angular-confirmation-popover/
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
@@ -56,7 +60,10 @@ export function init (config: ConfigurationService) {
         LoginComponent,
         UserComponent,
         AboutComponent,
-        InputsComponent
+        QuestionnairesComponent,
+        TestComponent,
+        QuestionComponent,
+        QuestionCheckComponent
     ],
     imports: [
         BrowserModule,
@@ -65,6 +72,7 @@ export function init (config: ConfigurationService) {
         AccordionModule,
         HttpModule,
         ReactiveFormsModule,
+        ProgressbarModule.forRoot(),
         ConfirmationPopoverModule.forRoot({"confirmButtonType": "danger"}),
         SidebarModule.forRoot()
     ],

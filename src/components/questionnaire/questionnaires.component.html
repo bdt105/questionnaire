@@ -6,23 +6,26 @@
             <span (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
                 <i *ngIf="!questionnaire.showQuestions" class="fa fa-plus-circle"></i>
                 <i *ngIf="questionnaire.showQuestions" class="fa fa-minus-circle"></i></span>
-                <input *ngIf="questionnaire.edit" type="text" class="form-control" placeholder="Question" [(ngModel)]="questionnaire.title" name="title">
+                <input *ngIf="questionnaire.edit" type="text" class="form-control" placeholder="{{translate('Questionnaie name')}}" [(ngModel)]="questionnaire.title" name="title">
                 <span *ngIf="!questionnaire.edit"  (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">{{questionnaire.title}}</span>
             <span *ngIf="!questionnaire.edit" class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>
         </h3>
         <div *ngIf="questionnaire.showQuestions">
             <!-- Questions -->
-            <div *ngFor="let question of questionnaire.questions" class="list-group-item row">
-                <i (click)="question.edit = !question.edit" class="fa fa-pencil" style="cursor: pointer;"></i>
+            <div *ngFor="let question of questionnaire.questions" class="list-group-item">
+                <question [question]=question></question>
+                <!-- <i (click)="question.edit = !question.edit" class="fa fa-pencil" style="cursor: pointer;"></i>
                 <i *ngIf="!question.showAnwsers" (click)="question.showAnwsers = !question.showAnwsers" class="fa fa-plus-circle" style="cursor: pointer;" ></i>
                 <i *ngIf="question.showAnwsers" (click)="question.showAnwsers = !question.showAnwsers" class="fa fa-minus-circle" style="cursor: pointer;" ></i>
                 <span *ngIf="question.questionLabel" style="cursor: pointer;" (click)="question.showAnwsers = !question.showAnwsers">{{ question.questionLabel}} <br></span>
-                <input *ngIf="question.edit" type="text" class="form-control" placeholder="Question" [(ngModel)]="question.question">
-                <div *ngIf="!question.edit" class="col-6" style="cursor: pointer;" (click)="question.showAnwsers = !question.showAnwsers">{{question.question}}</div>
-                <div *ngIf="question.showAnwsers" class="col-6">
-                    <!-- Answers -->
+                <input *ngIf="question.edit" type="text" class="form-control" placeholder="{{translate('Question')}}" [(ngModel)]="question.question">
+                <input *ngIf="question.edit" type="text" class="form-control" placeholder="{{translate('Detail')}}" [(ngModel)]="question.detail">
+                <div *ngIf="!question.edit" style="cursor: pointer;margin-bottom: 10px; margin-top: 10px" (click)="question.showAnwsers = !question.showAnwsers">
+                    {{question.question}}<br>
+                    {{question.detail}}
+                </div>
+                <div *ngIf="question.showAnwsers">
                     <div *ngFor="let answer of question.answers" class="list-group-item">
-                        <!-- Modifications -->
                         <form *ngIf="question.edit">
                             <div class="form-group">       
                                 <div class="input-group-prepend">
@@ -54,7 +57,6 @@
                                 <i class="fa fa-trash"></i> {{translate('Delete answer')}}
                             </button>
                         </form>
-                        <!-- Read only -->
                         <div *ngIf="!question.edit" class="row" style="margin: 0px">
                             <div class="col-10">{{answer.answer}}</div>
                             <div class="col-2 text-right">
@@ -66,16 +68,16 @@
                     <br>
                     <button *ngIf="question.edit" type="button" (click)="newAnswer(question)" class="btn btn-primary"><i class="fa fa-plus"></i> {{translate('New answer')}}</button>
                     <button *ngIf="question.edit" type="button" class="btn btn-danger" 
-                    mwlConfirmationPopover
-                                [popoverTitle]="translate('Delete question')"
-                                [popoverMessage]="translate('Are you sure you want to delete that element?')"
-                                [confirmText]="translate('Yes')"
-                                [cancelText]="translate('No')"
-                                placement="right"
-                                (confirm)="deleteQuestion(questionnaire, question)">
+                        mwlConfirmationPopover
+                            [popoverTitle]="translate('Delete question')"
+                            [popoverMessage]="translate('Are you sure you want to delete that element?')"
+                            [confirmText]="translate('Yes')"
+                            [cancelText]="translate('No')"
+                            placement="right"
+                            (confirm)="deleteQuestion(questionnaire, question)">
                         <i class="fa fa-trash"></i> {{translate('Delete question')}}
                     </button>
-                </div>
+                </div> -->
             </div>
             <br>
             <button *ngIf="questionnaire.edit" type="button" class="btn btn-primary" (click)="newQuestion(questionnaire)"><i class="fa fa-plus"></i> {{translate('New question')}}</button>
@@ -94,7 +96,7 @@
             </button>
             <div *ngIf="questionnaire.edit && questionnaire.importQuestions">
                 <br>
-                <textarea class="form-control" placeholder="{{translate('Copy and paste yours questions. Format questionLabel|answerLabelOk|answerLabelNok|question1|answer1|answer2|answerN|..| etc. Each line is a queston, all columns are mandatory but can be empty.')}}"
+                <textarea class="form-control" placeholder="{{translate('Copy and paste yours questions. Format questionLabel|answerLabelOk|answerLabelNok|question1|detail|answer1|answer2|answerN|..| etc. Each line is a queston, all columns are mandatory but can be empty.')}}"
                 [(ngModel)]="questionnaire.qestionsToImport">
                 </textarea>
                 <br>
@@ -102,6 +104,7 @@
             </div>
         </div>
     </div>
+    <button type="button" class="btn btn-warning" (click)="save()"><i class="fa fa-save"></i> Save questionnaires</button>
 </div>
 <br>
 <button type="button" class="btn btn-primary" (click)="newQuestionnaire()"><i class="fa fa-plus"></i> New questionnaire</button>

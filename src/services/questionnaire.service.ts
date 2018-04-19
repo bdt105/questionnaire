@@ -8,7 +8,6 @@ export class QuestionnaireService {
 
     private toolbox: Toolbox = new Toolbox(); 
     public storageKey = "data";
-    public data: any;
     public error: any;
 
     constructor (private configurationService: ConfigurationService, private http: Http){
@@ -20,10 +19,6 @@ export class QuestionnaireService {
             (data: any) => callbackSuccess(data),
             (error: any) => callbackFailure(error)
         );
-    }
-
-    get(){
-        return this.data;
     }
 
     newQuestionnaire(data: any){
@@ -50,6 +45,7 @@ export class QuestionnaireService {
             "answerLabelOk": "",
             "answerLabelNok": "",
             "question": "",
+            "detail": "",
             "answers":
             [
             ],
@@ -91,6 +87,16 @@ export class QuestionnaireService {
         }
     }
 
+    deleteQuestionnaire(data: any, questionnaire: any){
+        if (data && data.length > 0){
+            for (var i=0; i < data.length; i++){
+                if (data[i].id == questionnaire.id){
+                    data.splice(i, 1);
+                }
+            }
+        }
+    }
+
     deleteAnswer(question: any, answer: any){
         if (question.answers){
             for (var i=0; i < question.answers.length; i++){
@@ -101,12 +107,16 @@ export class QuestionnaireService {
         }
     }
 
-    save(data: any){
-        this.toolbox.writeToStorage(this.storageKey, this.data, true);
+    saveToLocal(data: any){
+        this.toolbox.writeToStorage(this.storageKey, data, true);
+    }
+
+    loadFromLocal(){
+        return this.toolbox.readFromStorage(this.storageKey);
     }
 
     importQuestions(questionnaire: any, questionsToImport: string){
-        // Format questionLabel|answerLabelOk|answerLabelNok|question1|answer1|answer2|answerN|..|
+        // Format questionLabel|answerLabelOk|answerLabelNok|detail|question1|answer1|answer2|answerN|..|
         if (questionsToImport && questionsToImport.length > 0){
             let lines = questionsToImport.split("\n");
             for (var l = 0 ; l < lines.length ; l++){
@@ -115,15 +125,31 @@ export class QuestionnaireService {
                 q.questionLabel = qs[0];
                 q.answerLabelOk = qs[1];
                 q.answerLabelNok = qs[2];
-                q.question = qs[3];
-                for (var i = 4; i < qs.length; i++){
-                    let a = this.newAnswer();
-                    a.answer = qs[i];
-                    q.answers.push(a);
+                q.detail = qs[3];
+                q.question = qs[4];
+                for (var i = 5; i < qs.length; i++){
+                    if (qs[i]){
+                        let a = this.newAnswer();
+                        a.answer = qs[i];
+                        q.answers.push(a);
+                    }
                 }
                 questionnaire.questions.push(q);
             }
         }
+    }
+
+    checkQuestion(question: any, answer: string){
+        question.status = false;
+        for (var i=0; i < question.answers.length; i++){
+            if (!question.correctDistance || question.correctDistance == 0){
+                if (answer == question.answers[i].answer){
+                    question.status = true;
+                    break;
+                }
+            }
+        }
+        question.checked = true;
     }
 
 }

@@ -11,12 +11,12 @@ import { Toolbox, Rest } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
 
 @Component({
-    selector: 'inputs',
-    templateUrl: './inputs.component.html',
+    selector: 'questionnaires',
+    templateUrl: './questionnaires.component.html',
     providers: []
 })
 
-export class InputsComponent extends GenericComponent {
+export class QuestionnairesComponent extends GenericComponent {
 
 
     private toolbox: Toolbox = new Toolbox();
@@ -32,7 +32,6 @@ export class InputsComponent extends GenericComponent {
     }
 
     ngOnInit(){
-        this.questionnaireService.get();
         this.load();
     }
 
@@ -42,11 +41,12 @@ export class InputsComponent extends GenericComponent {
         }else{
             this.data = [];
         }
-        this.questionnaireService.save(this.data);
+        this.questionnaireService.saveToLocal(this.data);
     }
 
     private manageError(error: any){
         this.error = error;
+        this.data = this.questionnaireService.loadFromLocal();
     }
 
     load(){        
@@ -58,6 +58,9 @@ export class InputsComponent extends GenericComponent {
     }
 
     newQuestionnaire(questionnaire: any){
+        if (!this.data){
+            this.data = [];
+        }
         this.questionnaireService.newQuestionnaire(this.data);
     }
 
@@ -73,11 +76,16 @@ export class InputsComponent extends GenericComponent {
         this.questionnaireService.deleteQuestion(questionnaire, question);
     }
 
+    deleteQuestionnaire(questionnaire: any){
+        this.questionnaireService.deleteQuestionnaire(this.data, questionnaire);        
+    }
+
     save(){
-        this.questionnaireService.save(this.data);
+        this.questionnaireService.saveToLocal(this.data);
     }
 
     importQuestions(questionnaire: any, importQuestions: string){
         this.questionnaireService.importQuestions(questionnaire, importQuestions);
+        this.questionnaireService.saveToLocal(this.data);
     }
 }

@@ -1,0 +1,77 @@
+<div class="list-group-item">
+    <h1>{{translate('Define your test')}}</h1>
+    <form>
+        <div class="form-group row">
+            <label for="exampleInputEmail1" class="col-2 col-form-label">{{translate('Choose your questionnaire(s)')}}</label>
+            <div class="col-10" style="padding: 0;">
+                <div *ngFor="let questionnaire of data">
+                    <input type="checkbox" [(ngModel)]="questionnaire.test" id="defaultCheck1" name="qus" (change)="selectQuestionnaire()"> {{questionnaire.title}}
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="exampleInputPassword1" class="col-2 col-form-label">{{translate('How many questions to ask ?')}}</label>
+            <input type="number" class="form-control col-10" id="exampleInputPassword1" placeholder="Number of questions to ask (empty means the whole questionnaire)" [(ngModel)]="nbQuestions" name="nbQuestions">
+        </div>
+        <div class="form-group row">
+            <label for="exampleInputPassword1" class="col-2 col-form-label">{{translate('Random questions')}}</label>
+            <div class="col-10" style="padding: 0;"><input type="checkbox" value="" id="defaultCheck1" [(ngModel)]="randomQuestions" name="randomQuestions"></div>
+        </div>
+        <div class="form-group row">
+            <label for="exampleInputPassword1" class="col-2 col-form-label">{{translate('Next question if correct')}}</label>
+            <div class="col-10" style="padding: 0;"><input type="checkbox" value="" id="defaultCheck1"  [(ngModel)]="nextIfCorrect" name="nextIfCorrect"></div>
+        </div>
+        <button type="submit" class="btn btn-primary" (click)="start()"><i class="fa fa-play"></i> {{translate('Let\'s go')}}</button>
+    </form>
+</div>
+<br>
+<div  class="list-group-item" *ngIf="testInProgress && currentQuestions && currentQuestions[currentQuestionIndex]">
+    <h1>{{translate('Test in progress')}} <span class="badge badge-pill badge-primary">{{currentQuestionIndex + 1}} / {{nbQuestions}}</span></h1>
+    <br>
+    <progressbar [max]="nbQuestions" [value]="currentQuestionIndex + 1"></progressbar>
+    <br>
+    <span *ngIf="startDate">{{translate('Start date')}} {{startDate | date: 'dd/MM/yyyy HH:mm:ss'}}<br></span>
+    <span *ngIf="endDate">{{translate('End date')}} {{endDate | date: 'dd/MM/yyyy HH:mm:ss'}}<br></span>
+    <!-- Results -->
+    <div style="margin-top: 20px" class="jumbotron" *ngIf="currentQuestions[currentQuestionIndex].checked && currentQuestionIndex == (currentQuestions.length - 1)">
+        <h1>{{translate('Congratulations!! You finished your test. Your score is: ') + getScore().score + '/' + currentQuestions.length + ' (' + getScore().pourcentage + '%)'}}</h1>
+        <span (click)="showResults = ! showResults">{{translate('See all questions and answers')}}</span>
+        <div *ngIf="showResults">
+            <div *ngFor="let question of currentQuestions">
+                <questionCheck [question]="question"></questionCheck>
+            </div>
+        </div>
+    </div>
+
+    <div class="row align-items-center justify-content-md-center">
+        <div class="col-2">
+            <button [disabled]="currentQuestionIndex <= 0" type="submit" class="btn btn-primary" (click)="previousQuestion()"><i class="fa fa-step-backward"></i> {{translate('Previous')}}</button>
+        </div>
+
+        <form class="col-8">
+            <div class="card">
+                <div class="card-header">
+                    {{ currentQuestions[currentQuestionIndex].questionLabel }}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ currentQuestions[currentQuestionIndex].question }} <br>
+                        {{ currentQuestions[currentQuestionIndex].detail }}
+                    </h5>
+                    <input type="text" class="form-control" [(ngModel)]="currentQuestions[currentQuestionIndex].customAnswer" name="qus" style="margin-bottom:20px">
+                    <button type="submit" class="btn btn-success" 
+                        (click)="checkQuestion(currentQuestions[currentQuestionIndex], currentQuestions[currentQuestionIndex].customAnswer)">
+                        <i class="fa fa-check"></i> {{translate('Check')}}
+                    </button>
+                    <div *ngIf="currentQuestions[currentQuestionIndex].checked">
+                        <br>
+                        <questionCheck [question]="currentQuestions[currentQuestionIndex]"></questionCheck>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="col-2 text-right">
+            <button [disabled]="!currentQuestions[currentQuestionIndex].checked || currentQuestionIndex >= (currentQuestions.length - 1)" type="submit" class="btn btn-primary" (click)="nextQuestion()"><i class="fa fa-step-forward"></i> {{translate('Next')}}</button>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 {
-    "title": "appName",
-    "contactEmail": "bernard.deregnaucourt@vidal.fr",
+    "title": "Questionnaires",
+    "contactEmail": "bdt105@gmail.com",
     "copyright": "",
     "version": "v1.0",
     "logo": "./assets/logo.png",
@@ -15,43 +15,18 @@
     "navbarMenu":
     [
         {
-            "label": "Menu 1",
-            "href": "/help",
-            "icon": "life-ring",
-            "title": "Help !",
+            "label": "Questionnaires",
+            "href": "/inputs",
+            "icon": "question",
+            "title": "Questionnaires",
             "align": "left"
         },
         {
-            "label": "Menu 2",
-            "href": "/play",
-            "icon": "play",
-            "title": "Play a query",
+            "label": "Test",
+            "href": "/test",
+            "icon": "pencil-square-o",
+            "title": "Test",
             "align": "right"
-        },
-        {
-            "label": "Menu3",
-            "href": "/menu1",
-            "icon": "users",
-            "submenu":[
-                {
-                    "label": "Menu31",
-                    "href": "/menu31",
-                    "icon": "star"
-                },
-                {
-                    "label": "Menu31",
-                    "href": "/menu31",
-                    "icon": "star"
-                },
-                {
-                    "label": "divider"
-                },
-                {
-                    "label": "Menu32",
-                    "href": "/menu32",
-                    "icon": "star"
-                }
-            ]
         },
         {
             "label": "",
