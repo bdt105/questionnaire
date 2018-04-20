@@ -7,6 +7,7 @@
         "logToConsole": true,
         "authentificationApiBaseUrl": "http://145.239.75.15/auth/",
         "language": "FR",
+        "saveApiBaseUrl": "http://vps453669.ovh.net/fs/",
         "contactEmail": "bdt105@gmail.com",
         "dataUrl": "./assets/data.json"
     },

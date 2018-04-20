@@ -34,9 +34,11 @@ export class TestComponent extends GenericComponent {
 
     public currentQuestions: any;
 
-    private currentQuestionIndex = 0;
+    public currentQuestionIndex = 0;
 
     public nextIfCorrect = true;
+
+    private name = "name";
 
     public startDate = null;
     public endDate = null;
@@ -62,11 +64,16 @@ export class TestComponent extends GenericComponent {
 
     private manageError(error: any){
         this.error = error;
-        this.data = this.questionnaireService.loadFromLocal();
+        let raw = this.questionnaireService.loadFromLocal();
+        this.data = this.toolbox.parseJson(raw);
+        if (!this.data){
+            this.data = [];
+        }
+        console.log("failure load", this.data);
     }
 
     load(){        
-        this.questionnaireService.load((data: any) => this.manageData(data), (error: any) => this.manageError(error));
+        this.questionnaireService.load((data: any) => this.manageData(data), (error: any) => this.manageError(error), this.name);
     }
 
     private generateTest(){

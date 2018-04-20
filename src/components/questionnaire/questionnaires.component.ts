@@ -25,6 +25,8 @@ export class QuestionnairesComponent extends GenericComponent {
     public data: any;
     public error: any;
 
+    private name = "name";
+
     constructor(public configurationService: ConfigurationService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
         public menuService: MenuService, private http: Http){
@@ -35,30 +37,37 @@ export class QuestionnairesComponent extends GenericComponent {
         this.load();
     }
 
-    private manageData(data: any){
+    private successLoad(data: any){
         if (data && data._body){
-            this.data = JSON.parse(data._body);
+            this.data = this.toolbox.parseJson(data._body);
         }else{
             this.data = [];
         }
         this.questionnaireService.saveToLocal(this.data);
+        console.log("success load", this.data);
     }
 
-    private manageError(error: any){
+    private failureLoad(error: any){
         this.error = error;
-        this.data = this.questionnaireService.loadFromLocal();
+        let raw = this.questionnaireService.loadFromLocal();
+        this.data = this.toolbox.parseJson(raw);
+        if (!this.data){
+            this.data = [];
+        }
+        console.log("failure load", this.data);
     }
 
     load(){        
-        this.questionnaireService.load((data: any) => this.manageData(data), (error: any) => this.manageError(error));
+        this.questionnaireService.load(
+            (data: any) => this.successLoad(data), (error: any) => this.failureLoad(error), this.name);
     }
 
     newQuestion(questionnaire: any){
         this.questionnaireService.newQuestion(questionnaire);
     }
 
-    newQuestionnaire(questionnaire: any){
-        if (!this.data){
+    newQuestionnaire(){
+        if (!this.data || this.data == "undefined"){
             this.data = [];
         }
         this.questionnaireService.newQuestionnaire(this.data);
@@ -80,8 +89,18 @@ export class QuestionnairesComponent extends GenericComponent {
         this.questionnaireService.deleteQuestionnaire(this.data, questionnaire);        
     }
 
+    private successSave(data: any){
+        console.log("success save", data);
+    }
+
+    private failureSave(error: any){
+        console.log("failure save", error);
+    }
+
     save(){
-        this.questionnaireService.saveToLocal(this.data);
+        this.questionnaireService.save(
+            (data: any) => this.successSave(data), 
+            (error: any) => this.failureSave(error), this.data, this.name);
     }
 
     importQuestions(questionnaire: any, importQuestions: string){

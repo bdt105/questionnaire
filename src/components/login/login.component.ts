@@ -54,7 +54,7 @@ export class LoginComponent extends GenericComponent{
         this.isConnected = this.connexionService.isConnected();
     }
     
-    private connect (){
+    connect (){
         this.connexionAttempt = true;
         this.loading = true;
         this.connexionService.connect(

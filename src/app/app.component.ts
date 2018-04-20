@@ -25,6 +25,10 @@ export class AppComponent {
         return this.translateService.translate(text);
     }
 
+	sideMenuClick(){
+		this.sidebarOpened = false;
+	}    
+
     public getCurrentUser(){
         let usr = this.connexionService.getUser();
         return usr;

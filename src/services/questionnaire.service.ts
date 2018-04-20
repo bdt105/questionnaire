@@ -13,9 +13,11 @@ export class QuestionnaireService {
     constructor (private configurationService: ConfigurationService, private http: Http){
     }
 
-    load(callbackSuccess: Function, callbackFailure: Function){
-        let dataUrl = this.configurationService.get().common.dataUrl;
-        this.http.get(dataUrl).subscribe(
+    load(callbackSuccess: Function, callbackFailure: Function, name: string){
+        let url = this.configurationService.get().common.saveApiBaseUrl;
+        console.log("data url", url);
+        let body = {"directory": name, "fileName": "questionnaires.json"};
+        this.http.post(url, body).subscribe(
             (data: any) => callbackSuccess(data),
             (error: any) => callbackFailure(error)
         );
@@ -111,8 +113,19 @@ export class QuestionnaireService {
         this.toolbox.writeToStorage(this.storageKey, data, true);
     }
 
-    loadFromLocal(){
-        return this.toolbox.readFromStorage(this.storageKey);
+    save(callbackSuccess: Function, callbackFailure: Function, data: any, name: string){
+        this.saveToLocal(data);
+        let url = this.configurationService.get().common.saveApiBaseUrl;
+        console.log("data url", url);
+        let body = {"directory": name, "fileName": "questionnaires.json", "content": JSON.stringify(data)};
+        this.http.put(url, body).subscribe(
+            (data: any) => callbackSuccess(data),
+            (error: any) => callbackFailure(error)
+        );
+    }
+
+    loadFromLocal(parseJson: boolean = false){
+        return this.toolbox.readFromStorage(this.storageKey, parseJson);
     }
 
     importQuestions(questionnaire: any, questionsToImport: string){
