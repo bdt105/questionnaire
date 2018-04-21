@@ -17,8 +17,9 @@ export class QuestionnaireService {
     load(callbackSuccess: Function, callbackFailure: Function){
         let url = this.configurationService.get().common.saveApiBaseUrl;
         let user = this.connexionService.getUser();
+        let directory = user.email.toUpperCase();
         console.log("data url", url);
-        let body = {"directory": user.email, "fileName": "questionnaires.json"};
+        let body = {"directory": directory, "fileName": "questionnaires.json"};
         this.http.post(url, body).subscribe(
             (data: any) => callbackSuccess(data),
             (error: any) => callbackFailure(error)
@@ -32,7 +33,9 @@ export class QuestionnaireService {
             "title": "",
             "questions":
             [
-            ]
+            ],
+            "edit": true,
+            "showQuestions": true
         };
         if (!data){
             data = [];
@@ -53,8 +56,11 @@ export class QuestionnaireService {
             "answers":
             [
             ],
-            "point": 1
+            "point": 1,
+            "edit": true,
+            "showAnswers": true
         };
+        let a = this.newAnswer(q);
         if (questionnaire){
             if (!questionnaire.questions){
                 questionnaire.questions = [];
@@ -67,7 +73,7 @@ export class QuestionnaireService {
     newAnswer(question: any = null){
         let id = this.toolbox.getUniqueId();
         let a =  {
-            "id": (question ? question.id + "_" : "") + id,
+            "id": id,
             "answer": "",
             "correctDistance": 0,
             "point": 1
@@ -115,12 +121,33 @@ export class QuestionnaireService {
         this.toolbox.writeToStorage(this.storageKey, data, true);
     }
 
+    clearEditShow(data: any){
+        for (var i=0 ; i< data.length; i++){
+            delete(data[i].edit);
+            delete(data[i].showQuestions);
+            if (data[i].questions){
+                for (var j=0; j< data[i].questions.length;j++){
+                    delete(data[i].questions[j].edit);
+                    delete(data[i].questions[j].showAnswers);
+                }
+            }
+        }
+    }
+
+    clearImports(data: any){
+        for (var i=0 ; i< data.length; i++){
+            delete(data[i].qestionsToImport);
+        }
+    }
+    
     save(callbackSuccess: Function, callbackFailure: Function, data: any){
+        this.clearImports(data);
         this.saveToLocal(data);
         let url = this.configurationService.get().common.saveApiBaseUrl;
         console.log("data url", url);
         let user = this.connexionService.getUser();
-        let body = {"directory": user.email, "fileName": "questionnaires.json", "content": JSON.stringify(data)};
+        let directory = user.email.toUpperCase();
+        let body = {"directory": directory, "fileName": "questionnaires.json", "content": JSON.stringify(data)};
         this.http.put(url, body).subscribe(
             (data: any) => callbackSuccess(data),
             (error: any) => callbackFailure(error)
@@ -131,7 +158,11 @@ export class QuestionnaireService {
         return this.toolbox.readFromStorage(this.storageKey, parseJson);
     }
 
-    importQuestions(questionnaire: any, questionsToImport: string){
+    removeFromLocal(){
+        this.toolbox.removeFromStorage(this.storageKey);
+    }
+
+    importQuestionsCsv(questionnaire: any, questionsToImport: string){
         // Format questionLabel|answerLabelOk|answerLabelNok|detail|question1|answer1|answer2|answerN|..|
         if (questionsToImport && questionsToImport.length > 0){
             let lines = questionsToImport.split("\n");
@@ -159,13 +190,53 @@ export class QuestionnaireService {
         question.status = false;
         for (var i=0; i < question.answers.length; i++){
             if (!question.correctDistance || question.correctDistance == 0){
-                if (answer == question.answers[i].answer || answer.toUpperCase() == question.answers[i].answer.toUpperCase()){
-                    question.status = true;
-                    break;
+                if (answer){
+                    if (answer == question.answers[i].answer || answer.toUpperCase() == question.answers[i].answer.toUpperCase()){
+                        question.status = true;
+                        break;
+                    }
+                }else{
+                    if (answer == question.answers[i].answer){
+                        question.status = true;
+                        break;
+                    }                    
                 }
             }
         }
         question.checked = true;
     }
 
+    importQuestionnaires(data: any, questionnaires: string){
+        let temp = this.toolbox.cloneObject(data);
+        if (!temp){
+            temp = [];
+        }
+        if (questionnaires){
+            if (this.toolbox.isJson(questionnaires)){
+                let ques = this.toolbox.parseJson(questionnaires);
+                this.setIds(ques);
+                let data2 = temp.concat(ques);
+                return data2;
+            }
+        }
+        return temp;
+    }
+
+    setIds(data: any){
+        if (data){
+            for (var i = 0 ; i< data.length; i++){
+                data[i].id = this.toolbox.getUniqueId();
+                if (data[i].questions){
+                    for (var j=0; j< data[i].questions.length;j++){
+                        data[i].questions[j].id = this.toolbox.getUniqueId();
+                        if (data[i].questions[j].answers){
+                            for (var k = 0; k < data[i].questions[j].answers.length; k++){
+                                data[i].questions[j].answers[k].id = this.toolbox.getUniqueId();
+                            }
+                        }
+                    }
+                }
+            }   
+        }
+    }
 }

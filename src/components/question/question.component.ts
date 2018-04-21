@@ -22,8 +22,9 @@ export class QuestionComponent extends GenericComponent {
     public showResults = false;
 
     @Input() question: any;
+    @Input() questionnaire: any;
     @Input() editable: boolean = true;
-    // @Output() goTo: EventEmitter<string> = new EventEmitter<string>();
+    @Output() change: EventEmitter<string> = new EventEmitter<string>();
 
     constructor(public configurationService: ConfigurationService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
@@ -43,4 +44,22 @@ export class QuestionComponent extends GenericComponent {
         this.question.showAnwsers = this.question.edit;
     }
 
+    newAnswer(question: any){
+        this.questionnaireService.newAnswer(question);        
+    }
+
+    deleteAnswer(question: any, answer: any){
+        this.questionnaireService.deleteAnswer(question, answer);
+        this.changed();
+    }
+
+    deleteQuestion(questionnaire: any, question: any){
+        this.questionnaireService.deleteQuestion(questionnaire, question);
+        this.changed();        
+    }
+
+    changed(){
+        this.change.emit(this.question);
+    }
+    
 }

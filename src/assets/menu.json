@@ -9,7 +9,7 @@
     "inputZone": true,
     "inputButtonLabel": "",
     "inputButtonIcon": "search",
-    "inputPlaceHolder": "Search in help...",
+    "inputPlaceHolder": "Search in questionnaires...",
     "inputButtonHref": "/help/",
     "aboutHref": "/about",
     "navbarMenu":
@@ -58,31 +58,23 @@
     "sidebarMenu":
     [
         {
-            "label": "Menu1",
-            "href": "/menu1",
-            "icon": "users",
-            "submenu":[
-                {
-                    "label": "Menu11",
-                    "href": "/menu11",
-                    "icon": "star"
-                },
-                {
-                    "label": "Menu12",
-                    "href": "/menu12",
-                    "icon": "star"
-                }
-            ]
+            "label": "Questionnaires",
+            "href": "/inputs",
+            "icon": "question",
+            "title": "Questionnaires",
+            "align": "left"
         },
         {
-            "label": "Menu2",
-            "href": "/menu2",
-            "icon": "star"
+            "label": "Test",
+            "href": "/test",
+            "icon": "pencil-square-o",
+            "title": "Test",
+            "align": "right"
         },
         {
-            "label": "Login",
+            "label": "Sign in / sign out",
             "href": "/login",
-            "icon": "user"
-        }     
+            "icon": "sign-in"
+        }    
     ]
 }

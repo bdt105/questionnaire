@@ -25,6 +25,12 @@ export class QuestionnairesComponent extends GenericComponent {
     public data: any;
     public error: any;
 
+    public importQuestionnaires = false;
+    public exportQuestionnaires = false;
+
+    public questionnairesToImport: string;
+    public questionnairesToExport: string;
+
     constructor(public configurationService: ConfigurationService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
         public menuService: MenuService, private http: Http){
@@ -38,6 +44,7 @@ export class QuestionnairesComponent extends GenericComponent {
     private successLoad(data: any){
         if (data && data._body){
             this.data = this.toolbox.parseJson(data._body);
+            this.questionnaireService.clearEditShow(this.data);
         }else{
             this.data = [];
         }
@@ -71,18 +78,6 @@ export class QuestionnairesComponent extends GenericComponent {
         this.questionnaireService.newQuestionnaire(this.data);
     }
 
-    newAnswer(question: any){
-        this.questionnaireService.newAnswer(question);
-    }
-
-    deleteAnswer(question: any, answer: any){
-        this.questionnaireService.deleteAnswer(question, answer);
-    }
-
-    deleteQuestion(questionnaire: any, question: any){
-        this.questionnaireService.deleteQuestion(questionnaire, question);
-    }
-
     deleteQuestionnaire(questionnaire: any){
         this.questionnaireService.deleteQuestionnaire(this.data, questionnaire);        
     }
@@ -101,8 +96,18 @@ export class QuestionnairesComponent extends GenericComponent {
             (error: any) => this.failureSave(error), this.data);
     }
 
-    importQuestions(questionnaire: any, importQuestions: string){
-        this.questionnaireService.importQuestions(questionnaire, importQuestions);
-        this.questionnaireService.saveToLocal(this.data);
+    importQuestionsCsv(questionnaire: any, importQuestions: string){
+        this.questionnaireService.importQuestionsCsv(questionnaire, importQuestions);
+        this.save();
+    }
+
+    importQuestionnairesJson(questionnaires: string){
+        let res = this.questionnaireService.importQuestionnaires(this.data, this.questionnairesToImport);
+        this.data = res;
+        this.save();
+    } 
+
+    exportQuestionnairesJson(questionnaires: string){
+        this.questionnairesToExport = this.toolbox.beautifyJson(JSON.stringify(this.data));
     }
 }

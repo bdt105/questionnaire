@@ -1,18 +1,23 @@
 <div class="list-group-item">
-    <h1>{{translate('Define your test')}}</h1>
-    <form>
+    <h3 (click)="showDefinition = !showDefinition" style="cursor: pointer;">{{translate('Define your test')}}</h3>
+    <form [hidden]="!showDefinition">
         <div class="form-group">
-            <div class="col-10" style="padding: 0;">
+            <div *ngIf="data" class="col-10" style="padding: 0;">
                 <div *ngFor="let questionnaire of data">
                     <input type="checkbox" [(ngModel)]="questionnaire.test" id="defaultCheck1" name="qus" (change)="selectQuestionnaire()"> {{questionnaire.title}}
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <input type="number" class="form-control col-10" id="exampleInputPassword1" placeholder="Number of questions to ask (empty means the whole questionnaire)" [(ngModel)]="nbQuestions" name="nbQuestions">
+        <div *ngIf="!data || data.length == 0">
+            {{translate('No questionnaire defined!')}} <a [routerLink]="'/inputs'">{{translate('Define one here.')}}</a>
+            <br>
+            <br>
         </div>
         <div class="form-group">
-            <input type="checkbox" value="" id="defaultCheck1" [(ngModel)]="randomQuestions" name="randomQuestions"> {{translate('Random questions')}}
+            <input type="number" class="form-control" id="exampleInputPassword1" placeholder="Number of questions to ask (empty means the whole questionnaire)" [(ngModel)]="nbQuestions" name="nbQuestions">
+        </div>
+        <div class="form-group">
+            <input type="checkbox" id="defaultCheck1" [(ngModel)]="randomQuestions" name="randomQuestions"> {{translate('Random questions')}}
         </div>
         <div class="form-group">
             <input type="checkbox" value="" id="defaultCheck1"  [(ngModel)]="nextIfCorrect" name="nextIfCorrect"> {{translate('Next question if correct')}}
@@ -21,16 +26,23 @@
     </form>
 </div>
 <br>
-<div  class="list-group-item" *ngIf="testInProgress && currentQuestions && currentQuestions[currentQuestionIndex]">
-    <h1>{{translate('Test in progress')}} <span class="badge badge-pill badge-primary">{{currentQuestionIndex + 1}} / {{nbQuestions}}</span></h1>
-    <br>
-    <progressbar [max]="nbQuestions" [value]="currentQuestionIndex + 1"></progressbar>
-    <br>
-    <span *ngIf="startDate">{{translate('Start date')}} {{startDate | date: 'dd/MM/yyyy HH:mm:ss'}}<br></span>
-    <span *ngIf="endDate">{{translate('End date')}} {{endDate | date: 'dd/MM/yyyy HH:mm:ss'}}<br></span>
-    <!-- Results -->
+<div class="list-group-item" *ngIf="currentQuestions && currentQuestions[currentQuestionIndex]">
+    <h3>{{translate('Test in progress')}}</h3>
+    <progressbar  type="warning" [max]="nbQuestions" [value]="currentQuestionIndex + 1">
+        <span class="text-nowrap" style="color: black">{{score.messagePourcentage}}</span>
+    </progressbar>
+    <div style="font-size: 1.5em">
+        <span class="badge badge-pill badge-success"><i class="fa fa-thumbs-up"></i> {{score.scoreOk}}</span>
+        <span class="badge badge-pill badge-danger"><i class="fa fa-thumbs-down"></i> {{score.scoreNok}}</span>
+    </div>
+    <em>
+        <span *ngIf="startDate">{{translate('Start')}} {{startDate | date: 'dd/MM/yyyy HH:mm:ss'}}<br></span>
+        <span *ngIf="endDate">{{translate('End')}} {{endDate | date: 'dd/MM/yyyy HH:mm:ss'}}<br></span>
+    </em>
+        <!-- Results -->
     <div style="margin-top: 20px" class="jumbotron" *ngIf="currentQuestions[currentQuestionIndex].checked && currentQuestionIndex == (currentQuestions.length - 1)">
-        <h1>{{translate('Congratulations!! You finished your test. Your score is: ') + getScore().score + '/' + currentQuestions.length + ' (' + getScore().pourcentage + '%)'}}</h1>
+        <h3>{{translate('Congratulations!!')}}</h3>
+        <h5>{{translate('Your score is: ') + score.messagePourcentage}}</h5>
         <span (click)="showResults = ! showResults">{{translate('See all questions and answers')}}</span>
         <div *ngIf="showResults">
             <div *ngFor="let question of currentQuestions">
@@ -38,9 +50,9 @@
             </div>
         </div>
     </div>
-    <br>
     <div class="align-items-center justify-content-md-center">
-        <form>
+        <br>
+        <form >
             <div class="card text-center">
                 <div class="card-header">
                     {{ currentQuestions[currentQuestionIndex].questionLabel }}
@@ -52,7 +64,7 @@
                     </span>
                     <br>
                     <div class="card-text">
-                        <input type="text" class="form-control" [(ngModel)]="currentQuestions[currentQuestionIndex].customAnswer" name="qus" style="margin-bottom:20px">
+                        <input autocomplete="off" type="text" class="form-control" [(ngModel)]="currentQuestions[currentQuestionIndex].customAnswer" name="qus" style="margin-bottom:20px">
                     </div>
                     <div class="row">
                         <div class="col-2" (click)="previousQuestion()" style="cursor: pointer;">

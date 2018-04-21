@@ -1,7 +1,7 @@
 <accordion *ngIf="menu && menu.sidebarMenu">
     <div *ngFor="let men of menu.sidebarMenu">
         <div *ngIf="!men.submenu" class="sidebarMenu">
-            <a class="sidebarMenuLink" [routerLink]="men.href" title="{{men.title}}"><i *ngIf="men.icon" class="fa fa-{{men.icon}}"></i> {{men.label}}</a>
+            <a class="sidebarMenuLink" (click)="clickMenu(men.href)" title="{{men.title}}"><i *ngIf="men.icon" class="fa fa-{{men.icon}}"></i> {{men.label}}</a>
         </div>
         <accordion-group *ngIf="men.submenu" class="sidebarBranch">
             <div  accordion-heading class="sidebarBranch" style="cursor: pointer">
@@ -12,4 +12,4 @@
             </div>
         </accordion-group>
     </div>
-</accordion>  
+</accordion>

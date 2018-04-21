@@ -41,6 +41,9 @@ export class TestComponent extends GenericComponent {
     public startDate = null;
     public endDate = null;
 
+    public showDefinition = true;
+    public score:any = {};
+
     constructor(public configurationService: ConfigurationService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
         public menuService: MenuService, private http: Http){
@@ -97,13 +100,14 @@ export class TestComponent extends GenericComponent {
         if (this.currentQuestionIndex < this.currentQuestions.length - 1){        
             this.currentQuestionIndex ++;
         }
-
+        this.getScore();
     }
 
     private previousQuestion(){
         if (this.currentQuestionIndex > 0){
             this.currentQuestionIndex --;
         }
+        this.getScore();
     }
 
     start(){
@@ -114,6 +118,8 @@ export class TestComponent extends GenericComponent {
             this.nbQuestions = this.currentQuestions.length;
         }
         this.startDate = Date.now();
+        //this.showDefinition = false;
+        this.getScore();        
     }
 
     checkQuestion(question: any, answer: string){
@@ -124,16 +130,21 @@ export class TestComponent extends GenericComponent {
         if (this.nextIfCorrect && this.currentQuestions[this.currentQuestionIndex].status){
             this.nextQuestion();
         }
+        this.getScore();
     }
 
-    getScore(){
-        var score = {"score": 0, "pourcentage": 0};
-        for (var i=0; i< this.currentQuestions.length; i++){
+    private getScore(){
+        var score: any = {};
+        score.scoreOk = 0;
+        for (var i = 0; i< this.currentQuestions.length; i++){
             if (this.currentQuestions[i].status){
-                score.score ++;
+                score.scoreOk ++;
             }
         }
-        score.pourcentage = Math.round(score.score / this.currentQuestions.length * 100);
+        score.scoreNok = this.currentQuestions.length - score.scoreOk;
+        score.pourcentage = Math.round(score.scoreOk / this.currentQuestions.length * 100);
+        score.messagePourcentage = score.scoreOk + '/' + this.currentQuestions.length + ' (' + score.pourcentage + '%)';
+        this.score = score;
         return score;
     }
 

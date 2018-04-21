@@ -1,110 +1,79 @@
-<h1>{{translate('Questionnaires')}}</h1>
+<h3>{{translate('Questionnaires')}}</h3>
 <div class="list-group">
     <!-- Questionnaires -->
     <div *ngFor="let questionnaire of data" class="list-group-item">
-        <h3><i (click)="questionnaire.edit = !questionnaire.edit"class="fa fa-pencil"></i>
+        <h5><i (click)="questionnaire.edit = !questionnaire.edit"class="fa fa-pencil"></i>
             <span (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
                 <i *ngIf="!questionnaire.showQuestions" class="fa fa-plus-circle"></i>
                 <i *ngIf="questionnaire.showQuestions" class="fa fa-minus-circle"></i></span>
-                <input *ngIf="questionnaire.edit" type="text" class="form-control" placeholder="{{translate('Questionnaie name')}}" [(ngModel)]="questionnaire.title" name="title">
+                <input *ngIf="questionnaire.edit" type="text" class="form-control" placeholder="{{translate('Questionnaire name')}}" [(ngModel)]="questionnaire.title" name="title" (change)="save()">
                 <span *ngIf="!questionnaire.edit"  (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">{{questionnaire.title}}</span>
             <span *ngIf="!questionnaire.edit" class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>
-        </h3>
+        </h5>
         <div *ngIf="questionnaire.showQuestions">
             <!-- Questions -->
             <div *ngFor="let question of questionnaire.questions" class="list-group-item">
-                <question [question]=question></question>
-                <!-- <i (click)="question.edit = !question.edit" class="fa fa-pencil" style="cursor: pointer;"></i>
-                <i *ngIf="!question.showAnwsers" (click)="question.showAnwsers = !question.showAnwsers" class="fa fa-plus-circle" style="cursor: pointer;" ></i>
-                <i *ngIf="question.showAnwsers" (click)="question.showAnwsers = !question.showAnwsers" class="fa fa-minus-circle" style="cursor: pointer;" ></i>
-                <span *ngIf="question.questionLabel" style="cursor: pointer;" (click)="question.showAnwsers = !question.showAnwsers">{{ question.questionLabel}} <br></span>
-                <input *ngIf="question.edit" type="text" class="form-control" placeholder="{{translate('Question')}}" [(ngModel)]="question.question">
-                <input *ngIf="question.edit" type="text" class="form-control" placeholder="{{translate('Detail')}}" [(ngModel)]="question.detail">
-                <div *ngIf="!question.edit" style="cursor: pointer;margin-bottom: 10px; margin-top: 10px" (click)="question.showAnwsers = !question.showAnwsers">
-                    {{question.question}}<br>
-                    {{question.detail}}
-                </div>
-                <div *ngIf="question.showAnwsers">
-                    <div *ngFor="let answer of question.answers" class="list-group-item">
-                        <form *ngIf="question.edit">
-                            <div class="form-group">       
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">{{translate('Answer')}}</span>                 
-                                    <input type="text" class="form-control" placeholder="Answer" [(ngModel)]="answer.answer" name="answer"> 
-                                </div>
-                            </div>
-                            <div class="form-group">                        
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">{{translate('Distance')}}</span>
-                                    <input type="number" class="form-control" placeholder="Correct answer distance" [(ngModel)]="answer.correctDistance" name="correctDistance"> 
-                                </div>
-                            </div>
-                            <div class="form-group">                        
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">{{translate('Reward')}}</span>
-                                    <input type="number" class="form-control" placeholder="Correct answer reward" [(ngModel)]="answer.point" name="point"> 
-                                    <span class="input-group-text" id="basic-addon1">{{translate('points')}}</span>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-danger"
-                            mwlConfirmationPopover
-                                [popoverTitle]="translate('Delete answer')"
+                <question [question]=question [questionnaire]="questionnaire" (change)="save()"></question>
+            </div>
+            <br>
+            <div class="list-group">
+                <button *ngIf="questionnaire.edit" type="button" class="btn btn-primary" (click)="newQuestion(questionnaire)"><i class="fa fa-plus"></i> {{translate('New question')}}</button>
+                <button *ngIf="questionnaire.edit" type="button" class="btn btn-danger" 
+                    mwlConfirmationPopover
+                                [popoverTitle]="translate('Delete questionnaire')"
                                 [popoverMessage]="translate('Are you sure you want to delete that element?')"
                                 [confirmText]="translate('Yes')"
                                 [cancelText]="translate('No')"
-                                placement="right"
-                                (confirm)="deleteAnswer(question, answer)">
-                                <i class="fa fa-trash"></i> {{translate('Delete answer')}}
-                            </button>
-                        </form>
-                        <div *ngIf="!question.edit" class="row" style="margin: 0px">
-                            <div class="col-10">{{answer.answer}}</div>
-                            <div class="col-2 text-right">
-                                <span class="badge badge-pill badge-warning" *ngIf="answer.correctDistance">{{answer.correctDistance}}</span>
-                                <span class="badge badge-pill badge-success" *ngIf="answer.point">{{answer.point}}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <button *ngIf="question.edit" type="button" (click)="newAnswer(question)" class="btn btn-primary"><i class="fa fa-plus"></i> {{translate('New answer')}}</button>
-                    <button *ngIf="question.edit" type="button" class="btn btn-danger" 
-                        mwlConfirmationPopover
-                            [popoverTitle]="translate('Delete question')"
-                            [popoverMessage]="translate('Are you sure you want to delete that element?')"
-                            [confirmText]="translate('Yes')"
-                            [cancelText]="translate('No')"
-                            placement="right"
-                            (confirm)="deleteQuestion(questionnaire, question)">
-                        <i class="fa fa-trash"></i> {{translate('Delete question')}}
-                    </button>
-                </div> -->
+                                placement="top"
+                                (confirm)="deleteQuestionnaire(questionnaire)">
+                    <i class="fa fa-trash"></i> {{translate('Delete questionnaire')}}
+                </button>
+                <button *ngIf="questionnaire.edit" type="button" class="btn btn-warning" (click)="questionnaire.importQuestionsCsv = !questionnaire.importQuestionsCsv">
+                    <i class="fa fa-download"></i> {{translate('Import questions')}}
+                </button>
             </div>
-            <br>
-            <button *ngIf="questionnaire.edit" type="button" class="btn btn-primary" (click)="newQuestion(questionnaire)"><i class="fa fa-plus"></i> {{translate('New question')}}</button>
-            <button *ngIf="questionnaire.edit" type="button" class="btn btn-danger" 
-                mwlConfirmationPopover
-                            [popoverTitle]="translate('Delete questionnaire')"
-                            [popoverMessage]="translate('Are you sure you want to delete that element?')"
-                            [confirmText]="translate('Yes')"
-                            [cancelText]="translate('No')"
-                            placement="right"
-                            (confirm)="deleteQuestionnaire(questionnaire)">
-                <i class="fa fa-trash"></i> {{translate('Delete questionnaire')}}
-            </button>
-            <button *ngIf="questionnaire.edit" type="button" class="btn btn-warning" (click)="questionnaire.importQuestions = !questionnaire.importQuestions">
-                <i class="fa fa-download"></i> {{translate('Import questions')}}
-            </button>
-            <div *ngIf="questionnaire.edit && questionnaire.importQuestions">
+            <div *ngIf="questionnaire.edit && questionnaire.importQuestionsCsv">
                 <br>
-                <textarea class="form-control" placeholder="{{translate('Copy and paste yours questions. Format questionLabel|answerLabelOk|answerLabelNok|question1|detail|answer1|answer2|answerN|..| etc. Each line is a queston, all columns are mandatory but can be empty.')}}"
+                <textarea class="form-control" placeholder="{{translate('Copy and paste yours questions. Json or Csv format (questionLabel|answerLabelOk|answerLabelNok|question1|detail|answer1|answer2|answerN|..| etc. Each line is a queston, all columns are mandatory but can be empty.)')}}"
                 [(ngModel)]="questionnaire.qestionsToImport">
                 </textarea>
-                <br>
-                <button type="button" class="btn btn-warning" (click)="importQuestions(questionnaire, questionnaire.qestionsToImport)"><i class="fa fa-download"></i> {{translate('Import')}}</button>
+                <div class="list-group">
+                    <br>
+                    <button type="button" class="btn btn-warning" (click)="importQuestionsCsv(questionnaire, questionnaire.qestionsToImport)"><i class="fa fa-download"></i> {{translate('Import Csv format')}}</button>
+                </div>
             </div>
         </div>
     </div>
-    <button type="button" class="btn btn-warning" (click)="save()"><i class="fa fa-save"></i> Save questionnaires</button>
+    <!-- <br>
+    <button type="button" class="btn btn-warning" (click)="save()"><i class="fa fa-save"></i> Save questionnaires</button> -->
+    <br>
+    <button type="button" class="btn btn-primary" (click)="newQuestionnaire()"><i class="fa fa-plus"></i> {{translate('New questionnaire')}}</button>
+    <button type="button" class="btn btn-warning" (click)="importQuestionnaires = !importQuestionnaires">
+        <i class="fa fa-download"></i> {{translate('Import questionnaires')}}
+    </button>
+    <div *ngIf="importQuestionnaires">
+        <br>
+        <textarea class="form-control" placeholder="{{translate('Paste your questionnaires with Json format here.')}}"
+        [(ngModel)]="questionnairesToImport">
+        </textarea>
+        <div class="list-group">
+            <br>
+            <button type="button" class="btn btn-warning" (click)="importQuestionnairesJson()"><i class="fa fa-download"></i> {{translate('Import your questionnaires')}}</button>
+        </div>
+    </div>
+    <button type="button" class="btn btn-warning" (click)="exportQuestionnaires = !exportQuestionnaires">
+        <i class="fa fa-upload"></i> {{translate('Export questionnaires')}}
+    </button>
+    <div *ngIf="exportQuestionnaires">
+        <br>
+        <textarea class="form-control" placeholder="{{translate('Your questionnaires with Json format will appear here.')}}"
+        [(ngModel)]="questionnairesToExport">
+        </textarea>
+        <div class="list-group">
+            <br>
+            <button type="button" class="btn btn-warning" (click)="exportQuestionnairesJson()"><i class="fa fa-download"></i> {{translate('Export your questionnaires')}}</button>
+        </div>
+    </div>
+       
 </div>
 <br>
-<button type="button" class="btn btn-primary" (click)="newQuestionnaire()"><i class="fa fa-plus"></i> New questionnaire</button>

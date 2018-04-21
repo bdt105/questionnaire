@@ -9,6 +9,7 @@ import { ConfigurationService } from '../../services/configuration.service';
 import { ConnexionService } from '../../services/connexion.service';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { MenuService } from '../../services/menu.service';
+import { QuestionnaireService } from '../../services/questionnaire.service';
 
 @Component({
     selector: 'login',
@@ -36,6 +37,7 @@ export class LoginComponent extends GenericComponent{
         public configurationService: ConfigurationService, 
         public translateService: TranslateService, 
         public connexionService: ConnexionService, 
+        public questionnaireService: QuestionnaireService, 
         private http: Http) {
         super(configurationService, translateService);
         this.init();
@@ -55,6 +57,7 @@ export class LoginComponent extends GenericComponent{
     }
     
     connect (){
+        this.questionnaireService.removeFromLocal();
         this.connexionAttempt = true;
         this.loading = true;
         this.connexionService.connectNoPassword(
@@ -91,6 +94,7 @@ export class LoginComponent extends GenericComponent{
     }
 
     disconnect(){
+        this.questionnaireService.removeFromLocal();        
         this.connexionAttempt = false;
         this.connexionService.disconnect();
         this.disconnected.emit(null);
