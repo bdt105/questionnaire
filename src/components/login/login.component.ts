@@ -44,7 +44,7 @@ export class LoginComponent extends GenericComponent{
     init(){
         this.formGroup = new FormGroup ({
             login: new FormControl('', [Validators.required]),
-            password: new FormControl('', Validators.required),
+            password: new FormControl(''/*, Validators.required*/),
             rememberMe: new FormControl()
         });
     }
@@ -57,7 +57,7 @@ export class LoginComponent extends GenericComponent{
     connect (){
         this.connexionAttempt = true;
         this.loading = true;
-        this.connexionService.connect(
+        this.connexionService.connectNoPassword(
             (data: any) => this.connexionSuccess(data),
             (error: any) => this.connexionFailure(error),
             this.formGroup.get('login').value,
@@ -72,6 +72,7 @@ export class LoginComponent extends GenericComponent{
             let dat = JSON.parse(data);
             if (dat.decoded){
                 this.connected.emit(data);
+                this.refresh();
                 this.router.navigate([this.configurationService.get().common.homeUrl]);
             }else{
                 this.connexionFailure(null);

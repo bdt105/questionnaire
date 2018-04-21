@@ -25,8 +25,6 @@ export class QuestionnairesComponent extends GenericComponent {
     public data: any;
     public error: any;
 
-    private name = "name";
-
     constructor(public configurationService: ConfigurationService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
         public menuService: MenuService, private http: Http){
@@ -59,7 +57,7 @@ export class QuestionnairesComponent extends GenericComponent {
 
     load(){        
         this.questionnaireService.load(
-            (data: any) => this.successLoad(data), (error: any) => this.failureLoad(error), this.name);
+            (data: any) => this.successLoad(data), (error: any) => this.failureLoad(error));
     }
 
     newQuestion(questionnaire: any){
@@ -100,7 +98,7 @@ export class QuestionnairesComponent extends GenericComponent {
     save(){
         this.questionnaireService.save(
             (data: any) => this.successSave(data), 
-            (error: any) => this.failureSave(error), this.data, this.name);
+            (error: any) => this.failureSave(error), this.data);
     }
 
     importQuestions(questionnaire: any, importQuestions: string){

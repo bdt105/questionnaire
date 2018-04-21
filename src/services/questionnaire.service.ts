@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Toolbox } from 'bdt105toolbox/dist';
 import { Http } from '@angular/http';
 import { ConfigurationService } from './configuration.service';
+import { ConnexionService } from './connexion.service';
 
 @Injectable()
 export class QuestionnaireService {
@@ -10,13 +11,14 @@ export class QuestionnaireService {
     public storageKey = "data";
     public error: any;
 
-    constructor (private configurationService: ConfigurationService, private http: Http){
+    constructor (private configurationService: ConfigurationService, private connexionService: ConnexionService, private http: Http){
     }
 
-    load(callbackSuccess: Function, callbackFailure: Function, name: string){
+    load(callbackSuccess: Function, callbackFailure: Function){
         let url = this.configurationService.get().common.saveApiBaseUrl;
+        let user = this.connexionService.getUser();
         console.log("data url", url);
-        let body = {"directory": name, "fileName": "questionnaires.json"};
+        let body = {"directory": user.email, "fileName": "questionnaires.json"};
         this.http.post(url, body).subscribe(
             (data: any) => callbackSuccess(data),
             (error: any) => callbackFailure(error)
@@ -113,11 +115,12 @@ export class QuestionnaireService {
         this.toolbox.writeToStorage(this.storageKey, data, true);
     }
 
-    save(callbackSuccess: Function, callbackFailure: Function, data: any, name: string){
+    save(callbackSuccess: Function, callbackFailure: Function, data: any){
         this.saveToLocal(data);
         let url = this.configurationService.get().common.saveApiBaseUrl;
         console.log("data url", url);
-        let body = {"directory": name, "fileName": "questionnaires.json", "content": JSON.stringify(data)};
+        let user = this.connexionService.getUser();
+        let body = {"directory": user.email, "fileName": "questionnaires.json", "content": JSON.stringify(data)};
         this.http.put(url, body).subscribe(
             (data: any) => callbackSuccess(data),
             (error: any) => callbackFailure(error)
@@ -156,7 +159,7 @@ export class QuestionnaireService {
         question.status = false;
         for (var i=0; i < question.answers.length; i++){
             if (!question.correctDistance || question.correctDistance == 0){
-                if (answer == question.answers[i].answer){
+                if (answer == question.answers[i].answer || answer.toUpperCase() == question.answers[i].answer.toUpperCase()){
                     question.status = true;
                     break;
                 }

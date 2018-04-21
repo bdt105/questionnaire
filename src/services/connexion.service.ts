@@ -18,6 +18,24 @@ export class ConnexionService {
     constructor(private http: Http, private configurationService: ConfigurationService, private translateService: TranslateService){
     }
 
+    public connectNoPassword (callbackSuccess: Function, callbackFailure: Function, log: string, passwd: string, forever: boolean = false){
+        let body: any = {};
+        body.login = log;
+        body.password = passwd;
+        let fakeUser = this.getFakeUser();
+        fakeUser.email = body.login;
+        let fake = {"decoded": fakeUser};
+        let data: any = {};
+        data._body = JSON.stringify(fake);
+        this.connexionSuccess(callbackSuccess, data, forever)
+        // this.http.post(this.configurationService.get().common.authentificationApiBaseUrl + "get", body).subscribe(
+        //     (data: any) => this.connexionSuccess(callbackSuccess, data, forever),
+        //     (error: any) => this.connexionFailure(callbackFailure, error)
+        // );
+        // Fake connexion
+        // let fakeUser = this.getFakeUser();
+    }
+
     public connect (callbackSuccess: Function, callbackFailure: Function, log: string, passwd: string, forever: boolean = false){
         let body: any = {};
         body.login = log;
@@ -34,7 +52,8 @@ export class ConnexionService {
         return {
             "iduser": 1,
             "lastName": "fake",
-            "firstName": "fake"
+            "firstName": "fake",
+            "email": "fake@fake.com"
         }
     }
 

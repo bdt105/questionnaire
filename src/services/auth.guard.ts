@@ -15,13 +15,13 @@ export class AuthGuard implements CanActivate{
     }
 
     canActivate (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        // let conn = this.connexionService.isConnected();
-        // if (!conn){
-        //     this.toolbox.writeToStorage("redirectUrl", state.url, true);
-        //     let url = this.toolbox.readFromStorage("redirectUrl");
-        //     this.router.navigate(['/login']);
-        //     return false;
-        // }
+        let conn = this.connexionService.isConnected();
+        if (!conn){
+            this.toolbox.writeToStorage("redirectUrl", state.url, true);
+            let url = this.toolbox.readFromStorage("redirectUrl");
+            this.router.navigate(['/login']);
+            return false;
+        }
         return true;
     }
 

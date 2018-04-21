@@ -38,8 +38,6 @@ export class TestComponent extends GenericComponent {
 
     public nextIfCorrect = true;
 
-    private name = "name";
-
     public startDate = null;
     public endDate = null;
 
@@ -73,7 +71,7 @@ export class TestComponent extends GenericComponent {
     }
 
     load(){        
-        this.questionnaireService.load((data: any) => this.manageData(data), (error: any) => this.manageError(error), this.name);
+        this.questionnaireService.load((data: any) => this.manageData(data), (error: any) => this.manageError(error));
     }
 
     private generateTest(){
