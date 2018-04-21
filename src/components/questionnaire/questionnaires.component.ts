@@ -7,7 +7,7 @@ import { TranslateService } from '../../services/translate.service';
 
 import { Http } from '@angular/http';
 
-import { Toolbox, Rest } from 'bdt105toolbox/dist';
+import { Toolbox } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
 
 @Component({
@@ -20,7 +20,6 @@ export class QuestionnairesComponent extends GenericComponent {
 
 
     private toolbox: Toolbox = new Toolbox();
-    private rest: Rest = new Rest();
 
     public data: any;
     public error: any;

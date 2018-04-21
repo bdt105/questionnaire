@@ -7,6 +7,7 @@ import { UserComponent } from '../components/user/user.component';
 import { QuestionnairesComponent } from '../components/questionnaire/questionnaires.component';
 import { TestComponent } from '../components/test/test.component';
 import { AuthGuard } from '../services/auth.guard';
+import { SearchComponent } from '../components/search/search.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -15,6 +16,7 @@ const routes: Routes = [
     { path: 'test', component: TestComponent, canActivate: [AuthGuard] },
     { path: 'inputs', component: QuestionnairesComponent, canActivate: [AuthGuard] },
     { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
+    { path: 'search/:search', component: SearchComponent, canActivate: [AuthGuard] },
     { path: 'user', component: UserComponent, canActivate: [AuthGuard] }
 ];
 

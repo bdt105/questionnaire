@@ -9,8 +9,8 @@
     "inputZone": true,
     "inputButtonLabel": "",
     "inputButtonIcon": "search",
-    "inputPlaceHolder": "Search in questionnaires...",
-    "inputButtonHref": "/help/",
+    "inputPlaceHolder": "Search in qauestions & answers...",
+    "inputButtonHref": "/search/",
     "aboutHref": "/about",
     "navbarMenu":
     [

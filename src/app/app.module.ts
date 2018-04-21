@@ -43,6 +43,7 @@ import { UserService } from '../services/user.service';
 import { FormValidationService } from '../services/fromValidation.service';
 import { AuthGuard } from '../services/auth.guard';
 import { QuestionnaireService } from '../services/questionnaire.service';
+import { SearchComponent } from '../components/search/search.component';
 
 export function init (config: ConfigurationService) {
     config.load();
@@ -63,7 +64,8 @@ export function init (config: ConfigurationService) {
         QuestionnairesComponent,
         TestComponent,
         QuestionComponent,
-        QuestionCheckComponent
+        QuestionCheckComponent,
+        SearchComponent
     ],
     imports: [
         BrowserModule,

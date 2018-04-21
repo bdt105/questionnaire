@@ -239,4 +239,35 @@ export class QuestionnaireService {
             }   
         }
     }
+
+    searchInQuestionsAndAnswers(data: any, search: string){
+        let ret = [];
+        if (data && search){
+            for (var i = 0 ; i< data.length; i++){
+                if (data[i].questions){
+                    for (var j=0; j< data[i].questions.length;j++){
+                        if (data[i].questions[j].question && data[i].questions[j].question.toUpperCase().includes(search.toUpperCase())){
+                            let q = this.toolbox.cloneObject(data[i].questions[j]);
+                            q.foundType = "question";
+                            ret.push(q);                        }
+                        if (data[i].questions[j].questionLabel && data[i].questions[j].questionLabel.toUpperCase().includes(search.toUpperCase())){
+                            let q = this.toolbox.cloneObject(data[i].questions[j]);
+                            q.foundType = "questionLabel";
+                            ret.push(q);
+                        }
+                        if (data[i].questions[j].answers){
+                            for (var k = 0; k < data[i].questions[j].answers.length; k++){
+                                if (data[i].questions[j].question && data[i].questions[j].answers[k].answer.toUpperCase().includes(search.toUpperCase())){
+                                    let q = this.toolbox.cloneObject(data[i].questions[j]);
+                                    q.foundType = "answer";
+                                    ret.push(q);
+                                }
+                            }
+                        }
+                    }
+                }
+            }   
+        }   
+        return ret;     
+    }
 }
