@@ -9,7 +9,7 @@
     "inputZone": true,
     "inputButtonLabel": "",
     "inputButtonIcon": "search",
-    "inputPlaceHolder": "Search in qauestions & answers...",
+    "inputPlaceHolder": "Search in questions & answers...",
     "inputButtonHref": "/search/",
     "aboutHref": "/about",
     "navbarMenu":
