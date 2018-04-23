@@ -41,7 +41,7 @@ export class QuestionComponent extends GenericComponent {
 
     toggleEdit(){
         this.question.edit = !this.question.edit;
-        this.question.showAnwsers = this.question.edit;
+        this.question.showAnswers = this.question.edit;
     }
 
     newAnswer(question: any){

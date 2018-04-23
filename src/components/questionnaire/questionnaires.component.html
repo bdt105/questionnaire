@@ -22,7 +22,7 @@
         <div *ngIf="questionnaire.showQuestions">
             <!-- Questions -->
             <div *ngFor="let question of questionnaire.questions" class="list-group-item">
-                <question [question]="question" [questionnaire]="questionnaire" (change)="save()"></question>
+                <question [question]="question" [questionnaire]="questionnaire" [editable]="questionnaire.edit" (change)="save()"></question>
             </div>
             <br>
             <div class="list-group">
