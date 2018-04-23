@@ -78,7 +78,8 @@ export class QuestionnairesComponent extends GenericComponent {
     }
 
     deleteQuestionnaire(questionnaire: any){
-        this.questionnaireService.deleteQuestionnaire(this.data, questionnaire);        
+        this.questionnaireService.deleteQuestionnaire(this.data, questionnaire);       
+        this.save(); 
     }
 
     private successSave(data: any){
@@ -108,5 +109,10 @@ export class QuestionnairesComponent extends GenericComponent {
 
     exportQuestionnairesJson(questionnaires: string){
         this.questionnairesToExport = this.toolbox.beautifyJson(JSON.stringify(this.data));
+    }
+
+    edit(questionnaire: any){
+        questionnaire.edit = !questionnaire.edit;
+        questionnaire.showQuestions = questionnaire.edit;
     }
 }

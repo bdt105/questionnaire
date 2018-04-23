@@ -1,7 +1,10 @@
 <h3>{{translate('Search')}}</h3>
 <div class="list-group">
-    <div class="list-group-item" *ngFor="let question of data">
+    <div class="list-group-item" *ngFor="let question of dataSearch">
+        <h5>{{question.questionnaireTitle}}</h5>    
         <span class="badge badge-primary badge-pill">{{question.foundType}}</span>
-        <question [question]="question" [editable]="false"></question>
+        <br>
+        <br>
+        <question [question]="question" [editable]="true" (change)="updateQuestion(question)"></question>
     </div>
 </div>

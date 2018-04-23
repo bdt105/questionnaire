@@ -1,19 +1,28 @@
 <h3>{{translate('Questionnaires')}}</h3>
 <div class="list-group">
+    
     <!-- Questionnaires -->
     <div *ngFor="let questionnaire of data" class="list-group-item">
-        <h5><i (click)="questionnaire.edit = !questionnaire.edit"class="fa fa-pencil"></i>
-            <span (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
-                <i *ngIf="!questionnaire.showQuestions" class="fa fa-plus-circle"></i>
-                <i *ngIf="questionnaire.showQuestions" class="fa fa-minus-circle"></i></span>
-                <input *ngIf="questionnaire.edit" type="text" class="form-control" placeholder="{{translate('Questionnaire name')}}" [(ngModel)]="questionnaire.title" name="title" (change)="save()">
-                <span *ngIf="!questionnaire.edit"  (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">{{questionnaire.title}}</span>
-            <span *ngIf="!questionnaire.edit" class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>
-        </h5>
+        <div class="row">
+            <div  class="col-10">
+                <div *ngIf="questionnaire.edit">
+                    <input type="text" class="form-control" placeholder="{{translate('Questionnaire name')}}" [(ngModel)]="questionnaire.title" name="title" (change)="save()">
+                    <br>
+                </div>
+                <span *ngIf="!questionnaire.edit" (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
+                    <h5>{{questionnaire.title}}
+                        <span class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>
+                    </h5> 
+                </span>
+            </div>           
+            <div class="col-2 text-right" (click)="edit(questionnaire)" style="cursor: pointer;">
+                <i  class="fa fa-pencil"></i>
+            </div>
+        </div>
         <div *ngIf="questionnaire.showQuestions">
             <!-- Questions -->
             <div *ngFor="let question of questionnaire.questions" class="list-group-item">
-                <question [question]=question [questionnaire]="questionnaire" (change)="save()"></question>
+                <question [question]="question" [questionnaire]="questionnaire" (change)="save()"></question>
             </div>
             <br>
             <div class="list-group">
@@ -35,7 +44,7 @@
             <div *ngIf="questionnaire.edit && questionnaire.importQuestionsCsv">
                 <br>
                 <textarea class="form-control" placeholder="{{translate('Copy and paste yours questions. Json or Csv format (questionLabel|answerLabelOk|answerLabelNok|question1|detail|answer1|answer2|answerN|..| etc. Each line is a queston, all columns are mandatory but can be empty.)')}}"
-                [(ngModel)]="questionnaire.qestionsToImport">
+                    [(ngModel)]="questionnaire.qestionsToImport">
                 </textarea>
                 <div class="list-group">
                     <br>
@@ -54,7 +63,7 @@
     <div *ngIf="importQuestionnaires">
         <br>
         <textarea class="form-control" placeholder="{{translate('Paste your questionnaires with Json format here.')}}"
-        [(ngModel)]="questionnairesToImport">
+            [(ngModel)]="questionnairesToImport">
         </textarea>
         <div class="list-group">
             <br>
@@ -67,7 +76,7 @@
     <div *ngIf="exportQuestionnaires">
         <br>
         <textarea class="form-control" placeholder="{{translate('Your questionnaires with Json format will appear here.')}}"
-        [(ngModel)]="questionnairesToExport">
+            [(ngModel)]="questionnairesToExport">
         </textarea>
         <div class="list-group">
             <br>

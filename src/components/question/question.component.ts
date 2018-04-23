@@ -61,5 +61,9 @@ export class QuestionComponent extends GenericComponent {
     changed(){
         this.change.emit(this.question);
     }
+
+    newQuestion(questionnaire: any, insertAfterQuestion: any = null){
+        this.questionnaireService.newQuestion(questionnaire, insertAfterQuestion);
+    }    
     
 }

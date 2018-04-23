@@ -44,7 +44,18 @@ export class QuestionnaireService {
         return q;
     }
 
-    newQuestion(questionnaire: any = null){
+    getQuestionIndex(questionnaire: any, question: any){
+        if (questionnaire){
+            for (var i = 0; i< questionnaire.questions.length; i++){
+                if (question.id == questionnaire.questions[i].id){
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    newQuestion(questionnaire: any = null, insertAfterQuestion: any = null){
         let id = this.toolbox.getUniqueId();
         let q = {
             "id": (questionnaire ? questionnaire.id + "_" : "") + id,
@@ -65,7 +76,14 @@ export class QuestionnaireService {
             if (!questionnaire.questions){
                 questionnaire.questions = [];
             }
-            questionnaire.questions.push(q);
+            if (!insertAfterQuestion){
+                questionnaire.questions.push(q);
+            }else{
+                let index = this.getQuestionIndex(questionnaire, insertAfterQuestion);
+                if (index >= 0){
+                    questionnaire.questions.splice(index + 1, 0, q);
+                }
+            }
         }
         return q;
     }
@@ -206,6 +224,25 @@ export class QuestionnaireService {
         question.checked = true;
     }
 
+    public getScore(questions: any){
+        var score: any = {};
+        score.scoreOk = 0;
+        score.scoreNok = 0;
+        for (var i = 0; i< questions.length; i++){
+            if (questions[i].checked){
+                if (questions[i].status){
+                    score.scoreOk ++;
+                }else{
+                    score.scoreNok ++;
+                }
+            } 
+        }
+        score.pourcentage = Math.round(score.scoreOk / questions.length * 100);
+        score.messagePourcentage = score.scoreOk + '/' + questions.length + ' (' + score.pourcentage + '%)';
+        return score;
+    }
+    
+
     importQuestionnaires(data: any, questionnaires: string){
         let temp = this.toolbox.cloneObject(data);
         if (!temp){
@@ -249,9 +286,11 @@ export class QuestionnaireService {
                         if (data[i].questions[j].question && data[i].questions[j].question.toUpperCase().includes(search.toUpperCase())){
                             let q = this.toolbox.cloneObject(data[i].questions[j]);
                             q.foundType = "question";
+                            q.questionnaireTitle = data[i].title;
                             ret.push(q);                        }
                         if (data[i].questions[j].questionLabel && data[i].questions[j].questionLabel.toUpperCase().includes(search.toUpperCase())){
                             let q = this.toolbox.cloneObject(data[i].questions[j]);
+                            q.questionnaireTitle = data[i].title;
                             q.foundType = "questionLabel";
                             ret.push(q);
                         }
@@ -259,6 +298,7 @@ export class QuestionnaireService {
                             for (var k = 0; k < data[i].questions[j].answers.length; k++){
                                 if (data[i].questions[j].question && data[i].questions[j].answers[k].answer.toUpperCase().includes(search.toUpperCase())){
                                     let q = this.toolbox.cloneObject(data[i].questions[j]);
+                                    q.questionnaireTitle = data[i].title;
                                     q.foundType = "answer";
                                     ret.push(q);
                                 }
@@ -268,6 +308,21 @@ export class QuestionnaireService {
                 }
             }   
         }   
-        return ret;     
+        return ret;
+    }
+
+    updateQuestion(data: any, question: any){
+        if (data && question && question.id){
+            for (var i = 0 ; i < data.length; i++){
+                if (data[i].questions){
+                    for (var j=0; j< data[i].questions.length;j++){
+                        if (data[i].questions[j].id == question.id){
+                            data[i].questions.splice(j, 1, question);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

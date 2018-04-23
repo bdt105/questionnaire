@@ -27,6 +27,7 @@ export class TestComponent extends GenericComponent {
 
     public nbQuestions;
     public randomQuestions = false;
+    public jeopardy = false;
 
     public testInProgress = false;
 
@@ -77,7 +78,7 @@ export class TestComponent extends GenericComponent {
         this.questionnaireService.load((data: any) => this.manageData(data), (error: any) => this.manageError(error));
     }
 
-    private generateTest(){
+    private generateTest(jeopardy: boolean = false){
         this.currentQuestions = null;
         this.currentQuestions = [];
         this.currentQuestionIndex = 0;
@@ -93,7 +94,6 @@ export class TestComponent extends GenericComponent {
         if (this.randomQuestions){
             this.currentQuestions = this.toolbox.shuffleArray(this.currentQuestions);
         }
-
     }
 
     private nextQuestion(){
@@ -134,18 +134,7 @@ export class TestComponent extends GenericComponent {
     }
 
     private getScore(){
-        var score: any = {};
-        score.scoreOk = 0;
-        for (var i = 0; i< this.currentQuestions.length; i++){
-            if (this.currentQuestions[i].status){
-                score.scoreOk ++;
-            }
-        }
-        score.scoreNok = this.currentQuestions.length - score.scoreOk;
-        score.pourcentage = Math.round(score.scoreOk / this.currentQuestions.length * 100);
-        score.messagePourcentage = score.scoreOk + '/' + this.currentQuestions.length + ' (' + score.pourcentage + '%)';
-        this.score = score;
-        return score;
+        this.score = this.questionnaireService.getScore(this.currentQuestions);
     }
 
     selectQuestionnaire(){

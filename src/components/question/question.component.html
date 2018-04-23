@@ -1,65 +1,157 @@
-<i *ngIf="editable" (click)="toggleEdit()" class="fa fa-pencil" style="cursor: pointer;"></i>
-<!-- Modifications -->
-<i *ngIf="!question.showAnswers" (click)="question.showAnswers = !question.showAnswers" class="fa fa-plus-circle" style="cursor: pointer;" ></i>
-<i *ngIf="question.showAnswers" (click)="question.showAnswers = !question.showAnswers" class="fa fa-minus-circle" style="cursor: pointer;" ></i>
-<span *ngIf="question.questionLabel" style="cursor: pointer;" (click)="question.showAnswers = !question.showAnswers">{{ question.questionLabel}} <br></span>
-<input *ngIf="canEdit()" type="text" class="form-control" placeholder="{{translate('Question label')}}" [(ngModel)]="question.questionLabel" (change)="changed()">
-<input *ngIf="canEdit()" type="text" class="form-control" placeholder="{{translate('Question')}}" [(ngModel)]="question.question" (change)="changed()">
-<input *ngIf="canEdit()" type="text" class="form-control" placeholder="{{translate('Detail')}}" [(ngModel)]="question.detail" (change)="changed()">
-<!-- Read only -->
-<div *ngIf="!canEdit()" style="cursor: pointer;margin-bottom: 10px; margin-top: 10px" (click)="question.showAnswers = !question.showAnswers">
-    <span *ngIf="question.question">{{question.question}}<br></span>
-    <span *ngIf="question.detail">{{question.detail}}</span>
-    <questionCheck *ngIf="question.checked" [question]="question"></questionCheck>
-</div>
-<div *ngIf="question.showAnswers">
-    <!-- Answers -->
-    <div *ngFor="let answer of question.answers" class="list-group-item">
-        <!-- Modifications -->
-        <form *ngIf="canEdit()">
-            <div class="form-group">       
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">{{translate('Answer')}}</span>                 
-                    <input type="text" class="form-control" placeholder="Answer" [(ngModel)]="answer.answer" name="answer" (change)="changed()"> 
+<div>
+    
+    <!-- Read only -->
+    <div *ngIf="!canEdit()" style="cursor: pointer">
+        <div (click)="question.showAnwsers = !question.showAnwsers">
+            <div>
+                <em *ngIf="question.questionLabel">{{question.questionLabel}}</em>
+                <span *ngIf="question.question">{{question.question}}<br></span>
+                <span *ngIf="question.detail">{{question.detail}}</span>
+            </div>
+            <div *ngIf="(questionnaire && questionnaire.edit) || editable" class="text-right">
+                <i class="fa fa-pencil" (click)="toggleEdit()" style="cursor: pointer"></i>
+            </div>
+        </div>
+        <!-- <questionCheck *ngIf="question.checked" [question]="question"></questionCheck> -->
+        <div *ngIf="question.showAnwsers">
+            <br>
+            <div *ngFor="let answer of question.answers" class="list-group-item">
+                <div class="row ">
+                    <div class="col-sm-10">{{answer.answer}}</div>
+                    <div class="col-sm-2 text-right">
+                        <span class="badge badge-pill badge-warning" *ngIf="answer.correctDistance">{{answer.correctDistance}}</span>
+                        <span class="badge badge-pill badge-success" *ngIf="answer.point">{{answer.point}}</span>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">                        
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">{{translate('Distance')}}</span>
-                    <input type="number" class="form-control" placeholder="Correct answer distance" [(ngModel)]="answer.correctDistance" name="correctDistance" (change)="changed()"> 
+        </div>
+    </div>
+
+    <!-- Modifications -->
+    <div *ngIf="canEdit()">
+        <button *ngIf="canEdit()" type="button" (click)="newQuestion(questionnaire, question)" class="btn btn-primary" title="{{translate('New question after this question')}}"><i class="fa fa-plus"></i></button>
+        <button *ngIf="canEdit()" type="button" class="btn btn-danger" 
+            mwlConfirmationPopover
+                [popoverTitle]="translate('Delete question')"
+                [popoverMessage]="translate('Are you sure you want to delete that element?')"
+                [confirmText]="translate('Yes')"
+                [cancelText]="translate('No')"
+                placement="top"
+                title="{{translate('Delete question')}}"
+                (confirm)="deleteQuestion(questionnaire, question)">
+            <i class="fa fa-trash"></i>
+        </button>
+        <button type="button" (click)="toggleEdit()" class="btn btn-primary"><i class="fa fa-pencil"></i></button>
+        <br>
+        <br>
+        <h5>{{translate('Question')}}</h5>
+        <form>
+            <div class="row">
+                <div class="form-group col-sm-5"> 
+                    <input type="text" name="questionLabel" class="form-control" placeholder="{{translate('Question label')}}" [(ngModel)]="question.questionLabel" (change)="changed()">
                 </div>
-            </div>
-            <div class="form-group">                        
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">{{translate('Points')}}</span>
-                    <input type="number" class="form-control" placeholder="Correct answer reward" [(ngModel)]="answer.point" name="point" (change)="changed()"> 
+                <div class="form-group col-sm-3"> 
+                    <textarea class="form-control" name="question" placeholder="{{translate('Question')}}" [(ngModel)]="question.question" (change)="changed()"></textarea>
                 </div>
-            </div>
-            <div class="list-group">
-            <button type="button" class="btn btn-danger"
-                mwlConfirmationPopover
-                    [popoverTitle]="translate('Delete answer')"
-                    [popoverMessage]="translate('Are you sure you want to delete that element?')"
-                    [confirmText]="translate('Yes')"
-                    [cancelText]="translate('No')"
-                    placement="top"
-                    (confirm)="deleteAnswer(question, answer)">
-                    <i class="fa fa-trash"></i> {{translate('Delete answer')}}
-                </button>
+                <div class="form-group col-sm-3"> 
+                    <textarea class="form-control" name="detail" placeholder="{{translate('Detail')}}" [(ngModel)]="question.detail" (change)="changed()"></textarea>     
+                </div>
+                <div class="form-group col-sm-1"> 
+                </div>
             </div>
         </form>
+        <h5>{{translate('Answers')}}&nbsp;
+            <button *ngIf="canEdit()" type="button" (click)="newAnswer(question)" class="btn btn-primary" title="{{translate('New answer')}}"><i class="fa fa-plus"></i></button>
+        </h5>
+
+        <div *ngFor="let answer of question.answers">
+            <form>
+                <div class="row">
+                    <div class="form-group col-sm-5">       
+                        <textarea class="form-control" placeholder="Answer" [(ngModel)]="answer.answer" name="answer" (change)="changed()"></textarea> 
+                    </div>
+                    <div class="form-group col-sm-3">                        
+                        <input type="number" class="form-control" placeholder="{{translate('Correct answer distance')}}" title="{{translate('Correct answer distance')}}" [(ngModel)]="answer.correctDistance" name="correctDistance" (change)="changed()"> 
+                    </div>
+                    <div class="form-group col-sm-3">                        
+                        <input type="number" class="form-control" placeholder="{{translate('Correct answer reward')}}" title="{{translate('Correct answer reward')}}" [(ngModel)]="answer.point" name="point" (change)="changed()"> 
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-danger"
+                            mwlConfirmationPopover
+                                [popoverTitle]="translate('Delete answer')"
+                                [popoverMessage]="translate('Are you sure you want to delete that element?')"
+                                [confirmText]="translate('Yes')"
+                                [cancelText]="translate('No')"
+                                placement="top"
+                                title="{{translate('Delete answer')}}"
+                                (confirm)="deleteAnswer(question, answer)">
+                                <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- Answers -->
+<div *ngIf="question.showAnwsers" class="row list-group-item" style="border: 0">
+    <div *ngFor="let answer of question.answers">
+
+        <!-- Modifications -->
+        <!-- <div *ngIf="canEdit()">
+            <form>
+                <div class="row">
+                    <div class="form-group col-sm-3">       
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">{{translate('Answer')}}</span>                 
+                            <input type="text" class="form-control" placeholder="Answer" [(ngModel)]="answer.answer" name="answer" (change)="changed()"> 
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-3">                        
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">{{translate('Distance')}}</span>
+                            <input type="number" class="form-control" placeholder="Correct answer distance" [(ngModel)]="answer.correctDistance" name="correctDistance" (change)="changed()"> 
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-3">                        
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">{{translate('Points')}}</span>
+                            <input type="number" class="form-control" placeholder="Correct answer reward" [(ngModel)]="answer.point" name="point" (change)="changed()"> 
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" class="btn btn-danger"
+                            mwlConfirmationPopover
+                                [popoverTitle]="translate('Delete answer')"
+                                [popoverMessage]="translate('Are you sure you want to delete that element?')"
+                                [confirmText]="translate('Yes')"
+                                [cancelText]="translate('No')"
+                                placement="top"
+                                (confirm)="deleteAnswer(question, answer)">
+                                <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div> -->
         <!-- Read only -->
-        <div *ngIf="!canEdit()" class="row" style="margin: 0px">
+        <!-- <div *ngIf="!canEdit()" class="row">
             <div class="col-10">{{answer.answer}}</div>
             <div class="col-2 text-right">
                 <span class="badge badge-pill badge-warning" *ngIf="answer.correctDistance">{{answer.correctDistance}}</span>
                 <span class="badge badge-pill badge-success" *ngIf="answer.point">{{answer.point}}</span>
             </div>
-        </div>
+        </div> -->
+
     </div>
+
+    <!-- Buttons -->
     <div class="list-group">
-        <button *ngIf="canEdit()" type="button" (click)="newAnswer(question)" class="btn btn-primary"><i class="fa fa-plus"></i> {{translate('New answer')}}</button>
-        <button *ngIf="canEdit()" type="button" class="btn btn-danger" 
+        <!-- <button *ngIf="canEdit()" type="button" (click)="newAnswer(question)" class="btn btn-primary"><i class="fa fa-plus"></i> {{translate('New answer')}}</button> -->
+        <!-- <button *ngIf="canEdit()" type="button" class="btn btn-danger" 
             mwlConfirmationPopover
                 [popoverTitle]="translate('Delete question')"
                 [popoverMessage]="translate('Are you sure you want to delete that element?')"
@@ -68,6 +160,6 @@
                 placement="top"
                 (confirm)="deleteQuestion(questionnaire, question)">
             <i class="fa fa-trash"></i> {{translate('Delete question')}}
-        </button>
+        </button> -->
     </div>
 </div>

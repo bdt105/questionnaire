@@ -1,7 +1,7 @@
 {
     "common":
     {
-        "applicationName": "appName",
+        "applicationName": "Questionnaires",
         "homeUrl": "/home",
         "logToFile": true,
         "logToConsole": true,

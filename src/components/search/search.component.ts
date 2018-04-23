@@ -19,6 +19,7 @@ export class SearchComponent extends GenericComponent{
     private search: string;
     
     public data: any;
+    public dataSearch: any;
     public error: any;
 
     constructor(public configurationService: ConfigurationService, 
@@ -37,7 +38,7 @@ export class SearchComponent extends GenericComponent{
         if (data && data._body){
             this.data = this.toolbox.parseJson(data._body);
             this.questionnaireService.clearEditShow(this.data);
-            this.data = this.questionnaireService.searchInQuestionsAndAnswers(this.data, this.search);        
+            this.dataSearch = this.questionnaireService.searchInQuestionsAndAnswers(this.data, this.search);
         }else{
             this.data = [];
         }
@@ -51,7 +52,7 @@ export class SearchComponent extends GenericComponent{
         if (!this.data){
             this.data = [];
         }
-        this.data = this.questionnaireService.searchInQuestionsAndAnswers(this.data, this.search);    
+        this.dataSearch = this.questionnaireService.searchInQuestionsAndAnswers(this.data, this.search);
         console.log("failure load", this.data);
     }
 
@@ -66,4 +67,14 @@ export class SearchComponent extends GenericComponent{
         this.questionnaireService.load(
             (data: any) => this.successLoad(data), (error: any) => this.failureLoad(error));
     }    
+
+    updateQuestion(question: any){
+        if (question){
+            this.questionnaireService.updateQuestion(this.data, question);
+            let fake = (data: any)=>{
+
+            }
+            this.questionnaireService.save(fake, fake, this.data);
+        }
+    }
 }
