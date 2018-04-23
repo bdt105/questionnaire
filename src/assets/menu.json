@@ -35,11 +35,6 @@
             "title": "About",
             "submenu":[
                 {
-                    "label": "My profile",
-                    "href": "/user",
-                    "icon": "user"
-                },
-                {
                     "label": "Sign in / sign out",
                     "href": "/login",
                     "icon": "sign-in"
