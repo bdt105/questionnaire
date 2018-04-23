@@ -4,18 +4,18 @@
     <!-- Questionnaires -->
     <div *ngFor="let questionnaire of data" class="list-group-item">
         <div class="row">
-            <div  class="col-10">
+            <div  class="col-sm-11">
                 <div *ngIf="questionnaire.edit">
                     <input type="text" class="form-control" placeholder="{{translate('Questionnaire name')}}" [(ngModel)]="questionnaire.title" name="title" (change)="save()">
                     <br>
                 </div>
                 <span *ngIf="!questionnaire.edit" (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
-                    <h5>{{questionnaire.title}}
+                    <h6>{{questionnaire.title}} 
                         <span class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>
-                    </h5> 
+                    </h6>
                 </span>
             </div>           
-            <div class="col-2 text-right" (click)="edit(questionnaire)" style="cursor: pointer;">
+            <div class="col-sm-1 text-right" (click)="edit(questionnaire)" style="cursor: pointer;">
                 <i  class="fa fa-pencil"></i>
             </div>
         </div>
@@ -53,8 +53,7 @@
             </div>
         </div>
     </div>
-    <!-- <br>
-    <button type="button" class="btn btn-warning" (click)="save()"><i class="fa fa-save"></i> Save questionnaires</button> -->
+
     <br>
     <button type="button" class="btn btn-primary" (click)="newQuestionnaire()"><i class="fa fa-plus"></i> {{translate('New questionnaire')}}</button>
     <button type="button" class="btn btn-warning" (click)="importQuestionnaires = !importQuestionnaires">
