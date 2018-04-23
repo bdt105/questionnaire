@@ -94,7 +94,32 @@ export class TestComponent extends GenericComponent {
         if (this.randomQuestions){
             this.currentQuestions = this.toolbox.shuffleArray(this.currentQuestions);
         }
+        if (jeopardy){
+            this.currentQuestions = this.generateJeopardy(this.currentQuestions);
+        }
     }
+
+    private generateJeopardy(questions: any){
+        let res = [];
+        if (questions){
+            for (var i=0; i < questions.length; i++){
+                if (questions[i].answers){
+                    for (var j=0; j < questions[i].answers.length; j++){
+                        let q = this.toolbox.cloneObject(questions[i]);
+                        if (questions[i].answers[j].answer){
+                            q.question = questions[i].answers[j].answer;
+                            q.answers = [];
+                            let a = this.questionnaireService.newAnswer();
+                            a.answer = questions[i].question;
+                            q.answers.push(a);
+                            res.push(q);
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }    
 
     private nextQuestion(){
         if (this.currentQuestionIndex < this.currentQuestions.length - 1){        
@@ -113,7 +138,7 @@ export class TestComponent extends GenericComponent {
     start(){
         this.testInProgress = true;
         this.showResults = false;
-        this.generateTest();
+        this.generateTest(this.jeopardy);
         if (!this.nbQuestions){
             this.nbQuestions = this.currentQuestions.length;
         }

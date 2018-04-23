@@ -23,9 +23,9 @@
         <div class="form-group">
             <input type="checkbox" value="" id="defaultCheck1"  [(ngModel)]="nextIfCorrect" name="nextIfCorrect"> {{translate('Next question if correct')}}
         </div>
-        <!-- <div class="form-group">
+        <div class="form-group" title="{{translate('Questions will be answers and answers will be questions')}}">
             <input type="checkbox" value="" id="defaultCheck1"  [(ngModel)]="jeopardy" name="nextIfCorrect"> {{translate('Jeopardy mode')}}
-        </div> -->
+        </div>
         <button type="submit" class="btn btn-primary" (click)="start()"><i class="fa fa-play"></i> {{translate('Let\'s go')}}</button>
     </form>
 </div>
