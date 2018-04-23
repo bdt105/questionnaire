@@ -47,7 +47,7 @@
     <div style="margin-top: 20px" class="jumbotron" *ngIf="currentQuestions[currentQuestionIndex].checked && currentQuestionIndex == (currentQuestions.length - 1)">
         <h3>{{translate('Congratulations!!')}}</h3>
         <h5>{{translate('Your score is: ') + score.messagePourcentage}}</h5>
-        <span (click)="showResults = ! showResults">{{translate('See all questions and answers')}}</span>
+        <span (click)="showResults = ! showResults" style="cursor: pointer;">{{translate('See all questions and answers')}}</span>
         <div *ngIf="showResults">
             <div *ngFor="let question of currentQuestions">
                 <questionCheck [question]="question"></questionCheck>
