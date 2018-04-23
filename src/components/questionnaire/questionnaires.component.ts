@@ -26,6 +26,7 @@ export class QuestionnairesComponent extends GenericComponent {
 
     public importQuestionnaires = false;
     public exportQuestionnaires = false;
+    public overWriteImport = false;
 
     public questionnairesToImport: string;
     public questionnairesToExport: string;
@@ -102,7 +103,7 @@ export class QuestionnairesComponent extends GenericComponent {
     }
 
     importQuestionnairesJson(questionnaires: string){
-        let res = this.questionnaireService.importQuestionnaires(this.data, this.questionnairesToImport);
+        let res = this.questionnaireService.importQuestionnaires(this.data, this.questionnairesToImport, this.overWriteImport);
         this.data = res;
         this.save();
     } 

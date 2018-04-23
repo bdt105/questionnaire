@@ -243,7 +243,7 @@ export class QuestionnaireService {
     }
     
 
-    importQuestionnaires(data: any, questionnaires: string){
+    importQuestionnaires(data: any, questionnaires: string, overwrite: boolean = false){
         let temp = this.toolbox.cloneObject(data);
         if (!temp){
             temp = [];
@@ -252,7 +252,12 @@ export class QuestionnaireService {
             if (this.toolbox.isJson(questionnaires)){
                 let ques = this.toolbox.parseJson(questionnaires);
                 this.setIds(ques);
-                let data2 = temp.concat(ques);
+                let data2;
+                if (overwrite){
+                    data2 = ques;
+                }else{
+                    data2 = temp.concat(ques);
+                }
                 return data2;
             }
         }

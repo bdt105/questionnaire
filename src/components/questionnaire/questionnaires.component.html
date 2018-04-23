@@ -43,7 +43,7 @@
             </div>
             <div *ngIf="questionnaire.edit && questionnaire.importQuestionsCsv">
                 <br>
-                <textarea class="form-control" placeholder="{{translate('Copy and paste yours questions. Json or Csv format (questionLabel|answerLabelOk|answerLabelNok|question1|detail|answer1|answer2|answerN|..| etc. Each line is a queston, all columns are mandatory but can be empty.)')}}"
+                <textarea class="form-control" placeholder="{{translate('Copy and paste yours questions. Json or Csv format (questionLabel|answerLabelOk|answerLabelNok|question1|detail|answer1|answer2|answerN|..| etc. Each line is a question, all columns are mandatory but can be empty.)')}}"
                     [(ngModel)]="questionnaire.qestionsToImport">
                 </textarea>
                 <div class="list-group">
@@ -65,6 +65,8 @@
         <textarea class="form-control" placeholder="{{translate('Paste your questionnaires with Json format here.')}}"
             [(ngModel)]="questionnairesToImport">
         </textarea>
+        <br>
+        <input type="checkbox" value="" id="defaultCheck1"  [(ngModel)]="overWriteImport" name="nextIfCorrect"> {{translate('Over write existing questionanires')}}                        
         <div class="list-group">
             <br>
             <button type="button" class="btn btn-warning" (click)="importQuestionnairesJson()"><i class="fa fa-download"></i> {{translate('Import your questionnaires')}}</button>
