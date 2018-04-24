@@ -9,6 +9,7 @@ import { Http } from '@angular/http';
 
 import { Toolbox, Rest } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
+import { TestService } from '../../services/test.service';
 
 @Component({
     selector: 'test',
@@ -47,7 +48,7 @@ export class TestComponent extends GenericComponent {
 
     constructor(public configurationService: ConfigurationService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
-        public menuService: MenuService, private http: Http){
+        public menuService: MenuService, private http: Http, public testService: TestService){
         super(configurationService, translateService);
     }
 
@@ -81,45 +82,8 @@ export class TestComponent extends GenericComponent {
     private generateTest(jeopardy: boolean = false){
         this.currentQuestions = null;
         this.currentQuestions = [];
-        this.currentQuestionIndex = 0;
-        for (var i=0; i < this.data.length; i++){
-            if (this.data[i].test){
-                for (var j = 0; j < this.data[i].questions.length; j++){
-                    let q = this.toolbox.cloneObject(this.data[i].questions[j]);
-                    q.questionnaireTitle = this.data[i].title;
-                    this.currentQuestions.push(q);
-                }
-            }
-        }
-        if (this.randomQuestions){
-            this.currentQuestions = this.toolbox.shuffleArray(this.currentQuestions);
-        }
-        if (jeopardy){
-            this.currentQuestions = this.generateJeopardy(this.currentQuestions);
-        }
+        this.currentQuestions = this.testService.generate(this.data, this.randomQuestions, jeopardy);
     }
-
-    private generateJeopardy(questions: any){
-        let res = [];
-        if (questions){
-            for (var i=0; i < questions.length; i++){
-                if (questions[i].answers){
-                    for (var j=0; j < questions[i].answers.length; j++){
-                        let q = this.toolbox.cloneObject(questions[i]);
-                        if (questions[i].answers[j].answer){
-                            q.question = questions[i].answers[j].answer;
-                            q.answers = [];
-                            let a = this.questionnaireService.newAnswer();
-                            a.answer = questions[i].question;
-                            q.answers.push(a);
-                            res.push(q);
-                        }
-                    }
-                }
-            }
-        }
-        return res;
-    }    
 
     private nextQuestion(){
         if (this.currentQuestionIndex < this.currentQuestions.length - 1){        
@@ -156,10 +120,28 @@ export class TestComponent extends GenericComponent {
             this.nextQuestion();
         }
         this.getScore();
+        this.saveTest();
+    }
+
+    private saveTest(){
+        if (this.currentQuestionIndex == (this.currentQuestions.length - 1)){
+            let fake = (data: any) => {
+
+            }
+            let saveDate = new Date().toString();
+            let questionnaires = [];
+            for (var i=0; i < this.data.length - 1; i++){
+                if (this.data[i].test){
+                    questionnaires.push(this.data[i].title);
+                }
+            }
+            let test = {"": questionnaires, "random": this.randomQuestions, "questions": this.currentQuestions, "saveDate": saveDate, "startDate": this.startDate, "endDate": this.endDate};
+            this.testService.save(fake, fake, test);
+        }
     }
 
     private getScore(){
-        this.score = this.questionnaireService.getScore(this.currentQuestions);
+        this.score = this.testService.getScore(this.currentQuestions);
     }
 
     selectQuestionnaire(){

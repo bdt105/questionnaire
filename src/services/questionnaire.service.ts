@@ -224,24 +224,6 @@ export class QuestionnaireService {
         question.checked = true;
     }
 
-    public getScore(questions: any){
-        var score: any = {};
-        score.scoreOk = 0;
-        score.scoreNok = 0;
-        for (var i = 0; i< questions.length; i++){
-            if (questions[i].checked){
-                if (questions[i].status){
-                    score.scoreOk ++;
-                }else{
-                    score.scoreNok ++;
-                }
-            } 
-        }
-        score.pourcentage = Math.round(score.scoreOk / questions.length * 100);
-        score.messagePourcentage = score.scoreOk + '/' + questions.length + ' (' + score.pourcentage + '%)';
-        return score;
-    }
-    
 
     importQuestionnaires(data: any, questionnaires: string, overwrite: boolean = false){
         let temp = this.toolbox.cloneObject(data);
@@ -330,4 +312,5 @@ export class QuestionnaireService {
             }
         }
     }
+ 
 }

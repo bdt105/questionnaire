@@ -23,10 +23,21 @@
         },
         {
             "label": "Test",
-            "href": "/test",
             "icon": "pencil-square-o",
             "title": "Test",
-            "align": "right"
+            "align": "right",
+            "submenu":[
+                {
+                    "label": "Tests already done",
+                    "href": "/tests",
+                    "icon": "list"
+                },
+                {
+                    "label": "New test",
+                    "href": "/test",
+                    "icon": "pencil-square-o"
+                }
+            ]
         },
         {
             "label": "",
@@ -61,10 +72,21 @@
         },
         {
             "label": "Test",
-            "href": "/test",
             "icon": "pencil-square-o",
             "title": "Test",
-            "align": "right"
+            "align": "right",
+            "submenu":[
+                {
+                    "label": "Tests already done",
+                    "href": "/tests",
+                    "icon": "list"
+                },
+                {
+                    "label": "New test",
+                    "href": "/test",
+                    "icon": "pencil-square-o"
+                }
+            ]
         },
         {
             "label": "Sign in / sign out",

@@ -13,6 +13,7 @@ import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { UserComponent } from '../components/user/user.component';
 import { QuestionnairesComponent } from '../components/questionnaire/questionnaires.component';
 import { TestComponent } from '../components/test/test.component';
+import { TestsComponent } from '../components/test/tests.component';
 import { QuestionComponent } from '../components/question/question.component';
 import { QuestionCheckComponent } from '../components/question/questionCheck.component';
 
@@ -44,6 +45,7 @@ import { FormValidationService } from '../services/fromValidation.service';
 import { AuthGuard } from '../services/auth.guard';
 import { QuestionnaireService } from '../services/questionnaire.service';
 import { SearchComponent } from '../components/search/search.component';
+import { TestService } from '../services/test.service';
 
 export function init (config: ConfigurationService) {
     config.load();
@@ -63,6 +65,7 @@ export function init (config: ConfigurationService) {
         AboutComponent,
         QuestionnairesComponent,
         TestComponent,
+        TestsComponent,
         QuestionComponent,
         QuestionCheckComponent,
         SearchComponent
@@ -86,7 +89,7 @@ export function init (config: ConfigurationService) {
             'multi': true
         },
         AuthGuard, MenuService, AccordionConfig, ConfigurationService, TranslateService, 
-            ConnexionService, FormValidationService, UserService, QuestionnaireService],
+            ConnexionService, FormValidationService, UserService, QuestionnaireService, TestService],
         bootstrap: [ AppComponent ]
     })
 
