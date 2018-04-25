@@ -100,23 +100,23 @@ export class TestService {
         );
     }
 
-
-
     public getScore(questions: any){
         var score: any = {};
-        score.scoreOk = 0;
-        score.scoreNok = 0;
-        for (var i = 0; i< questions.length; i++){
-            if (questions[i].checked){
-                if (questions[i].status){
-                    score.scoreOk ++;
-                }else{
-                    score.scoreNok ++;
-                }
-            } 
-        }
-        score.pourcentage = Math.round(score.scoreOk / questions.length * 100);
-        score.messagePourcentage = score.scoreOk + '/' + questions.length + ' (' + score.pourcentage + '%)';
+        if (questions){
+            score.scoreOk = 0;
+            score.scoreNok = 0;
+            for (var i = 0; i< questions.length; i++){
+                if (questions[i].checked){
+                    if (questions[i].status){
+                        score.scoreOk ++;
+                    }else{
+                        score.scoreNok ++;
+                    }
+                } 
+            }
+            score.pourcentage = Math.round(score.scoreOk / questions.length * 100);
+            score.messagePourcentage = score.scoreOk + '/' + questions.length + ' (' + score.pourcentage + '%)';
+            }
         return score;
     }
 
@@ -124,10 +124,10 @@ export class TestService {
         let url = this.configurationService.get().common.saveApiBaseUrl;
         let d = new Date();
         console.log("data url", url);
-        let fileName = this.toolbox.formatDate(d, "YYYYMMDDHHmmss") + "_test.json";
+        test.fileName = this.toolbox.formatDate(d, "YYYYMMDDHHmmss") + "_test.json";
         let user = this.connexionService.getUser();
         let directory = user.email.toUpperCase();
-        let body = {"directory": directory, "fileName": fileName, "content": JSON.stringify(test)};
+        let body = {"directory": directory, "fileName": test.fileName, "content": JSON.stringify(test)};
         this.http.put(url, body).subscribe(
             (data: any) => callbackSuccess(data),
             (error: any) => callbackFailure(error)
@@ -135,7 +135,7 @@ export class TestService {
 
     } 
 
-    public generate(data: any, randomQuestions: boolean, jeopardy: boolean = false){
+    public generate(data: any, randomQuestions: boolean, jeopardy: boolean = false, nbQuestion: number = -1){
         let currentQuestions  = [];
         for (var i=0; i < data.length; i++){
             if (data[i].test){
@@ -148,6 +148,9 @@ export class TestService {
         }
         if (randomQuestions){
             currentQuestions = this.toolbox.shuffleArray(currentQuestions);
+            if (nbQuestion != -1){
+                currentQuestions = currentQuestions.splice(0, nbQuestion);
+            }
         }
         if (jeopardy){
             currentQuestions = this.generateJeopardy(currentQuestions);

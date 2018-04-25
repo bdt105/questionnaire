@@ -34,7 +34,7 @@
                 },
                 {
                     "label": "New test",
-                    "href": "/test",
+                    "href": "/tester",
                     "icon": "pencil-square-o"
                 }
             ]
@@ -83,7 +83,7 @@
                 },
                 {
                     "label": "New test",
-                    "href": "/test",
+                    "href": "/tester",
                     "icon": "pencil-square-o"
                 }
             ]

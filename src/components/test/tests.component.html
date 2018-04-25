@@ -3,10 +3,9 @@
 <div *ngIf="data" class="list-group">
     <div *ngFor="let test of data" class="list-group-item">
         <span (click)="toggleTest(test)" style="cursor: pointer">{{test.dateString}}</span>
-        <div *ngIf="test.showTest && test.data && test.data.questions">
-            <div *ngFor="let question of test.data.questions">
-                <questionCheck [question]="question"></questionCheck>
-            </div>
+        <div *ngIf="test.showTest && test.data && test.data.questions" class="list-group">
+            <br>
+            <test [fileName]="test.fileName"></test>
         </div>
     </div>
 </div>

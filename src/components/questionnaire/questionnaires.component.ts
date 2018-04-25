@@ -114,6 +114,6 @@ export class QuestionnairesComponent extends GenericComponent {
 
     edit(questionnaire: any){
         questionnaire.edit = !questionnaire.edit;
-        questionnaire.showQuestions = questionnaire.edit;
+        //questionnaire.showQuestions = questionnaire.edit;
     }
 }

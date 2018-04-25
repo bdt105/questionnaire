@@ -1,5 +1,6 @@
 <h6>{{question.questionnaireTitle}}</h6>
-<em>{{question.question}}</em>
+<question [question]="question" [editable]="false"></question>
+<!-- <em>{{question.question}}</em>
 <div>
     <span *ngIf="question.status" class="badge badge-pill badge-success"><i class="fa fa-thumbs-up"></i> {{answerLabelNok}}</span>
     <span *ngIf="!question.status" class="badge badge-pill badge-danger"><i class="fa fa-thumbs-down"></i> {{answerLabelOk}}</span>
@@ -10,4 +11,4 @@
     <div *ngFor="let answer of question.answers" style="margin-left: 30px">
         <i>{{answer.answer}}</i>
     </div>
-</div>
+</div> -->

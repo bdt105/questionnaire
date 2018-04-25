@@ -20,6 +20,7 @@ import { TestService } from '../../services/test.service';
 export class TestsComponent extends GenericComponent {
 
 
+    public score: any;
     private toolbox: Toolbox = new Toolbox();
 
     public data: any;
@@ -53,6 +54,7 @@ export class TestsComponent extends GenericComponent {
     private successLoad1(data: any, test: any){
         if (data && data._body){
             test.data = JSON.parse(data._body);
+            test.score = this.testService.getScore(test.data.questions);
         }else{
             test.data = [];
         }

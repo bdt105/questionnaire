@@ -19,133 +19,50 @@ import { TestService } from '../../services/test.service';
 
 export class TestComponent extends GenericComponent {
 
+    public __fileName: string;
 
+    @Input() set fileName(value: string){
+        this.__fileName = value;
+        this.load();
+    };
+
+    get fileName(): string{
+        return this.__fileName;
+    };
+
+    public score: any;
     private toolbox: Toolbox = new Toolbox();
-    private rest: Rest = new Rest();
 
     public data: any;
     public error: any;
 
-    public nbQuestions;
-    public randomQuestions = false;
-    public jeopardy = false;
-
-    public testInProgress = false;
-
-    public showResults = false;
-
-    public currentQuestions: any;
-
-    public currentQuestionIndex = 0;
-
-    public nextIfCorrect = true;
-
-    public startDate = null;
-    public endDate = null;
-
-    public showDefinition = true;
-    public score:any = {};
 
     constructor(public configurationService: ConfigurationService, 
-        public translateService: TranslateService, public questionnaireService: QuestionnaireService,
-        public menuService: MenuService, private http: Http, public testService: TestService){
+        public translateService: TranslateService, public testService: TestService,
+        public menuService: MenuService, private http: Http){
         super(configurationService, translateService);
     }
 
     ngOnInit(){
-        this.load();
     }
 
     private manageData(data: any){
-        if (data && data._body){
+        if (data){
             this.data = JSON.parse(data._body);
-        }else{
-            this.data = [];
+            this.data.score = this.testService.getScore(this.data.questions);
+            this.data.startDateString = this.toolbox.formatDateToLocal(new Date(this.data.startDate), true);
+            this.data.endDateString = this.toolbox.formatDateToLocal(new Date(this.data.endDate), true);;
         }
-        this.questionnaireService.saveToLocal(this.data);
     }
 
     private manageError(error: any){
-        this.error = error;
-        let raw = this.questionnaireService.loadFromLocal();
-        this.data = this.toolbox.parseJson(raw);
-        if (!this.data){
-            this.data = [];
-        }
-        console.log("failure load", this.data);
+        this.data = error;
     }
 
     load(){        
-        this.questionnaireService.load((data: any) => this.manageData(data), (error: any) => this.manageError(error));
+        this.testService.load1(
+            (data: any) => this.manageData(data), 
+            (error: any) => this.manageError(error), this.__fileName);
     }
-
-    private generateTest(jeopardy: boolean = false){
-        this.currentQuestions = null;
-        this.currentQuestions = [];
-        this.currentQuestions = this.testService.generate(this.data, this.randomQuestions, jeopardy);
-    }
-
-    private nextQuestion(){
-        if (this.currentQuestionIndex < this.currentQuestions.length - 1){        
-            this.currentQuestionIndex ++;
-        }
-        this.getScore();
-    }
-
-    private previousQuestion(){
-        if (this.currentQuestionIndex > 0){
-            this.currentQuestionIndex --;
-        }
-        this.getScore();
-    }
-
-    start(){
-        this.testInProgress = true;
-        this.showResults = false;
-        this.generateTest(this.jeopardy);
-        if (!this.nbQuestions){
-            this.nbQuestions = this.currentQuestions.length;
-        }
-        this.startDate = Date.now();
-        //this.showDefinition = false;
-        this.getScore();        
-    }
-
-    checkQuestion(question: any, answer: string){
-        if (this.currentQuestionIndex == this.currentQuestions.length - 1){
-            this.endDate = Date.now();
-        }        
-        this.questionnaireService.checkQuestion(question, answer);
-        if (this.nextIfCorrect && this.currentQuestions[this.currentQuestionIndex].status){
-            this.nextQuestion();
-        }
-        this.getScore();
-        this.saveTest();
-    }
-
-    private saveTest(){
-        if (this.currentQuestionIndex == (this.currentQuestions.length - 1)){
-            let fake = (data: any) => {
-
-            }
-            let saveDate = new Date().toString();
-            let questionnaires = [];
-            for (var i=0; i < this.data.length - 1; i++){
-                if (this.data[i].test){
-                    questionnaires.push(this.data[i].title);
-                }
-            }
-            let test = {"": questionnaires, "random": this.randomQuestions, "questions": this.currentQuestions, "saveDate": saveDate, "startDate": this.startDate, "endDate": this.endDate};
-            this.testService.save(fake, fake, test);
-        }
-    }
-
-    private getScore(){
-        this.score = this.testService.getScore(this.currentQuestions);
-    }
-
-    selectQuestionnaire(){
-        this.nbQuestions = null;
-    }
-
+    
 }

@@ -12,6 +12,7 @@ import { NavbarComponent } from '../components/navbar/navbar.component';
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { UserComponent } from '../components/user/user.component';
 import { QuestionnairesComponent } from '../components/questionnaire/questionnaires.component';
+import { TesterComponent } from '../components/test/tester.component';
 import { TestComponent } from '../components/test/test.component';
 import { TestsComponent } from '../components/test/tests.component';
 import { QuestionComponent } from '../components/question/question.component';
@@ -65,8 +66,9 @@ export function init (config: ConfigurationService) {
         UserComponent,
         AboutComponent,
         QuestionnairesComponent,
-        TestComponent,
+        TesterComponent,
         TestsComponent,
+        TestComponent,
         QuestionComponent,
         QuestionsComponent,
         QuestionCheckComponent,

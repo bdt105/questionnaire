@@ -2,13 +2,18 @@
     
     <!-- Read only -->
     <div *ngIf="!canEdit()" style="cursor: pointer">
-        <div (click)="question.showAnswers = !question.showAnswers">
-            <div>
-                <em *ngIf="question.questionLabel">{{question.questionLabel}}</em>
-                <span *ngIf="question.question">{{question.question}}<br></span>
+        <div (click)="question.showAnswers = !question.showAnswers" class="row">
+            <div class="col-10">
+                <span *ngIf="question.checked">
+                    <span *ngIf="question.status == true" class="badge badge-pill badge-success"><i class="fa fa-thumbs-up"></i></span>
+                    <span *ngIf="question.status == false" class="badge badge-pill badge-danger"><i class="fa fa-thumbs-down"></i></span>                    
+                    <strong>{{question.customAnswer}}<br></strong>
+                </span>
+                <em *ngIf="question.questionLabel">{{question.questionLabel}}<br></em>
+                <strong *ngIf="question.question">{{question.question}}<br></strong>
                 <span *ngIf="question.detail">{{question.detail}}</span>
             </div>
-            <div *ngIf="(questionnaire && questionnaire.edit) || editable" class="text-right">
+            <div class="col-2 text-right" *ngIf="(questionnaire && questionnaire.edit) || editable">
                 <i class="fa fa-pencil" (click)="toggleEdit()" style="cursor: pointer"></i>
             </div>
         </div>
@@ -17,8 +22,8 @@
             <br>
             <div *ngFor="let answer of question.answers" class="list-group-item">
                 <div class="row ">
-                    <div class="col-sm-10">{{answer.answer}}</div>
-                    <div class="col-sm-2 text-right">
+                    <div class="col-10">{{answer.answer}}</div>
+                    <div class="col-2 text-right">
                         <span class="badge badge-pill badge-warning" *ngIf="answer.correctDistance">{{answer.correctDistance}}</span>
                         <span class="badge badge-pill badge-success" *ngIf="answer.point">{{answer.point}}</span>
                     </div>
