@@ -1,0 +1,5 @@
+<div>
+    <div *ngFor="let question of questions" class="list-group-item">
+        <question [question]="question" [questionnaire]="questionnaire" [editable]="questionnaire.edit" (change)="changed()"></question>
+    </div>
+</div>

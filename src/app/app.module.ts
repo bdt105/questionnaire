@@ -15,6 +15,7 @@ import { QuestionnairesComponent } from '../components/questionnaire/questionnai
 import { TestComponent } from '../components/test/test.component';
 import { TestsComponent } from '../components/test/tests.component';
 import { QuestionComponent } from '../components/question/question.component';
+import { QuestionsComponent } from '../components/question/questions.component';
 import { QuestionCheckComponent } from '../components/question/questionCheck.component';
 
 // Sidebar module https://github.com/arkon/ng-sidebar
@@ -67,6 +68,7 @@ export function init (config: ConfigurationService) {
         TestComponent,
         TestsComponent,
         QuestionComponent,
+        QuestionsComponent,
         QuestionCheckComponent,
         SearchComponent
     ],
@@ -78,6 +80,7 @@ export function init (config: ConfigurationService) {
         HttpModule,
         ReactiveFormsModule,
         ProgressbarModule.forRoot(),
+        PaginationModule.forRoot(),
         ConfirmationPopoverModule.forRoot({"confirmButtonType": "danger"}),
         SidebarModule.forRoot()
     ],

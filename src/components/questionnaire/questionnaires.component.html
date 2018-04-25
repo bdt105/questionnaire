@@ -21,9 +21,10 @@
         </div>
         <div *ngIf="questionnaire.showQuestions">
             <!-- Questions -->
-            <div *ngFor="let question of questionnaire.questions" class="list-group-item">
+            <questions [questions]="questionnaire.questions" [questionnaire]="questionnaire" [editable]="questionnaire.edit" (change)="save()"></questions>
+            <!-- <div *ngFor="let question of questionnaire.questions" class="list-group-item">
                 <question [question]="question" [questionnaire]="questionnaire" [editable]="questionnaire.edit" (change)="save()"></question>
-            </div>
+            </div> -->
             <br>
             <div class="list-group">
                 <button *ngIf="questionnaire.edit" type="button" class="btn btn-primary" (click)="newQuestion(questionnaire)"><i class="fa fa-plus"></i> {{translate('New question')}}</button>

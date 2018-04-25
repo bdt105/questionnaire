@@ -139,14 +139,25 @@ export class QuestionnaireService {
         this.toolbox.writeToStorage(this.storageKey, data, true);
     }
 
-    clearEditShow(data: any){
+    cleanQuestionnaires(data: any){
+        let x = 0;
         for (var i=0 ; i< data.length; i++){
             delete(data[i].edit);
             delete(data[i].showQuestions);
             if (data[i].questions){
-                for (var j=0; j< data[i].questions.length;j++){
+                for (var j=0 ; j< data[i].questions.length; j++){
                     delete(data[i].questions[j].edit);
                     delete(data[i].questions[j].showAnswers);
+                    if (data[i].questions[j].answers){
+                        if (data[i].questions[j].answers.length > 1){
+                            x ++;
+                        }
+                        for (var k = 0; k < data[i].questions[j].answers.length; k++){
+                            if (data[i].questions[j].answers[k].answer == ""){
+                                data[i].questions[j].answers.splice(k, 1);
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -44,7 +44,7 @@ export class QuestionnairesComponent extends GenericComponent {
     private successLoad(data: any){
         if (data && data._body){
             this.data = this.toolbox.parseJson(data._body);
-            this.questionnaireService.clearEditShow(this.data);
+            this.questionnaireService.cleanQuestionnaires(this.data);
         }else{
             this.data = [];
         }
