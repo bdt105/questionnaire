@@ -135,7 +135,7 @@ export class TestService {
 
     } 
 
-    public generate(data: any, randomQuestions: boolean, jeopardy: boolean = false, nbQuestion: number = -1){
+    public generate(data: any, randomQuestions: boolean, jeopardy: boolean, nbQuestion: number){
         let currentQuestions  = [];
         for (var i=0; i < data.length; i++){
             if (data[i].test){
@@ -148,7 +148,7 @@ export class TestService {
         }
         if (randomQuestions){
             currentQuestions = this.toolbox.shuffleArray(currentQuestions);
-            if (nbQuestion != -1){
+            if (nbQuestion != -1 && nbQuestion){
                 currentQuestions = currentQuestions.splice(0, nbQuestion);
             }
         }
