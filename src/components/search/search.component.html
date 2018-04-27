@@ -1,6 +1,6 @@
-<h3>{{translate('Search')}}</h3>
+<h3>{{translate('Search')}} <span *ngIf="questionsSearch" class="badge badge-primary badge-pill">{{questionsSearch.length}}</span></h3>
 <div class="list-group">
-    <div class="list-group-item" *ngFor="let question of dataSearch">
+    <div class="list-group-item" *ngFor="let question of questionsSearch">
         <h6>{{question.questionnaireTitle}}</h6>    
         <span class="badge badge-primary badge-pill">{{question.foundType}}</span>
         <br>

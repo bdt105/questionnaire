@@ -1,0 +1,32 @@
+<div class="row">
+    <div  class="col-11">
+        <div *ngIf="questionnaire.edit">
+            <input type="text" class="form-control" placeholder="{{translate('Questionnaire name')}}" [(ngModel)]="questionnaire.title" name="title" (change)="save()">
+            <br>
+        </div>
+        <span *ngIf="!questionnaire.edit" (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
+            <h6>{{questionnaire.title}} 
+                <span class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>
+            </h6>
+        </span>
+    </div>           
+    <div class="col-1 text-right" style="cursor: pointer;padding:0; margin: 0">
+        <div class="dropdown">
+            <button style="background-color:transparent; border: 0" class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i  class="fa fa-ellipsis-v"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" (click)="edit(questionnaire)"><i class="fa fa-pencil"></i> {{translate('Edit')}}</a>
+                <a class="dropdown-item" (click)="newQuestion(questionnaire)"><i class="fa fa-plus"></i> {{translate('New question')}}</a>
+                <a class="dropdown-item" (click)="export()"><i class="fa fa-upload"></i> {{translate('Export questionnaire')}}</a>
+                <a class="dropdown-item" (click)="deleteWithConfirmation()"><i class="fa fa-trash"></i> {{translate('Delete this questionnaire')}}</a>
+            </div>
+        </div>
+                          
+    </div>
+</div>
+
+<!-- Questions -->
+<div *ngIf="questionnaire.showQuestions">
+    <questions [questions]="questionnaire.questions" [questionnaire]="questionnaire" [editable]="true" (change)="save()"></questions>
+</div>

@@ -9,6 +9,8 @@ import { Http } from '@angular/http';
 
 import { Toolbox, Rest } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { ConfirmationComponent } from '../standard/confirmation.component';
 
 @Component({
     selector: 'question',
@@ -20,13 +22,14 @@ export class QuestionComponent extends GenericComponent {
 
     private toolbox: Toolbox = new Toolbox();
     public showResults = false;
+    public bsModalRef: BsModalRef;
 
     @Input() question: any;
     @Input() questionnaire: any;
     @Input() editable: boolean = true;
     @Output() change: EventEmitter<string> = new EventEmitter<string>();
 
-    constructor(public configurationService: ConfigurationService, 
+    constructor(public configurationService: ConfigurationService, private modalService: BsModalService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
         public menuService: MenuService, private http: Http){
         super(configurationService, translateService);
@@ -45,13 +48,39 @@ export class QuestionComponent extends GenericComponent {
     }
 
     newAnswer(question: any){
-        this.questionnaireService.newAnswer(question);        
+        this.question.showAnswers = true;      
+        this.question.edit = true;      
+        this.questionnaireService.newAnswer(question);  
     }
 
     deleteAnswer(question: any, answer: any){
         this.questionnaireService.deleteAnswer(question, answer);
         this.changed();
     }
+
+    deleteWithConfirmationQuestion(question: any) {
+        this.bsModalRef = this.modalService.show(ConfirmationComponent);
+        this.bsModalRef.content.modalRef = this.bsModalRef;
+        this.bsModalRef.content.title = this.translate("Deleting a questionnaire");
+        this.bsModalRef.content.message = this.translate("Are you sure you want to delete question '" + question.question + "'");
+        this.bsModalRef.content.button1Label = this.translate("Yes");
+        this.bsModalRef.content.button2Label = this.translate("No");        
+        this.bsModalRef.content.button1Click.subscribe(result => {
+            this.deleteQuestion(this.questionnaire, question);
+        })
+    }    
+
+    deleteWithConfirmationAnswer(answer: any) {
+        this.bsModalRef = this.modalService.show(ConfirmationComponent);
+        this.bsModalRef.content.modalRef = this.bsModalRef;
+        this.bsModalRef.content.title = this.translate("Deleting a answer");
+        this.bsModalRef.content.message = this.translate("Are you sure you want to delete answer '" + answer.answer + "'");
+        this.bsModalRef.content.button1Label = this.translate("Yes");
+        this.bsModalRef.content.button2Label = this.translate("No");
+        this.bsModalRef.content.button1Click.subscribe(result => {
+            this.deleteAnswer(this.question, answer);
+        })
+    }    
 
     deleteQuestion(questionnaire: any, question: any){
         this.questionnaireService.deleteQuestion(questionnaire, question);

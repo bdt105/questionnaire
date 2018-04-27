@@ -8,40 +8,112 @@ import { ConnexionService } from './connexion.service';
 export class QuestionnaireService {
 
     private toolbox: Toolbox = new Toolbox(); 
-    public storageKey = "data";
-    public error: any;
+    private storageKey = "data";
+    private error: any;
+
+    private data: any;
+
+    private questionnairesCount = 0;
 
     constructor (private configurationService: ConfigurationService, private connexionService: ConnexionService, private http: Http){
     }
 
-    load(callbackSuccess: Function, callbackFailure: Function){
+    loadQuestionnaireIds(callbackSuccess: Function, callbackFailure: Function){
         let url = this.configurationService.get().common.saveApiBaseUrl;
         let user = this.connexionService.getUser();
         let directory = user.email.toUpperCase();
         console.log("data url", url);
-        let body = {"directory": directory, "fileName": "questionnaires.json"};
+        let body = {"directory": directory};
         this.http.post(url, body).subscribe(
             (data: any) => callbackSuccess(data),
             (error: any) => callbackFailure(error)
         );
     }
 
-    newQuestionnaire(data: any){
+
+    loadQuestionnaire(callbackSuccess: Function, callbackFailure: Function, id: string){
+        let url = this.configurationService.get().common.saveApiBaseUrl;
+        let user = this.connexionService.getUser();
+        let directory = user.email.toUpperCase();
+        console.log("data url", url);
+        let body = {"directory": directory, "fileName": id + ".json"};
+        this.http.post(url, body).subscribe(
+            (data: any) => callbackSuccess(data),
+            (error: any) => callbackFailure(error)
+        );
+    }
+
+    private successLoadQuestionnaire(data: any, callbackSuccess: Function, fileName: string){
+        if (data){
+            let questionnaire = JSON.parse(data._body);
+            questionnaire.fileName = fileName;
+            this.data.push(questionnaire);
+            if (this.data.length == this.questionnairesCount){
+                this.toolbox.writeToStorage(this.storageKey, this.data, true);
+                callbackSuccess(this.data);
+            }
+        }
+    }
+    
+    private failureLoadQuestionnaire(error: any, callbackFailure: Function){
+        console.log(error);
+        if (callbackFailure){
+            callbackFailure(error);
+        }
+    }
+    
+    private successLoadQuestionnaires(data: any, callbackSuccess: Function, callbackFailure: Function){
+        if (data){
+            let questionnaireIds = JSON.parse(data._body);
+            this.questionnairesCount = questionnaireIds.length;
+            for (var i = 0; i < questionnaireIds.length; i++){
+                let id = questionnaireIds[i].replace(".json", "");
+                this.loadQuestionnaire(
+                    (data: any) => this.successLoadQuestionnaire(data, callbackSuccess, id + ".json"), 
+                    (error: any) => this.failureLoadQuestionnaire(error, callbackFailure), 
+                    id);
+            }
+        }
+    }
+    
+    private failureLoadQuestionnaires(error: any, callbackFailure: Function){
+        console.log(error);        
+        if (callbackFailure){
+            callbackFailure(error);
+        }
+    }
+    
+
+    loadQuestionnaires(callbackSuccess: Function, callbackFailure: Function){
+        this.questionnairesCount = 0;
+        this.data = null;
+        this.data = [];
+        this.loadQuestionnaireIds(
+            (data: any) => this.successLoadQuestionnaires(data, callbackSuccess, callbackFailure),
+            (error: any) => this.failureLoadQuestionnaires(error, callbackFailure)
+        );
+    }
+
+    newObject(type: string){
         let id = this.toolbox.getUniqueId();
+        let date = this.toolbox.dateToDbString(new Date());
         let q = {
+            "type": type,
+            "date": date,
+            "score": null,
+            "startDate": null,
+            "endDate": null,
             "id": id,
             "title": "",
-            "questions":
-            [
-            ],
+            "questions": [],
             "edit": true,
             "showQuestions": true
         };
-        if (!data){
-            data = [];
-        }
-        data.push(q);
         return q;
+    }
+
+    newQuestionnaire(){
+        return this.newObject("questionnaire");
     }
 
     getQuestionIndex(questionnaire: any, question: any){
@@ -55,7 +127,7 @@ export class QuestionnaireService {
         return -1;
     }
 
-    newQuestion(questionnaire: any = null, insertAfterQuestion: any = null){
+    newQuestion(questionnaire: any = null, index: number = 0){
         let id = this.toolbox.getUniqueId();
         let q = {
             "id": (questionnaire ? questionnaire.id + "_" : "") + id,
@@ -76,14 +148,7 @@ export class QuestionnaireService {
             if (!questionnaire.questions){
                 questionnaire.questions = [];
             }
-            if (!insertAfterQuestion){
-                questionnaire.questions.push(q);
-            }else{
-                let index = this.getQuestionIndex(questionnaire, insertAfterQuestion);
-                if (index >= 0){
-                    questionnaire.questions.splice(index + 1, 0, q);
-                }
-            }
+            questionnaire.questions.splice(index, 0, q);
         }
         return q;
     }
@@ -115,13 +180,40 @@ export class QuestionnaireService {
         }
     }
 
-    deleteQuestionnaire(data: any, questionnaire: any){
-        if (data && data.length > 0){
-            for (var i=0; i < data.length; i++){
-                if (data[i].id == questionnaire.id){
-                    data.splice(i, 1);
+    private removeQuestionnaire(questionnaires: any, questionnaire: any){
+        if (questionnaires && questionnaires.length > 0){
+            for (var i=0; i < questionnaires.length; i++){
+                if (questionnaires[i].id == questionnaire.id){
+                    questionnaires.splice(i, 1);
                 }
             }
+        }        
+    }
+
+    private successDeleteQuestionnaire(data: any, questionnaires: any, questionnaire: any){
+        this.removeQuestionnaire(questionnaires, questionnaire);
+    }
+
+    private failureDeleteQuestionnaire(data: any){
+        console.log("Unable to delete questionnaire");
+    }
+
+    deleteQuestionnaire(questionnaires: any, questionnaire: any){
+        if (questionnaire.fileName){
+            let url = this.configurationService.get().common.saveApiBaseUrl;
+            let user = this.connexionService.getUser();
+            let directory = user.email.toUpperCase();
+            console.log("data url", url);
+            let options = 
+            {
+                "body": {"directory": directory, "fileName": questionnaire.fileName}
+            }
+            this.http.delete(url, options).subscribe(
+                (data: any) => this.successDeleteQuestionnaire(data, questionnaires, questionnaire),
+                (error: any) => this.failureDeleteQuestionnaire(error)
+            );
+        }else{
+            this.removeQuestionnaire(questionnaires, questionnaire)
         }
     }
 
@@ -135,27 +227,22 @@ export class QuestionnaireService {
         }
     }
 
-    saveToLocal(data: any){
-        this.toolbox.writeToStorage(this.storageKey, data, true);
-    }
-
-    cleanQuestionnaires(data: any){
+    cleanQuestionnaire(questionnaire: any){
         let x = 0;
-        for (var i=0 ; i< data.length; i++){
-            delete(data[i].edit);
-            delete(data[i].showQuestions);
-            if (data[i].questions){
-                for (var j=0 ; j< data[i].questions.length; j++){
-                    delete(data[i].questions[j].edit);
-                    delete(data[i].questions[j].showAnswers);
-                    if (data[i].questions[j].answers){
-                        if (data[i].questions[j].answers.length > 1){
-                            x ++;
-                        }
-                        for (var k = 0; k < data[i].questions[j].answers.length; k++){
-                            if (data[i].questions[j].answers[k].answer == ""){
-                                data[i].questions[j].answers.splice(k, 1);
-                            }
+        delete(questionnaire.edit);
+        delete(questionnaire.showQuestions);
+        delete(questionnaire.qestionsToImport);
+        if (questionnaire.questions){
+            for (var j=0 ; j< questionnaire.questions.length; j++){
+                delete(questionnaire.questions[j].edit);
+                delete(questionnaire.questions[j].showAnswers);
+                if (questionnaire.questions[j].answers){
+                    if (questionnaire.questions[j].answers.length > 1){
+                        x ++;
+                    }
+                    for (var k = 0; k < questionnaire.questions[j].answers.length; k++){
+                        if (questionnaire.questions[j].answers[k].answer == ""){
+                            questionnaire.questions[j].answers.splice(k, 1);
                         }
                     }
                 }
@@ -163,31 +250,29 @@ export class QuestionnaireService {
         }
     }
 
-    clearImports(data: any){
-        for (var i=0 ; i< data.length; i++){
-            delete(data[i].qestionsToImport);
+    saveQuestionnaire(callbackSuccess: Function, callbackFailure: Function, questionnaire: any){
+        if (questionnaire){
+            let q = this.toolbox.cloneObject(questionnaire);
+            this.cleanQuestionnaire(q);
+            let url = this.configurationService.get().common.saveApiBaseUrl;
+            console.log("data url", url);
+            let user = this.connexionService.getUser();
+            let directory = user.email.toUpperCase();
+            let fileName = "questionnaire_" + q.id + ".json";
+            let date = new Date();
+            let body = {"type": "questionnaire", "dateTime": date, "directory": directory, "fileName": fileName, "content": JSON.stringify(q)};
+            this.http.put(url, body).subscribe(
+                (data: any) => callbackSuccess(data),
+                (error: any) => callbackFailure(error)
+            );
         }
-    }
-    
-    save(callbackSuccess: Function, callbackFailure: Function, data: any){
-        this.clearImports(data);
-        this.saveToLocal(data);
-        let url = this.configurationService.get().common.saveApiBaseUrl;
-        console.log("data url", url);
-        let user = this.connexionService.getUser();
-        let directory = user.email.toUpperCase();
-        let body = {"directory": directory, "fileName": "questionnaires.json", "content": JSON.stringify(data)};
-        this.http.put(url, body).subscribe(
-            (data: any) => callbackSuccess(data),
-            (error: any) => callbackFailure(error)
-        );
     }
 
     loadFromLocal(parseJson: boolean = false){
         return this.toolbox.readFromStorage(this.storageKey, parseJson);
     }
 
-    removeFromLocal(){
+    removeFromLocal(key: string){
         this.toolbox.removeFromStorage(this.storageKey);
     }
 
@@ -236,67 +321,60 @@ export class QuestionnaireService {
     }
 
 
-    importQuestionnaires(data: any, questionnaires: string, overwrite: boolean = false){
-        let temp = this.toolbox.cloneObject(data);
-        if (!temp){
-            temp = [];
-        }
-        if (questionnaires){
-            if (this.toolbox.isJson(questionnaires)){
-                let ques = this.toolbox.parseJson(questionnaires);
-                this.setIds(ques);
-                let data2;
-                if (overwrite){
-                    data2 = ques;
-                }else{
-                    data2 = temp.concat(ques);
-                }
-                return data2;
+    importQuestionnaire(questionnaire: any, questionnaires: any){
+        if (questionnaires && questionnaire){
+            this.setQuestionnaireIds(questionnaire);
+            questionnaires = questionnaires.concat(questionnaire);
+            let fake = (data: any)=>{
+
             }
+            this.saveQuestionnaire(fake, fake, questionnaire);
         }
-        return temp;
+        return questionnaires;
     }
 
-    setIds(data: any){
-        if (data){
-            for (var i = 0 ; i< data.length; i++){
-                data[i].id = this.toolbox.getUniqueId();
-                if (data[i].questions){
-                    for (var j=0; j< data[i].questions.length;j++){
-                        data[i].questions[j].id = this.toolbox.getUniqueId();
-                        if (data[i].questions[j].answers){
-                            for (var k = 0; k < data[i].questions[j].answers.length; k++){
-                                data[i].questions[j].answers[k].id = this.toolbox.getUniqueId();
-                            }
+    setQuestionnaireIds(questionnaire: any){
+        if (questionnaire){
+            questionnaire.id = this.toolbox.getUniqueId();
+            if (questionnaire.questions){
+                for (var j=0; j< questionnaire.questions.length;j++){
+                    questionnaire.questions[j].id = this.toolbox.getUniqueId();
+                    if (questionnaire.questions[j].answers){
+                        for (var k = 0; k < questionnaire.questions[j].answers.length; k++){
+                            questionnaire.questions[j].answers[k].id = this.toolbox.getUniqueId();
                         }
                     }
                 }
-            }   
+            }
         }
     }
 
-    searchInQuestionsAndAnswers(data: any, search: string){
+    searchInQuestionsAndAnswers(questionnaires: any, search: string){
         let ret = [];
-        if (data && search){
-            for (var i = 0 ; i< data.length; i++){
-                if (data[i].questions){
-                    for (var j=0; j< data[i].questions.length;j++){
-                        if (data[i].questions[j].question && data[i].questions[j].question.toUpperCase().includes(search.toUpperCase())){
-                            let q = this.toolbox.cloneObject(data[i].questions[j]);
+        if (questionnaires && search){
+            for (var i = 0; i < questionnaires.length; i++){
+                let questionnaire = questionnaires[i];
+                if (questionnaire.questions){
+                    for (var j=0; j< questionnaire.questions.length;j++){
+                        if (questionnaire.questions[j].question && questionnaire.questions[j].question.toUpperCase().includes(search.toUpperCase())){
+                            let q = this.toolbox.cloneObject(questionnaire.questions[j]);
                             q.foundType = "question";
-                            q.questionnaireTitle = data[i].title;
+                            q.questionnaireTitle = questionnaire.title;
+                            q.questionnaireId = questionnaire.id;                            
                             ret.push(q);                        }
-                        if (data[i].questions[j].questionLabel && data[i].questions[j].questionLabel.toUpperCase().includes(search.toUpperCase())){
-                            let q = this.toolbox.cloneObject(data[i].questions[j]);
-                            q.questionnaireTitle = data[i].title;
+                        if (questionnaire.questions[j].questionLabel && questionnaire.questions[j].questionLabel.toUpperCase().includes(search.toUpperCase())){
+                            let q = this.toolbox.cloneObject(questionnaire.questions[j]);
+                            q.questionnaireTitle = questionnaire.title;
+                            q.questionnaireId = questionnaire.id;
                             q.foundType = "questionLabel";
                             ret.push(q);
                         }
-                        if (data[i].questions[j].answers){
-                            for (var k = 0; k < data[i].questions[j].answers.length; k++){
-                                if (data[i].questions[j].question && data[i].questions[j].answers[k].answer.toUpperCase().includes(search.toUpperCase())){
-                                    let q = this.toolbox.cloneObject(data[i].questions[j]);
-                                    q.questionnaireTitle = data[i].title;
+                        if (questionnaire.questions[j].answers){
+                            for (var k = 0; k < questionnaire.questions[j].answers.length; k++){
+                                if (questionnaire.questions[j].question && questionnaire.questions[j].answers[k].answer.toUpperCase().includes(search.toUpperCase())){
+                                    let q = this.toolbox.cloneObject(questionnaire.questions[j]);
+                                    q.questionnaireTitle = questionnaire.title;
+                                    q.questionnaireId = questionnaire.id;
                                     q.foundType = "answer";
                                     ret.push(q);
                                 }
@@ -304,24 +382,24 @@ export class QuestionnaireService {
                         }
                     }
                 }
-            }   
+            }
         }   
         return ret;
     }
 
-    updateQuestion(data: any, question: any){
-        if (data && question && question.id){
-            for (var i = 0 ; i < data.length; i++){
-                if (data[i].questions){
-                    for (var j=0; j< data[i].questions.length;j++){
-                        if (data[i].questions[j].id == question.id){
-                            data[i].questions.splice(j, 1, question);
-                            return;
-                        }
-                    }
+    updateQuestion(questionnaire: any, question: any){
+        if (questionnaire && question){
+            for (var j=0; j< questionnaire.questions.length;j++){
+                if (questionnaire.questions[j].id == question.id){
+                    questionnaire.questions.splice(j, 1, question);
+                    return;
                 }
             }
         }
+    }
+
+    getQuestionnaireById(questionnaires: any, id: string){
+        return this.toolbox.searchElementSpecial(questionnaires, "id", id);
     }
  
 }

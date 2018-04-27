@@ -20,11 +20,10 @@ import { TestService } from '../../services/test.service';
 export class TesterComponent extends GenericComponent {
 
 
-    public tester: any;
     private toolbox: Toolbox = new Toolbox();
     private rest: Rest = new Rest();
 
-    public data: any;
+    public questionnaires: any;
     public error: any;
 
     public nbQuestions;
@@ -36,17 +35,13 @@ export class TesterComponent extends GenericComponent {
 
     public showResults = false;
 
-    public currentQuestions: any;
+    public test: any;
 
     public currentQuestionIndex = 0;
 
     public nextIfCorrect = true;
 
-    public startDate = null;
-    public endDate = null;
-
     public showDefinition = true;
-    public score:any = {};
 
     constructor(public configurationService: ConfigurationService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
@@ -58,37 +53,23 @@ export class TesterComponent extends GenericComponent {
         this.load();
     }
 
-    private manageData(data: any){
-        if (data && data._body){
-            this.data = JSON.parse(data._body);
-        }else{
-            this.data = [];
-        }
-        this.questionnaireService.saveToLocal(this.data);
+    private successLoadQuestionnaires(data: any){
+        this.questionnaires = data;
     }
 
-    private manageError(error: any){
+    private failureLoadQuestionnaires(error: any){
         this.error = error;
-        let raw = this.questionnaireService.loadFromLocal();
-        this.data = this.toolbox.parseJson(raw);
-        if (!this.data){
-            this.data = [];
-        }
-        console.log("failure load", this.data);
+        console.log("failure load", this.error);
     }
 
     load(){        
-        this.questionnaireService.load((data: any) => this.manageData(data), (error: any) => this.manageError(error));
-    }
-
-    private generateTest(jeopardy: boolean = false){
-        this.currentQuestions = null;
-        this.currentQuestions = [];
-        this.currentQuestions = this.testService.generate(this.data, this.randomQuestions, jeopardy, this.nbQuestions);
+        this.questionnaireService.loadQuestionnaires(
+            (data: any) => this.successLoadQuestionnaires(data), 
+            (error: any) => this.failureLoadQuestionnaires(error));
     }
 
     private nextQuestion(){
-        if (this.currentQuestionIndex < this.currentQuestions.length - 1){        
+        if (this.test && (this.currentQuestionIndex < this.test.questions.length - 1)){        
             this.currentQuestionIndex ++;
         }
         this.getScore();
@@ -102,24 +83,22 @@ export class TesterComponent extends GenericComponent {
     }
 
     start(){
-        this.tester = null;
         this.testInProgress = true;
         this.showResults = false;
-        this.generateTest(this.jeopardy);
+        this.test = this.testService.generate(this.questionnaires, this.randomQuestions, this.jeopardy, this.nbQuestions);
         if (!this.nbQuestions){
-            this.nbQuestions = this.currentQuestions.length;
+            this.nbQuestions = this.test.questions.length;
         }
-        this.startDate = Date.now();
-        //this.showDefinition = false;
+        this.test.startDate = this.toolbox.dateToDbString(new Date());
         this.getScore();        
     }
 
     checkQuestion(question: any, answer: string){
-        if (this.currentQuestionIndex == this.currentQuestions.length - 1){
-            this.endDate = Date.now();
+        if (this.currentQuestionIndex == this.test.questions.length - 1){
+            this.test.endDate = this.toolbox.dateToDbString(new Date());
         }        
         this.questionnaireService.checkQuestion(question, answer);
-        if (this.nextIfCorrect && this.currentQuestions[this.currentQuestionIndex].status){
+        if (this.nextIfCorrect && this.test.questions[this.currentQuestionIndex].status){
             this.nextQuestion();
         }
         this.getScore();
@@ -127,24 +106,13 @@ export class TesterComponent extends GenericComponent {
     }
 
     private saveTest(){
-        if (this.currentQuestionIndex == (this.currentQuestions.length - 1)){
-            let fake = (data: any) => {
-
-            }
-            let saveDate = new Date().toString();
-            let questionnaires = [];
-            for (var i=0; i < this.data.length - 1; i++){
-                if (this.data[i].test){
-                    questionnaires.push(this.data[i].title);
-                }
-            }
-            this.tester = {"title": this.title, "questionnaires": questionnaires, "random": this.randomQuestions, "questions": this.currentQuestions, "saveDate": saveDate, "startDate": this.startDate, "endDate": this.endDate};
-            this.testService.save(fake, fake, this.tester);
-        }
+        let fake = (data: any) => {}
+        this.test.endDate = this.toolbox.dateToDbString(new Date());
+        this.testService.save(fake, fake, this.test);
     }
 
     private getScore(){
-        this.score = this.testService.getScore(this.currentQuestions);
+        this.test.score = this.testService.getScore(this.test.questions);
     }
 
     selectQuestionnaire(){

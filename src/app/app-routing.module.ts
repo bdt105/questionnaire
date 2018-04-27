@@ -16,7 +16,7 @@ const routes: Routes = [
     { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'tester', component: TesterComponent, canActivate: [AuthGuard] },
     { path: 'tests', component: TestsComponent, canActivate: [AuthGuard] },
-    { path: 'inputs', component: QuestionnairesComponent, canActivate: [AuthGuard] },
+    { path: 'questionnaires', component: QuestionnairesComponent, canActivate: [AuthGuard] },
     { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
     { path: 'search/:search', component: SearchComponent, canActivate: [AuthGuard] },
     { path: 'user', component: UserComponent, canActivate: [AuthGuard] }

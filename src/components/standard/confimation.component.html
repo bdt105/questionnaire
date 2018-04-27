@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{title}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>    
+<div class="modal-body text-center">
+    <p *ngIf="bodyMessage" style="text-align: left">{{bodyMessage}}</p>
+    <p *ngIf="message && readOnly">{{message}}</p>
+    <textarea *ngIf="!readOnly" class="form-control" placeholder="{{message}}" [(ngModel)]="message"></textarea>
+    <br>
+    <button *ngIf="button1Label" type="button" class="btn btn-default" (click)="button1Clicked()">{{button1Label}}</button>
+    <button *ngIf="button2Label" type="button" class="btn btn-primary" (click)="button2Clicked()">{{button2Label}}</button>
+</div>

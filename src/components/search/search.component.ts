@@ -18,8 +18,9 @@ export class SearchComponent extends GenericComponent{
     private toolbox: Toolbox = new Toolbox();
     private search: string;
     
-    public data: any;
-    public dataSearch: any;
+    private questionnaires: any;
+
+    public questionsSearch: any;
     public error: any;
 
     constructor(public configurationService: ConfigurationService, 
@@ -34,28 +35,6 @@ export class SearchComponent extends GenericComponent{
         });       
     }
 
-    private successLoad(data: any){
-        if (data && data._body){
-            this.data = this.toolbox.parseJson(data._body);
-            this.questionnaireService.cleanQuestionnaires(this.data);
-            this.dataSearch = this.questionnaireService.searchInQuestionsAndAnswers(this.data, this.search);
-        }else{
-            this.data = [];
-        }
-        console.log("success load", this.data);
-    }
-
-    private failureLoad(error: any){
-        this.error = error;
-        let raw = this.questionnaireService.loadFromLocal();
-        this.data = this.toolbox.parseJson(raw);
-        if (!this.data){
-            this.data = [];
-        }
-        this.dataSearch = this.questionnaireService.searchInQuestionsAndAnswers(this.data, this.search);
-        console.log("failure load", this.data);
-    }
-
     getParams (){
         if (this.activatedRoute.snapshot.params["search"]){
             this.search = this.activatedRoute.snapshot.params["search"];
@@ -63,18 +42,40 @@ export class SearchComponent extends GenericComponent{
         }
     }
 
-    load(){        
-        this.questionnaireService.load(
-            (data: any) => this.successLoad(data), (error: any) => this.failureLoad(error));
-    }    
+    private successLoad(data: any): any {
+        this.questionnaires = data;
+        this.fetch()
+    }
+
+    private failureLoad(error: any): any {
+        console.log(error);
+    }
+    
+    private load(){
+        this.questionnaireService.loadQuestionnaires(
+            (data: any) => this.successLoad(data),
+            (error: any) => this.failureLoad(error)
+        );
+    }
+
+    private fetch(){
+        this.questionsSearch = null;
+        this.questionsSearch = [];
+        if (this.questionnaires && this.search){
+            this.questionsSearch = this.questionnaireService.searchInQuestionsAndAnswers(this.questionnaires, this.search);
+        }
+    }
 
     updateQuestion(question: any){
-        if (question){
-            this.questionnaireService.updateQuestion(this.data, question);
-            let fake = (data: any)=>{
+        if (question && question.questionnaireId){
+            let questionnaire = this.questionnaireService.getQuestionnaireById(this.questionnaires, question.questionnaireId);
+            if (questionnaire){
+                this.questionnaireService.updateQuestion(questionnaire, question);
+                let fake = (data: any)=>{
 
+                }
+                this.questionnaireService.saveQuestionnaire(fake, fake, questionnaire);
             }
-            this.questionnaireService.save(fake, fake, this.data);
         }
     }
 }

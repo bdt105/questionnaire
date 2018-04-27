@@ -57,7 +57,6 @@ export class LoginComponent extends GenericComponent{
     }
     
     connect (){
-        this.questionnaireService.removeFromLocal();
         this.connexionAttempt = true;
         this.loading = true;
         this.connexionService.connectNoPassword(
@@ -94,7 +93,6 @@ export class LoginComponent extends GenericComponent{
     }
 
     disconnect(){
-        this.questionnaireService.removeFromLocal();        
         this.connexionAttempt = false;
         this.connexionService.disconnect();
         this.disconnected.emit(null);

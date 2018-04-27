@@ -127,7 +127,7 @@ export class TestService {
         test.fileName = this.toolbox.formatDate(d, "YYYYMMDDHHmmss") + "_test.json";
         let user = this.connexionService.getUser();
         let directory = user.email.toUpperCase();
-        let body = {"directory": directory, "fileName": test.fileName, "content": JSON.stringify(test)};
+        let body = {"type": "test", "directory": directory, "fileName": "test_" + test.fileName, "content": JSON.stringify(test)};
         this.http.put(url, body).subscribe(
             (data: any) => callbackSuccess(data),
             (error: any) => callbackFailure(error)
@@ -135,30 +135,39 @@ export class TestService {
 
     } 
 
-    public generate(data: any, randomQuestions: boolean, jeopardy: boolean, nbQuestion: number){
-        let currentQuestions  = [];
+    newTest(){
+        return this.questionnaireService.newObject("test");
+    }
+
+    generate(data: any, randomQuestions: boolean, jeopardy: boolean, nbQuestion: number){
+        let t = this.newTest();
+
+        let questions  = [];
         for (var i=0; i < data.length; i++){
             if (data[i].test){
                 for (var j = 0; j < data[i].questions.length; j++){
                     let q = this.toolbox.cloneObject(data[i].questions[j]);
                     q.questionnaireTitle = data[i].title;
-                    currentQuestions.push(q);
+                    questions.push(q);
                 }
             }
         }
         if (randomQuestions){
-            currentQuestions = this.toolbox.shuffleArray(currentQuestions);
+            questions = this.toolbox.shuffleArray(questions);
             if (nbQuestion != -1 && nbQuestion){
-                currentQuestions = currentQuestions.splice(0, nbQuestion);
+                questions = questions.splice(0, nbQuestion);
             }
         }
         if (jeopardy){
-            currentQuestions = this.generateJeopardy(currentQuestions);
+            questions = this.generateJeopardy(questions);
         }
-        return currentQuestions;
+
+        t.questions = questions;
+
+        return t;
     }
 
-    private generateJeopardy(questions: any){
+    generateJeopardy(questions: any){
         let res = [];
         if (questions){
             for (var i=0; i < questions.length; i++){

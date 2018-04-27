@@ -16,7 +16,7 @@
     [
         {
             "label": "Questionnaires",
-            "href": "/inputs",
+            "href": "/questionnaires",
             "icon": "question",
             "title": "Questionnaires",
             "align": "left"
@@ -65,7 +65,7 @@
     [
         {
             "label": "Questionnaires",
-            "href": "/inputs",
+            "href": "/questionnaires",
             "icon": "question",
             "title": "Questionnaires",
             "align": "left"

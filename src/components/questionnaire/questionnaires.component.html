@@ -1,86 +1,26 @@
-<h3>{{translate('Questionnaires')}}</h3>
+<div class="row"> <!-- Title -->
+    <div class="col-10">
+        <h3>{{translate('Questionnaires')}} <span *ngIf="questionnaires" class="badge badge-primary badge-pill">{{questionnaires.length}}</span></h3>
+    </div>
+    <div class="col-2 text-right" style="cursor: pointer;">
+        <div class="dropdown">
+            <button style="background-color:transparent; border: 0" class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i  class="fa fa-ellipsis-v"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" (click)="newQuestionnaire()"><i class="fa fa-plus"></i> {{translate('New questionnaire')}}</a>
+                <a class="dropdown-item" (click)="import()"><i class="fa fa-download"></i> {{translate('Import a questionnaire')}}</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- List -->
 <div class="list-group">
 
     <!-- Questionnaires -->
-    <div *ngFor="let questionnaire of data" class="list-group-item">
-        <div class="row">
-            <div  class="col-10">
-                <div *ngIf="questionnaire.edit">
-                    <input type="text" class="form-control" placeholder="{{translate('Questionnaire name')}}" [(ngModel)]="questionnaire.title" name="title" (change)="save()">
-                    <br>
-                </div>
-                <span *ngIf="!questionnaire.edit" (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
-                    <h6>{{questionnaire.title}} 
-                        <span class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>
-                    </h6>
-                </span>
-            </div>           
-            <div class="col-2 text-right" (click)="edit(questionnaire)" style="cursor: pointer;">
-                <i  class="fa fa-pencil"></i>
-            </div>
-        </div>
-        <div *ngIf="questionnaire.showQuestions">
-            <questions [questions]="questionnaire.questions" [questionnaire]="questionnaire" [editable]="true" (change)="save()"></questions>
-            <br>
-            <div class="list-group">
-                <button *ngIf="questionnaire.edit" type="button" class="btn btn-primary" (click)="newQuestion(questionnaire)"><i class="fa fa-plus"></i> {{translate('New question')}}</button>
-                <button *ngIf="questionnaire.edit" type="button" class="btn btn-danger" 
-                    mwlConfirmationPopover
-                                [popoverTitle]="translate('Delete questionnaire')"
-                                [popoverMessage]="translate('Are you sure you want to delete that element?')"
-                                [confirmText]="translate('Yes')"
-                                [cancelText]="translate('No')"
-                                placement="top"
-                                (confirm)="deleteQuestionnaire(questionnaire)">
-                    <i class="fa fa-trash"></i> {{translate('Delete questionnaire')}}
-                </button>
-                <button *ngIf="questionnaire.edit" type="button" class="btn btn-warning" (click)="questionnaire.importQuestionsCsv = !questionnaire.importQuestionsCsv">
-                    <i class="fa fa-download"></i> {{translate('Import questions')}}
-                </button>
-            </div>
-            <div *ngIf="questionnaire.edit && questionnaire.importQuestionsCsv">
-                <br>
-                <textarea class="form-control" placeholder="{{translate('Copy and paste yours questions. Json or Csv format (questionLabel|answerLabelOk|answerLabelNok|question1|detail|answer1|answer2|answerN|..| etc. Each line is a question, all columns are mandatory but can be empty.)')}}"
-                    [(ngModel)]="questionnaire.qestionsToImport">
-                </textarea>
-                <div class="list-group">
-                    <br>
-                    <button type="button" class="btn btn-warning" (click)="importQuestionsCsv(questionnaire, questionnaire.qestionsToImport)"><i class="fa fa-download"></i> {{translate('Import Csv format')}}</button>
-                </div>
-            </div>
-        </div>
+    <div *ngFor="let questionnaire of questionnaires" class="list-group-item">
+        <questionnaire [questionnaire]="questionnaire" [questionnaires]="questionnaires"></questionnaire>
     </div>
-
-    <br>
-    <button type="button" class="btn btn-primary" (click)="newQuestionnaire()"><i class="fa fa-plus"></i> {{translate('New questionnaire')}}</button>
-    <button type="button" class="btn btn-warning" (click)="importQuestionnaires = !importQuestionnaires">
-        <i class="fa fa-download"></i> {{translate('Import questionnaires')}}
-    </button>
-    <div *ngIf="importQuestionnaires">
-        <br>
-        <textarea class="form-control" placeholder="{{translate('Paste your questionnaires with Json format here.')}}"
-            [(ngModel)]="questionnairesToImport">
-        </textarea>
-        <br>
-        <input type="checkbox" value="" id="defaultCheck1"  [(ngModel)]="overWriteImport" name="nextIfCorrect"> {{translate('Over write existing questionanires')}}                        
-        <div class="list-group">
-            <br>
-            <button type="button" class="btn btn-warning" (click)="importQuestionnairesJson()"><i class="fa fa-download"></i> {{translate('Import your questionnaires')}}</button>
-        </div>
-    </div>
-    <button type="button" class="btn btn-warning" (click)="exportQuestionnaires = !exportQuestionnaires">
-        <i class="fa fa-upload"></i> {{translate('Export questionnaires')}}
-    </button>
-    <div *ngIf="exportQuestionnaires">
-        <br>
-        <textarea class="form-control" placeholder="{{translate('Your questionnaires with Json format will appear here.')}}"
-            [(ngModel)]="questionnairesToExport">
-        </textarea>
-        <div class="list-group">
-            <br>
-            <button type="button" class="btn btn-warning" (click)="exportQuestionnairesJson()"><i class="fa fa-download"></i> {{translate('Export your questionnaires')}}</button>
-        </div>
-    </div>
-       
+    
 </div>
-<br>

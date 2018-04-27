@@ -18,17 +18,21 @@ import { TestsComponent } from '../components/test/tests.component';
 import { QuestionComponent } from '../components/question/question.component';
 import { QuestionsComponent } from '../components/question/questions.component';
 import { QuestionCheckComponent } from '../components/question/questionCheck.component';
+import { QuestionnaireComponent } from '../components/questionnaire/questionnaire.component';
+import { ConfirmationComponent } from '../components/standard/confirmation.component';
 
 // Sidebar module https://github.com/arkon/ng-sidebar
 import { SidebarModule } from 'ng-sidebar';
 
 // Bootstrap components https://valor-software.com/ngx-bootstrap
-import { AccordionModule, AccordionConfig } from 'ngx-bootstrap';
-import { TabsModule } from 'ngx-bootstrap';
-import { TypeaheadModule } from 'ngx-bootstrap';
-import { PaginationModule } from 'ngx-bootstrap';
-import { ModalModule } from 'ngx-bootstrap';
-import { ProgressbarModule } from 'ngx-bootstrap';
+import { 
+    AccordionModule, 
+    AccordionConfig, 
+    TabsModule,
+    TypeaheadModule,
+    PaginationModule,
+    ModalModule,
+    ProgressbarModule } from 'ngx-bootstrap';
 
 // Confirmations https://mattlewis92.github.io/angular-confirmation-popover/
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
@@ -66,7 +70,9 @@ export function init (config: ConfigurationService) {
         UserComponent,
         AboutComponent,
         QuestionnairesComponent,
+        QuestionnaireComponent,
         TesterComponent,
+        ConfirmationComponent,
         TestsComponent,
         TestComponent,
         QuestionComponent,
@@ -74,12 +80,16 @@ export function init (config: ConfigurationService) {
         QuestionCheckComponent,
         SearchComponent
     ],
+    entryComponents: [
+        ConfirmationComponent
+    ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         FormsModule,
         AccordionModule,
         HttpModule,
+        ModalModule.forRoot(),
         ReactiveFormsModule,
         ProgressbarModule.forRoot(),
         PaginationModule.forRoot(),
@@ -94,7 +104,7 @@ export function init (config: ConfigurationService) {
             'multi': true
         },
         AuthGuard, MenuService, AccordionConfig, ConfigurationService, TranslateService, 
-            ConnexionService, FormValidationService, UserService, QuestionnaireService, TestService],
+        ConnexionService, FormValidationService, UserService, QuestionnaireService, TestService],
         bootstrap: [ AppComponent ]
     })
 

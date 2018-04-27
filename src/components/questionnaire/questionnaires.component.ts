@@ -9,6 +9,8 @@ import { Http } from '@angular/http';
 
 import { Toolbox } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { ConfirmationComponent } from '../standard/confirmation.component';
 
 @Component({
     selector: 'questionnaires',
@@ -18,10 +20,11 @@ import { QuestionnaireService } from '../../services/questionnaire.service';
 
 export class QuestionnairesComponent extends GenericComponent {
 
-
     private toolbox: Toolbox = new Toolbox();
 
-    public data: any;
+    public bsModalRef: BsModalRef;
+
+    public questionnaires: any;
     public error: any;
 
     public importQuestionnaires = false;
@@ -31,7 +34,7 @@ export class QuestionnairesComponent extends GenericComponent {
     public questionnairesToImport: string;
     public questionnairesToExport: string;
 
-    constructor(public configurationService: ConfigurationService, 
+    constructor(public configurationService: ConfigurationService, private modalService: BsModalService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
         public menuService: MenuService, private http: Http){
         super(configurationService, translateService);
@@ -42,29 +45,17 @@ export class QuestionnairesComponent extends GenericComponent {
     }
 
     private successLoad(data: any){
-        if (data && data._body){
-            this.data = this.toolbox.parseJson(data._body);
-            this.questionnaireService.cleanQuestionnaires(this.data);
-        }else{
-            this.data = [];
-        }
-        this.questionnaireService.saveToLocal(this.data);
-        console.log("success load", this.data);
+        this.questionnaires = data;
     }
 
     private failureLoad(error: any){
         this.error = error;
-        let raw = this.questionnaireService.loadFromLocal();
-        this.data = this.toolbox.parseJson(raw);
-        if (!this.data){
-            this.data = [];
-        }
-        console.log("failure load", this.data);
     }
 
-    load(){        
-        this.questionnaireService.load(
-            (data: any) => this.successLoad(data), (error: any) => this.failureLoad(error));
+    load(){  
+        this.questionnaireService.loadQuestionnaires(
+            (data: any) => this.successLoad(data), 
+            (error: any) => this.failureLoad(error));
     }
 
     newQuestion(questionnaire: any){
@@ -72,48 +63,26 @@ export class QuestionnairesComponent extends GenericComponent {
     }
 
     newQuestionnaire(){
-        if (!this.data || this.data == "undefined"){
-            this.data = [];
-        }
-        this.questionnaireService.newQuestionnaire(this.data);
+        let q = this.questionnaireService.newQuestionnaire();
+        this.questionnaires.push(q);
     }
 
-    deleteQuestionnaire(questionnaire: any){
-        this.questionnaireService.deleteQuestionnaire(this.data, questionnaire);       
-        this.save(); 
+    import(){
+        this.bsModalRef = this.modalService.show(ConfirmationComponent);
+        this.bsModalRef.content.modalRef = this.bsModalRef;
+        this.bsModalRef.content.title = this.translate("Importing a questionnaire");
+        this.bsModalRef.content.readOnly = false;
+        this.bsModalRef.content.bodyMessage = this.translate("Paste json format below and import");
+        this.bsModalRef.content.button2Label = this.translate("Cancel");
+        this.bsModalRef.content.button1Label = this.translate("Import");
+        this.bsModalRef.content.button1Click.subscribe(result => {
+            let json = this.bsModalRef.content.message;
+            if (this.toolbox.isJson(json)){
+                let questionnaire = JSON.parse(json);
+                this.questionnaires = this.questionnaireService.importQuestionnaire(questionnaire, this.questionnaires);
+            }
+        })
     }
 
-    private successSave(data: any){
-        console.log("success save", data);
-    }
 
-    private failureSave(error: any){
-        console.log("failure save", error);
-    }
-
-    save(){
-        this.questionnaireService.save(
-            (data: any) => this.successSave(data), 
-            (error: any) => this.failureSave(error), this.data);
-    }
-
-    importQuestionsCsv(questionnaire: any, importQuestions: string){
-        this.questionnaireService.importQuestionsCsv(questionnaire, importQuestions);
-        this.save();
-    }
-
-    importQuestionnairesJson(questionnaires: string){
-        let res = this.questionnaireService.importQuestionnaires(this.data, this.questionnairesToImport, this.overWriteImport);
-        this.data = res;
-        this.save();
-    } 
-
-    exportQuestionnairesJson(questionnaires: string){
-        this.questionnairesToExport = this.toolbox.beautifyJson(JSON.stringify(this.data));
-    }
-
-    edit(questionnaire: any){
-        questionnaire.edit = !questionnaire.edit;
-        //questionnaire.showQuestions = questionnaire.edit;
-    }
 }
