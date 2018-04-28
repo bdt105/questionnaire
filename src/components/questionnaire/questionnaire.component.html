@@ -1,12 +1,14 @@
 <div class="row">
     <div  class="col-11">
         <div *ngIf="questionnaire.edit">
-            <input type="text" class="form-control" placeholder="{{translate('Questionnaire name')}}" [(ngModel)]="questionnaire.title" name="title" (change)="save()">
+            <input type="text" class="form-control" placeholder="{{translate('Questionnaire name')}}" 
+                [(ngModel)]="questionnaire.title" name="title" (change)="save()">
             <br>
         </div>
         <span *ngIf="!questionnaire.edit" (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
-            <h6>{{questionnaire.title}} 
-                <span class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>
+            <h6>{{(questionnaire.title ? questionnaire.title : questionnaire.defaultTitle)}} 
+                <span class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span> 
+                <span class="badge badge-secondary">{{questionnaire.type}}{{questionnaire.score ? ' - ' + questionnaire.score.messagePourcentage : ""}}</span>
             </h6>
         </span>
     </div>           

@@ -9,7 +9,6 @@ import { Http } from '@angular/http';
 
 import { Toolbox, Rest } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
-import { TestService } from '../../services/test.service';
 
 @Component({
     selector: 'tests',
@@ -28,7 +27,7 @@ export class TestsComponent extends GenericComponent {
 
 
     constructor(public configurationService: ConfigurationService, 
-        public translateService: TranslateService, public testService: TestService,
+        public translateService: TranslateService,
         public menuService: MenuService, private http: Http){
         super(configurationService, translateService);
     }

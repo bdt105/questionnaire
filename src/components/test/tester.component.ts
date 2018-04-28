@@ -9,7 +9,6 @@ import { Http } from '@angular/http';
 
 import { Toolbox, Rest } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
-import { TestService } from '../../services/test.service';
 
 @Component({
     selector: 'tester',
@@ -26,11 +25,6 @@ export class TesterComponent extends GenericComponent {
     public questionnaires: any;
     public error: any;
 
-    public nbQuestions;
-    public title: string;
-    public randomQuestions = false;
-    public jeopardy = false;
-
     public testInProgress = false;
 
     public showResults = false;
@@ -39,17 +33,16 @@ export class TesterComponent extends GenericComponent {
 
     public currentQuestionIndex = 0;
 
-    public nextIfCorrect = true;
-
     public showDefinition = true;
 
     constructor(public configurationService: ConfigurationService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
-        public menuService: MenuService, private http: Http, public testService: TestService){
+        public menuService: MenuService, private http: Http){
         super(configurationService, translateService);
     }
 
     ngOnInit(){
+        this.test = this.questionnaireService.newQuestionnaire("test");
         this.load();
     }
 
@@ -85,9 +78,10 @@ export class TesterComponent extends GenericComponent {
     start(){
         this.testInProgress = true;
         this.showResults = false;
-        this.test = this.testService.generate(this.questionnaires, this.randomQuestions, this.jeopardy, this.nbQuestions);
-        if (!this.nbQuestions){
-            this.nbQuestions = this.test.questions.length;
+        let questions = this.questionnaireService.generateQuestions(this.questionnaires, this.test.randomQuestions, this.test.jeopardy, this.test.nbQuestions);
+        this.test.questions = questions;
+        if (!this.test.nbQuestions){
+            this.test.nbQuestions = this.test.questions.length;
         }
         this.test.startDate = this.toolbox.dateToDbString(new Date());
         this.getScore();        
@@ -98,7 +92,7 @@ export class TesterComponent extends GenericComponent {
             this.test.endDate = this.toolbox.dateToDbString(new Date());
         }        
         this.questionnaireService.checkQuestion(question, answer);
-        if (this.nextIfCorrect && this.test.questions[this.currentQuestionIndex].status){
+        if (this.test.nextIfCorrect && this.test.questions[this.currentQuestionIndex].status){
             this.nextQuestion();
         }
         this.getScore();
@@ -108,15 +102,26 @@ export class TesterComponent extends GenericComponent {
     private saveTest(){
         let fake = (data: any) => {}
         this.test.endDate = this.toolbox.dateToDbString(new Date());
-        this.testService.save(fake, fake, this.test);
+        this.questionnaireService.saveQuestionnaire(fake, fake, this.test);
     }
 
     private getScore(){
-        this.test.score = this.testService.getScore(this.test.questions);
+        this.test.score = this.questionnaireService.getScore(this.test.questions);
+    }
+
+    private getTestTitle(){
+        let title = "";
+        for (var i = 0; i < this.questionnaires.length; i++){
+            if (this.questionnaires[i].test){
+                title += (title ? ", " : "") + this.questionnaires[i].title;
+            }
+        }
+        return title;
     }
 
     selectQuestionnaire(){
-        this.nbQuestions = null;
+        this.test.nbQuestions = null;
+        this.test.defaultTitle = this.getTestTitle();
     }
 
 }

@@ -8,6 +8,7 @@ import { ConnexionService } from './connexion.service';
 export class QuestionnaireService {
 
     private toolbox: Toolbox = new Toolbox(); 
+    private storageKey = "data";
     private error: any;
 
     private data: any;
@@ -17,7 +18,7 @@ export class QuestionnaireService {
     constructor (private configurationService: ConfigurationService, private connexionService: ConnexionService, private http: Http){
     }
 
-    loadFiles(callbackSuccess: Function, callbackFailure: Function){
+    loadQuestionnaireIds(callbackSuccess: Function, callbackFailure: Function){
         let url = this.configurationService.get().common.saveApiBaseUrl;
         let user = this.connexionService.getUser();
         let directory = user.email.toUpperCase();
@@ -28,6 +29,7 @@ export class QuestionnaireService {
             (error: any) => callbackFailure(error)
         );
     }
+
 
     loadQuestionnaire(callbackSuccess: Function, callbackFailure: Function, id: string){
         let url = this.configurationService.get().common.saveApiBaseUrl;
@@ -47,6 +49,7 @@ export class QuestionnaireService {
             questionnaire.fileName = fileName;
             this.data.push(questionnaire);
             if (this.data.length == this.questionnairesCount){
+                this.toolbox.writeToStorage(this.storageKey, this.data, true);
                 callbackSuccess(this.data);
             }
         }
@@ -85,13 +88,13 @@ export class QuestionnaireService {
         this.questionnairesCount = 0;
         this.data = null;
         this.data = [];
-        this.loadFiles(
+        this.loadQuestionnaireIds(
             (data: any) => this.successLoadQuestionnaires(data, callbackSuccess, callbackFailure),
             (error: any) => this.failureLoadQuestionnaires(error, callbackFailure)
         );
     }
 
-    newQuestionnaire(type: string){
+    newObject(type: string){
         let id = this.toolbox.getUniqueId();
         let date = this.toolbox.dateToDbString(new Date());
         let q = {
@@ -109,6 +112,21 @@ export class QuestionnaireService {
         return q;
     }
 
+    newQuestionnaire(){
+        return this.newObject("questionnaire");
+    }
+
+    getQuestionIndex(questionnaire: any, question: any){
+        if (questionnaire){
+            for (var i = 0; i< questionnaire.questions.length; i++){
+                if (question.id == questionnaire.questions[i].id){
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
     newQuestion(questionnaire: any = null, index: number = 0){
         let id = this.toolbox.getUniqueId();
         let q = {
@@ -118,7 +136,9 @@ export class QuestionnaireService {
             "answerLabelNok": "",
             "question": "",
             "detail": "",
-            "answers": [],
+            "answers":
+            [
+            ],
             "point": 1,
             "edit": true,
             "showAnswers": true
@@ -151,17 +171,23 @@ export class QuestionnaireService {
     }
 
     deleteQuestion(questionnaire: any, question: any){
-        let index = this.toolbox.findIndexArrayOfObjects(questionnaire.questions, "id", question.id);
-        if (index >= 0){
-            questionnaire.questions.splice(index, 1);
+        if (questionnaire.questions){
+            for (var i=0; i < questionnaire.questions.length; i++){
+                if (questionnaire.questions[i].id == question.id){
+                    questionnaire.questions.splice(i, 1);
+                }
+            }
         }
     }
 
     private removeQuestionnaire(questionnaires: any, questionnaire: any){
-        let index = this.toolbox.findIndexArrayOfObjects(questionnaires, "id", questionnaire.id);
-        if (index >= 0){
-            questionnaires.splice(index, 1);
-        }
+        if (questionnaires && questionnaires.length > 0){
+            for (var i=0; i < questionnaires.length; i++){
+                if (questionnaires[i].id == questionnaire.id){
+                    questionnaires.splice(i, 1);
+                }
+            }
+        }        
     }
 
     private successDeleteQuestionnaire(data: any, questionnaires: any, questionnaire: any){
@@ -192,28 +218,31 @@ export class QuestionnaireService {
     }
 
     deleteAnswer(question: any, answer: any){
-        let index = this.toolbox.findIndexArrayOfObjects(question.answers, "id", answer.id);
-        if (index >= 0){
-            question.answers.splice(index, 1);
+        if (question.answers){
+            for (var i=0; i < question.answers.length; i++){
+                if (question.answers[i].id == answer.id){
+                    question.answers.splice(i, 1);
+                }
+            }
         }
     }
 
-    cleanQuestionnaire(questionnaire: any){
+    cleanObject(object: any){
         let x = 0;
-        delete(questionnaire.edit);
-        delete(questionnaire.showQuestions);
-        delete(questionnaire.qestionsToImport);
-        if (questionnaire.questions){
-            for (var j=0 ; j< questionnaire.questions.length; j++){
-                delete(questionnaire.questions[j].edit);
-                delete(questionnaire.questions[j].showAnswers);
-                if (questionnaire.questions[j].answers){
-                    if (questionnaire.questions[j].answers.length > 1){
+        delete(object.edit);
+        delete(object.showQuestions);
+        delete(object.qestionsToImport);
+        if (object.questions){
+            for (var j=0 ; j< object.questions.length; j++){
+                delete(object.questions[j].edit);
+                delete(object.questions[j].showAnswers);
+                if (object.questions[j].answers){
+                    if (object.questions[j].answers.length > 1){
                         x ++;
                     }
-                    for (var k = 0; k < questionnaire.questions[j].answers.length; k++){
-                        if (questionnaire.questions[j].answers[k].answer == ""){
-                            questionnaire.questions[j].answers.splice(k, 1);
+                    for (var k = 0; k < object.questions[j].answers.length; k++){
+                        if (object.questions[j].answers[k].answer == ""){
+                            object.questions[j].answers.splice(k, 1);
                         }
                     }
                 }
@@ -221,22 +250,30 @@ export class QuestionnaireService {
         }
     }
 
-    saveQuestionnaire(callbackSuccess: Function, callbackFailure: Function, questionnaire: any){
-        if (questionnaire){
-            let q = this.toolbox.cloneObject(questionnaire);
-            this.cleanQuestionnaire(q);
+    saveObject(callbackSuccess: Function, callbackFailure: Function, object: any){
+        if (object){
+            let q = this.toolbox.cloneObject(object);
+            this.cleanObject(q);
             let url = this.configurationService.get().common.saveApiBaseUrl;
             console.log("data url", url);
             let user = this.connexionService.getUser();
             let directory = user.email.toUpperCase();
-            let fileName = "questionnaire_" + q.id + ".json";
+            let fileName = q.type + "_" + q.id + ".json";
             let date = new Date();
-            let body = {"type": "questionnaire", "dateTime": date, "directory": directory, "fileName": fileName, "content": JSON.stringify(q)};
+            let body = {"directory": directory, "fileName": fileName, "content": JSON.stringify(q)};
             this.http.put(url, body).subscribe(
                 (data: any) => callbackSuccess(data),
                 (error: any) => callbackFailure(error)
             );
         }
+    }
+
+    loadFromLocal(parseJson: boolean = false){
+        return this.toolbox.readFromStorage(this.storageKey, parseJson);
+    }
+
+    removeFromLocal(key: string){
+        this.toolbox.removeFromStorage(this.storageKey);
     }
 
     importQuestionsCsv(questionnaire: any, questionsToImport: string){
@@ -291,7 +328,7 @@ export class QuestionnaireService {
             let fake = (data: any)=>{
 
             }
-            this.saveQuestionnaire(fake, fake, questionnaire);
+            this.saveObject(fake, fake, questionnaire);
         }
         return questionnaires;
     }
@@ -364,70 +401,5 @@ export class QuestionnaireService {
     getQuestionnaireById(questionnaires: any, id: string){
         return this.toolbox.searchElementSpecial(questionnaires, "id", id);
     }
-
-    getScore(questions: any){
-        var score: any = {};
-        if (questions){
-            score.scoreOk = 0;
-            score.scoreNok = 0;
-            for (var i = 0; i< questions.length; i++){
-                if (questions[i].checked){
-                    if (questions[i].status){
-                        score.scoreOk ++;
-                    }else{
-                        score.scoreNok ++;
-                    }
-                } 
-            }
-            score.pourcentage = Math.round(score.scoreOk / questions.length * 100);
-            score.messagePourcentage = score.scoreOk + '/' + questions.length + ' (' + score.pourcentage + '%)';
-            }
-        return score;
-    }
-
-    generateQuestions(data: any, randomQuestions: boolean, jeopardy: boolean, nbQuestion: number){
-        let questions  = [];
-        for (var i=0; i < data.length; i++){
-            if (data[i].test){
-                for (var j = 0; j < data[i].questions.length; j++){
-                    let q = this.toolbox.cloneObject(data[i].questions[j]);
-                    q.questionnaireTitle = data[i].title;
-                    questions.push(q);
-                }
-            }
-        }
-        if (randomQuestions){
-            questions = this.toolbox.shuffleArray(questions);
-        }
-        if (nbQuestion != -1 && nbQuestion){
-            questions = questions.splice(0, nbQuestion);
-        }
-        if (jeopardy){
-            questions = this.generateJeopardy(questions);
-        }
-
-        return questions;
-    }
-
-    generateJeopardy(questions: any){
-        let res = [];
-        if (questions){
-            for (var i=0; i < questions.length; i++){
-                if (questions[i].answers){
-                    for (var j=0; j < questions[i].answers.length; j++){
-                        let q = this.toolbox.cloneObject(questions[i]);
-                        if (questions[i].answers[j].answer){
-                            q.question = questions[i].answers[j].answer;
-                            q.answers = [];
-                            let a = this.newAnswer();
-                            a.answer = questions[i].question;
-                            q.answers.push(a);
-                            res.push(q);
-                        }
-                    }
-                }
-            }
-        }
-        return res;
-    }    
+ 
 }

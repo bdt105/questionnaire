@@ -9,7 +9,6 @@ import { Http } from '@angular/http';
 
 import { Toolbox, Rest } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
-import { TestService } from '../../services/test.service';
 
 @Component({
     selector: 'test',
@@ -38,7 +37,7 @@ export class TestComponent extends GenericComponent {
 
 
     constructor(public configurationService: ConfigurationService, 
-        public translateService: TranslateService, public testService: TestService,
+        public translateService: TranslateService, public questionnaireService: QuestionnaireService,
         public menuService: MenuService, private http: Http){
         super(configurationService, translateService);
     }
@@ -49,7 +48,7 @@ export class TestComponent extends GenericComponent {
     private manageData(data: any){
         if (data){
             this.data = JSON.parse(data._body);
-            this.data.score = this.testService.getScore(this.data.questions);
+            this.data.score = this.questionnaireService.getScore(this.data.questions);
             this.data.startDateString = this.toolbox.formatDateToLocal(new Date(this.data.startDate), true);
             this.data.endDateString = this.toolbox.formatDateToLocal(new Date(this.data.endDate), true);;
         }

@@ -1,12 +1,14 @@
 <!-- definitions -->
-<div class="list-group-item">
+<div class="list-group-item" *ngIf="test">
     <h3 (click)="showDefinition = !showDefinition" style="cursor: pointer;">{{translate('Define your test')}}</h3>
     <form [hidden]="!showDefinition">
         <div class="form-group">
             <div *ngIf="questionnaires" class="col-10" style="padding: 0;">
                 <div *ngFor="let questionnaire of questionnaires">
-                    <input type="checkbox" [(ngModel)]="questionnaire.test" id="defaultCheck1" name="qus" (change)="selectQuestionnaire()"> {{questionnaire.title}}
-                    <span class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>                
+                    <input type="checkbox" [(ngModel)]="questionnaire.test" id="defaultCheck1" name="qus" (change)="selectQuestionnaire()"> 
+                    {{(questionnaire.title ? questionnaire.title : questionnaire.defaultTitle)}}
+                    <span class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>  
+                    <span class="badge badge-secondary">{{questionnaire.type}}</span>              
                 </div>
             </div>
         </div>
@@ -16,19 +18,21 @@
             <br>
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="Title" [(ngModel)]="title" name="title">
+            {{test.defaultTitle}}
+            <input type="text" class="form-control" placeholder="Title" [(ngModel)]="test.title" name="title">
         </div>
         <div class="form-group">
-            <input type="number" class="form-control" id="exampleInputPassword1" placeholder="Number of questions to ask (empty means the whole questionnaire)" [(ngModel)]="nbQuestions" name="nbQuestions">
+            <input type="number" class="form-control" id="exampleInputPassword1" placeholder="Number of questions to ask (empty means the whole questionnaire)"
+             [(ngModel)]="test.nbQuestions" name="nbQuestions">
         </div>
         <div class="form-group">
-            <input type="checkbox" id="defaultCheck1" [(ngModel)]="randomQuestions" name="randomQuestions"> {{translate('Random questions')}}
+            <input type="checkbox" id="defaultCheck1" [(ngModel)]="test.randomQuestions" name="randomQuestions"> {{translate('Random questions')}}
         </div>
         <div class="form-group">
-            <input type="checkbox" value="" id="defaultCheck1"  [(ngModel)]="nextIfCorrect" name="nextIfCorrect"> {{translate('Next question if correct')}}
+            <input type="checkbox" value="" id="defaultCheck1"  [(ngModel)]="test.nextIfCorrect" name="nextIfCorrect"> {{translate('Next question if correct')}}
         </div>
         <div class="form-group" title="{{translate('Questions will be answers and answers will be questions')}}">
-            <input type="checkbox" value="" id="defaultCheck1"  [(ngModel)]="jeopardy" name="nextIfCorrect"> {{translate('Jeopardy mode')}}
+            <input type="checkbox" value="" id="defaultCheck1"  [(ngModel)]="test.jeopardy" name="nextIfCorrect"> {{translate('Jeopardy mode')}}
         </div>
         <button type="submit" class="btn btn-primary" (click)="start()"><i class="fa fa-play"></i> {{translate('Let\'s go')}}</button>
     </form>
@@ -38,7 +42,7 @@
 <!-- test -->
 <div class="list-group-item" *ngIf="test && test.questions && test.questions[currentQuestionIndex]">
     <h3>{{translate('Test in progress')}}</h3>
-    <progressbar  type="warning" [max]="nbQuestions" [value]="currentQuestionIndex + 1">
+    <progressbar  type="warning" [max]="test.nbQuestions" [value]="currentQuestionIndex + 1">
         <span class="text-nowrap" style="color: black">{{test.score.messagePourcentage}}</span>
     </progressbar>
     <div style="font-size: 1.5em">
@@ -56,7 +60,7 @@
         <h5>{{translate('Your score is: ') + test.score.messagePourcentage}}</h5>
         <span (click)="showResults = ! showResults" style="cursor: pointer;">{{translate('See all questions and answers')}}</span>
         <div *ngIf="showResults">
-            <test *ngIf="tester" [fileName]="tester.fileName"></test>
+            <questionnaire *ngIf="tester" [questionnaire]="test"></questionnaire>
         </div>
     </div>
 

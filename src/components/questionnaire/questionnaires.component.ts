@@ -63,7 +63,12 @@ export class QuestionnairesComponent extends GenericComponent {
     }
 
     newQuestionnaire(){
-        let q = this.questionnaireService.newQuestionnaire();
+        let q = this.questionnaireService.newQuestionnaire("questionnaire");
+        this.questionnaires.push(q);
+    }
+
+    newTest(){
+        let q = this.questionnaireService.newQuestionnaire("test");
         this.questionnaires.push(q);
     }
 

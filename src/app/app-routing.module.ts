@@ -8,14 +8,12 @@ import { QuestionnairesComponent } from '../components/questionnaire/questionnai
 import { TesterComponent } from '../components/test/tester.component';
 import { AuthGuard } from '../services/auth.guard';
 import { SearchComponent } from '../components/search/search.component';
-import { TestsComponent } from '../components/test/tests.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full'},
     { path: 'login', component: LoginComponent},
     { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'tester', component: TesterComponent, canActivate: [AuthGuard] },
-    { path: 'tests', component: TestsComponent, canActivate: [AuthGuard] },
     { path: 'questionnaires', component: QuestionnairesComponent, canActivate: [AuthGuard] },
     { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
     { path: 'search/:search', component: SearchComponent, canActivate: [AuthGuard] },
