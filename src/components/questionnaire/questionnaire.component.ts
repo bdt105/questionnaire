@@ -72,7 +72,7 @@ export class QuestionnaireComponent extends GenericComponent {
         this.bsModalRef = this.modalService.show(ConfirmationComponent);
         this.bsModalRef.content.modalRef = this.bsModalRef;
         this.bsModalRef.content.title = this.translate("Deleting a questionnaire");
-        this.bsModalRef.content.message = this.translate("Are you sure you want to delete questionnaire '" + 
+        this.bsModalRef.content.message = this.translate("Are you sure you want to delete " + this.questionnaire.type + " '" + 
             (this.questionnaire.title ? this.questionnaire.title : this.questionnaire.defaultTitle) + "'");
         this.bsModalRef.content.button1Label = this.translate("Yes");
         this.bsModalRef.content.button2Label = this.translate("No");

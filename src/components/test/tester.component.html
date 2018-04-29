@@ -70,9 +70,9 @@
 <br>
 
 <!-- test -->
-<h3 *ngIf="test && test.questions && test.questions[currentQuestionIndex]">{{translate('Test in progress')}}</h3>
-<div class="list-group-item" *ngIf="test && test.questions && test.questions[currentQuestionIndex]">
-    <progressbar  type="warning" [max]="test.nbQuestions" [value]="currentQuestionIndex + 1">
+<h3 *ngIf="test && test.questions && test.questions[test.currentQuestionIndex]">{{translate('Test in progress')}}</h3>
+<div class="list-group-item" *ngIf="test && test.questions && test.questions[test.currentQuestionIndex]">
+    <progressbar  type="warning" [max]="test.nbQuestions" [value]="test.currentQuestionIndex + 1">
         <span class="text-nowrap" style="color: black">{{test.score.messagePourcentage}}</span>
     </progressbar>
     <div style="font-size: 1.5em">
@@ -85,12 +85,15 @@
     </em>
     
     <!-- Results -->
-    <div style="margin-top: 20px" class="jumbotron" *ngIf="test.questions[currentQuestionIndex].checked && currentQuestionIndex == (test.questions.length - 1)">
+    <div style="margin-top: 20px" class="jumbotron" *ngIf="test.questions[test.currentQuestionIndex].checked && test.currentQuestionIndex == (test.questions.length - 1)">
         <h3>{{translate('Congratulations!!')}}</h3>
         <h5>{{translate('Your score is: ') + test.score.messagePourcentage}}</h5>
         <span (click)="showResults = ! showResults" style="cursor: pointer;">{{translate('See all questions and answers')}}</span>
         <div *ngIf="showResults">
-            <questionnaire *ngIf="tester" [questionnaire]="test"></questionnaire>
+            <br>
+            <span (click)="saveTest()" style="cursor: pointer"><i class="fa fa-floppy-o"></i> {{translate('Save this test')}}</span>
+            <br>
+            <questionnaire *ngIf="test" [questionnaire]="test"></questionnaire>
         </div>
     </div>
 
@@ -100,17 +103,17 @@
         <form >
             <div class="card text-center">
                 <div class="card-header">
-                    {{ test.questions[currentQuestionIndex].questionLabel }}
+                    {{ test.questions[test.currentQuestionIndex].questionLabel }}
                 </div>
                 <div class="card-body">
                     <span class="card-title">
-                        {{ test.questions[currentQuestionIndex].question }} <br>
-                        {{ test.questions[currentQuestionIndex].detail }}
+                        {{ test.questions[test.currentQuestionIndex].question }} <br>
+                        {{ test.questions[test.currentQuestionIndex].detail }}
                     </span>
                     <br>
                     <div class="card-text">
-                        <textarea (keyup.enter)="check()" class="form-control" [(ngModel)]="test.questions[currentQuestionIndex].customAnswer" name="qus" style="margin-bottom:20px"></textarea>
-                        <!-- <input type="text" class="form-control" [(ngModel)]="test.questions[currentQuestionIndex].customAnswer" name="qus" style="margin-bottom:20px; line-height: 28px;">                         -->
+                        <textarea (keyup.enter)="check()" class="form-control" [(ngModel)]="test.questions[test.currentQuestionIndex].customAnswer" name="qus" style="margin-bottom:20px"></textarea>
+                        <!-- <input type="text" class="form-control" [(ngModel)]="test.questions[test.currentQuestionIndex].customAnswer" name="qus" style="margin-bottom:20px; line-height: 28px;">                         -->
                     </div>
                     <div class="row">
                         <div class="col-2" (click)="previousQuestion()" style="cursor: pointer;">
@@ -124,9 +127,9 @@
                             <i class="fa fa-chevron-right align-middle"></i>
                         </div>
                     </div>
-                    <div *ngIf="test.questions[currentQuestionIndex].checked">
+                    <div *ngIf="test.questions[test.currentQuestionIndex].checked">
                         <br>
-                        <questionCheck style="text-align: left;" [question]="test.questions[currentQuestionIndex]"></questionCheck>
+                        <questionCheck style="text-align: left;" [question]="test.questions[test.currentQuestionIndex]"></questionCheck>
                     </div>
                 </div>
             </div>

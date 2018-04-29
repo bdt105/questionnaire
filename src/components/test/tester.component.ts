@@ -19,7 +19,10 @@ import { QuestionnaireService } from '../../services/questionnaire.service';
 export class TesterComponent extends GenericComponent {
 
 
+    activatedRoute: any;
     public filterType: string;
+    public showDisabled: boolean;
+
     private toolbox: Toolbox = new Toolbox();
     private rest: Rest = new Rest();
 
@@ -34,10 +37,9 @@ export class TesterComponent extends GenericComponent {
 
     public test: any;
 
-    public currentQuestionIndex = 0;
-
     public showDefinition = true;
-    public showDisabled: boolean;
+
+    private id: string;
 
     constructor(public configurationService: ConfigurationService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
@@ -47,10 +49,21 @@ export class TesterComponent extends GenericComponent {
 
     ngOnInit(){
         this.test = this.questionnaireService.newQuestionnaire("test");
+        this.test.edit = false;
         this.filterType = "questionnaire";
         this.showDisabled = false;
+        // this.activatedRoute.params.subscribe(params => {
+        //     this.getParams();
+        // });       
         this.load();
     }
+
+    // getParams (){
+    //     if (this.activatedRoute.snapshot.params["id"]){
+    //         this.id = this.activatedRoute.snapshot.params["id"];
+    //         this.load();
+    //     }
+    // }
 
     private successLoadQuestionnaires(data: any){
         this.questionnaires = data;
@@ -68,20 +81,21 @@ export class TesterComponent extends GenericComponent {
     }
 
     private nextQuestion(){
-        if (this.test && (this.currentQuestionIndex < this.test.questions.length - 1)){        
-            this.currentQuestionIndex ++;
+        if (this.test && (this.test.currentQuestionIndex < this.test.questions.length - 1)){        
+            this.test.currentQuestionIndex ++;
         }
         this.getScore();
     }
 
     private previousQuestion(){
-        if (this.currentQuestionIndex > 0){
-            this.currentQuestionIndex --;
+        if (this.test.currentQuestionIndex > 0){
+            this.test.currentQuestionIndex --;
         }
         this.getScore();
     }
 
     start(){
+        this.test.currentQuestionIndex = 0;
         this.testInProgress = true;
         this.showResults = false;
         let questions = this.questionnaireService.generateQuestions(this.questionnaires, this.test.randomQuestions, this.test.jeopardy, this.test.nbQuestions);
@@ -94,15 +108,15 @@ export class TesterComponent extends GenericComponent {
     }
 
     checkQuestion(question: any, answer: string){
-        if (this.currentQuestionIndex == this.test.questions.length - 1){
+        if (this.test.currentQuestionIndex == this.test.questions.length - 1){
             this.test.endDate = this.toolbox.dateToDbString(new Date());
         }        
         this.questionnaireService.checkQuestion(question, answer, this.test.exactMatching);
-        if (this.test.nextIfCorrect && this.test.questions[this.currentQuestionIndex].status){
+        if (this.test.nextIfCorrect && this.test.questions[this.test.currentQuestionIndex].status){
             this.nextQuestion();
         }
         this.getScore();
-        this.saveTest();
+//        this.saveTest();
     }
 
     private saveTest(){
@@ -145,11 +159,13 @@ export class TesterComponent extends GenericComponent {
     } 
 
     check(){
-        let answer = this.test.questions[this.currentQuestionIndex].customAnswer;
-        if (answer[answer.length - 1] == "\n"){
-            answer = answer.substr(0, answer.length - 1);
+        let answer = this.test.questions[this.test.currentQuestionIndex].customAnswer;
+        if (answer){
+            if (answer[answer.length - 1] == "\n"){
+                answer = answer.substr(0, answer.length - 1);
+            }
+            this.test.questions[this.test.currentQuestionIndex].customAnswer = answer;
         }
-        this.test.questions[this.currentQuestionIndex].customAnswer = answer;
-        this.checkQuestion(this.test.questions[this.currentQuestionIndex], this.test.questions[this.currentQuestionIndex].customAnswer)        
+        this.checkQuestion(this.test.questions[this.test.currentQuestionIndex], this.test.questions[this.test.currentQuestionIndex].customAnswer)        
     }
 }

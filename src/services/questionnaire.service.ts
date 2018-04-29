@@ -149,6 +149,7 @@ export class QuestionnaireService {
         let a =  {
             "id": id,
             "answer": "",
+            "detail": "",
             "correctDistance": 0,
             "point": 1
         };
@@ -279,22 +280,10 @@ export class QuestionnaireService {
         for (var i=0; i < question.answers.length; i++){
             if (!question.correctDistance || question.correctDistance == 0){
                 if (answer){
-                    if (exactMatching){
-                        if (answer == question.answers[i].answer){
-                            question.status = true;
-                            break;
-                        }
-                    }else{
-                        if (answer.toUpperCase() == question.answers[i].answer.toUpperCase()){
-                            question.status = true;
-                            break;
-                        }
-                    }
-                }else{
-                    if (answer == question.answers[i].answer){
+                    if (this.toolbox.compareString(answer, question.answers[i].answer, false, false, exactMatching, false)){
                         question.status = true;
                         break;
-                    }                    
+                    }
                 }
             }
         }
@@ -337,25 +326,28 @@ export class QuestionnaireService {
                 let questionnaire = questionnaires[i];
                 if (questionnaire.questions){
                     for (var j=0; j< questionnaire.questions.length;j++){
-                        if (questionnaire.questions[j].question && questionnaire.questions[j].question.toUpperCase().includes(search.toUpperCase())){
+                        if (questionnaire.questions[j].question && this.toolbox.compareString(questionnaire.questions[j].question, search, false, false, false, true)){
                             let q = this.toolbox.cloneObject(questionnaire.questions[j]);
                             q.foundType = "question";
                             q.questionnaireTitle = questionnaire.title;
-                            q.questionnaireId = questionnaire.id;                            
+                            q.questionnaireId = questionnaire.id; 
+                            q.questionnaireType = questionnaire.type;                      
                             ret.push(q);                        }
-                        if (questionnaire.questions[j].questionLabel && questionnaire.questions[j].questionLabel.toUpperCase().includes(search.toUpperCase())){
+                        if (questionnaire.questions[j].questionLabel && this.toolbox.compareString(questionnaire.questions[j].questionLabel, search, false, false, false, true)){
                             let q = this.toolbox.cloneObject(questionnaire.questions[j]);
                             q.questionnaireTitle = questionnaire.title;
                             q.questionnaireId = questionnaire.id;
+                            q.questionnaireType = questionnaire.type;                      
                             q.foundType = "questionLabel";
                             ret.push(q);
                         }
                         if (questionnaire.questions[j].answers){
                             for (var k = 0; k < questionnaire.questions[j].answers.length; k++){
-                                if (questionnaire.questions[j].question && questionnaire.questions[j].answers[k].answer.toUpperCase().includes(search.toUpperCase())){
+                                if (questionnaire.questions[j].answers[k] && this.toolbox.compareString(questionnaire.questions[j].answers[k].answer, search, false, false, false, true)){
                                     let q = this.toolbox.cloneObject(questionnaire.questions[j]);
                                     q.questionnaireTitle = questionnaire.title;
                                     q.questionnaireId = questionnaire.id;
+                                    q.questionnaireType = questionnaire.type;                      
                                     q.foundType = "answer";
                                     ret.push(q);
                                 }
@@ -448,5 +440,5 @@ export class QuestionnaireService {
         }
         return res;
     }  
-    
+
 }

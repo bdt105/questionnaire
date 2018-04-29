@@ -23,13 +23,18 @@ export class SearchComponent extends GenericComponent{
     public questionsSearch: any;
     public error: any;
 
+    public filterType: string;
+    public showDisabled: boolean;
+    
     constructor(public configurationService: ConfigurationService, 
         public translateService: TranslateService, private activatedRoute: ActivatedRoute, public questionnaireService: QuestionnaireService){
         super(configurationService, translateService);
     }
 
-
     ngOnInit(){
+        this.filterType = "questionnaire";
+        this.showDisabled = false;
+        
         this.activatedRoute.params.subscribe(params => {
             this.getParams();
         });       
@@ -54,7 +59,7 @@ export class SearchComponent extends GenericComponent{
     private load(){
         this.questionnaireService.loadQuestionnaires(
             (data: any) => this.successLoad(data),
-            (error: any) => this.failureLoad(error)
+            (error: any) => this.failureLoad(error), this.filterType, this.showDisabled
         );
     }
 
@@ -78,4 +83,11 @@ export class SearchComponent extends GenericComponent{
             }
         }
     }
+
+    filter(type: string = null, showDisabled: boolean = null){
+        this.filterType = type;
+        this.showDisabled = (showDisabled == null ? true : showDisabled);
+        this.load();
+    } 
+    
 }
