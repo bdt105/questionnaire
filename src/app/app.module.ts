@@ -18,6 +18,7 @@ import { QuestionsComponent } from '../components/question/questions.component';
 import { QuestionCheckComponent } from '../components/question/questionCheck.component';
 import { QuestionnaireComponent } from '../components/questionnaire/questionnaire.component';
 import { ConfirmationComponent } from '../components/standard/confirmation.component';
+import { SearchComponent } from '../components/search/search.component';
 
 // Sidebar module https://github.com/arkon/ng-sidebar
 import { SidebarModule } from 'ng-sidebar';
@@ -48,7 +49,7 @@ import { UserService } from '../services/user.service';
 import { FormValidationService } from '../services/fromValidation.service';
 import { AuthGuard } from '../services/auth.guard';
 import { QuestionnaireService } from '../services/questionnaire.service';
-import { SearchComponent } from '../components/search/search.component';
+import { GroupByPipe } from '../services/groupBy.pipe';
 
 export function init (config: ConfigurationService) {
     config.load();
@@ -73,7 +74,8 @@ export function init (config: ConfigurationService) {
         QuestionComponent,
         QuestionsComponent,
         QuestionCheckComponent,
-        SearchComponent
+        SearchComponent,
+        GroupByPipe
     ],
     entryComponents: [
         ConfirmationComponent
@@ -101,7 +103,8 @@ export function init (config: ConfigurationService) {
         AuthGuard, MenuService, AccordionConfig, ConfigurationService, TranslateService, 
         ConnexionService, FormValidationService, UserService, QuestionnaireService],
         bootstrap: [ AppComponent ]
-    })
+    }
+)
 
 
 export class AppModule { 

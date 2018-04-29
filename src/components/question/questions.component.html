@@ -3,3 +3,13 @@
         <question [question]="question" [questionnaire]="questionnaire" [editable]="editable" (change)="changed()"></question>
     </div>
 </div>
+<div class="list-group">
+    <div *ngFor="let object of questions | groupBy:'questionLabel'" class="list-group-item">
+        <strong>{{object.key}}</strong>
+        <div class="list-group">
+            <div *ngFor="let question of object.value" class="list-group-item">
+                <question [question]="question" [editable]="false"></question>
+            </div>
+        </div>
+    </div>
+</div>

@@ -81,6 +81,13 @@ export class QuestionnairesComponent extends GenericComponent {
             let json = this.bsModalRef.content.message;
             if (this.toolbox.isJson(json)){
                 let questionnaire = JSON.parse(json);
+                let date = this.toolbox.dateToDbString(new Date());
+                questionnaire.creationDate = date;
+                questionnaire.modificationDate = date;
+                questionnaire.type = "questionnaire";
+                if (!questionnaire.title){
+                    questionnaire.title = this.translate('Import') + " " + date;
+                }
                 this.questionnaires = this.questionnaireService.importQuestionnaire(questionnaire, this.questionnaires);
             }
         })
