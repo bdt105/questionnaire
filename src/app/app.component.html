@@ -1,4 +1,4 @@
-<navbar (clickSidebarMenu)="toggleSidebar($event)"></navbar>
+<navbar  *ngIf="isConnected()" (clickSidebarMenu)="toggleSidebar($event)"></navbar>
 <ng-sidebar-container style="height: 93.8vh;">
     <ng-sidebar [(opened)]="sidebarOpened" closeOnClickOutside="true" mode="over" [autoFocus]="false">
         <br>

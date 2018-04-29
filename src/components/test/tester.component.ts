@@ -140,7 +140,17 @@ export class TesterComponent extends GenericComponent {
 
     filter(type: string = null, showDisabled: boolean = null){
         this.filterType = type;
-        this.showDisabled = showDisabled;
+        this.showDisabled = (showDisabled == null ? true : showDisabled);
         this.load();
-    }    
+    } 
+    
+    enterText(event: any){
+        if (event.charCode == 13){
+            this.check();
+        }
+    }
+    
+    check(){
+        this.checkQuestion(this.test.questions[this.currentQuestionIndex], this.test.questions[this.currentQuestionIndex].customAnswer)        
+    }
 }

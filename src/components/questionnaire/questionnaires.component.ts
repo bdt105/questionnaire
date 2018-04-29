@@ -88,7 +88,7 @@ export class QuestionnairesComponent extends GenericComponent {
 
     filter(type: string = null, showDisabled: boolean = null){
         this.filterType = type;
-        this.showDisabled = showDisabled;
+        this.showDisabled = (showDisabled == null ? true : showDisabled);
         this.load();
     }
 

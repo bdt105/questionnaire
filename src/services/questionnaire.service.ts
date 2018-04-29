@@ -274,27 +274,33 @@ export class QuestionnaireService {
         }
     }
 
-    checkQuestion(question: any, answer: string, exactMatching: boolean){
-        question.status = false;
-        for (var i=0; i < question.answers.length; i++){
-            if (!question.correctDistance || question.correctDistance == 0){
-                if (answer){
-                    if (exactMatching){
+    checkQuestion(question: any, answering: string, exactMatching: boolean){
+        if (answering){
+            let answer = answering;
+            if (answer[answer.length - 1] == "\n"){
+                answer = answer.substr(0, answer.length - 1);
+            }
+            question.status = false;
+            for (var i=0; i < question.answers.length; i++){
+                if (!question.correctDistance || question.correctDistance == 0){
+                    if (answer){
+                        if (exactMatching){
+                            if (answer == question.answers[i].answer){
+                                question.status = true;
+                                break;
+                            }
+                        }else{
+                            if (answer.toUpperCase() == question.answers[i].answer.toUpperCase()){
+                                question.status = true;
+                                break;
+                            }
+                        }
+                    }else{
                         if (answer == question.answers[i].answer){
                             question.status = true;
                             break;
-                        }
-                    }else{
-                        if (answer.toUpperCase() == question.answers[i].answer.toUpperCase()){
-                            question.status = true;
-                            break;
-                        }
+                        }                    
                     }
-                }else{
-                    if (answer == question.answers[i].answer){
-                        question.status = true;
-                        break;
-                    }                    
                 }
             }
         }
