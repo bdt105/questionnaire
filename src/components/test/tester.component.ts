@@ -143,14 +143,13 @@ export class TesterComponent extends GenericComponent {
         this.showDisabled = (showDisabled == null ? true : showDisabled);
         this.load();
     } 
-    
-    enterText(event: any){
-        if (event.charCode == 13){
-            this.check();
-        }
-    }
-    
+
     check(){
+        let answer = this.test.questions[this.currentQuestionIndex].customAnswer;
+        if (answer[answer.length - 1] == "\n"){
+            answer = answer.substr(0, answer.length - 1);
+        }
+        this.test.questions[this.currentQuestionIndex].customAnswer = answer;
         this.checkQuestion(this.test.questions[this.currentQuestionIndex], this.test.questions[this.currentQuestionIndex].customAnswer)        
     }
 }
