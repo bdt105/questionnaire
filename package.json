@@ -21,7 +21,7 @@
     "@angular/platform-browser": "^5.2.7",
     "@angular/platform-browser-dynamic": "^5.2.7",
     "@angular/router": "^5.2.7",
-    "bdt105toolbox": "^1.0.78",
+    "bdt105toolbox": "^1.0.80",
     "bootstrap": "^4.0.0",
     "angular-confirmation-popover": "~4.1.0",
     "core-js": "^2.5.3",

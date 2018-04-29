@@ -14,6 +14,8 @@ export class QuestionnaireService {
 
     private questionnairesCount = 0;
 
+    private sortKey = "title";
+
     constructor (private configurationService: ConfigurationService, private connexionService: ConnexionService, private http: Http){
     }
 
@@ -41,12 +43,19 @@ export class QuestionnaireService {
         );
     }
 
-    private successLoadQuestionnaire(data: any, callbackSuccess: Function, fileName: string){
+    private successLoadQuestionnaire(data: any, callbackSuccess: Function, fileName: string, type: string, showDisabled: boolean){
         if (data){
             let questionnaire = JSON.parse(data._body);
             questionnaire.fileName = fileName;
             this.data.push(questionnaire);
             if (this.data.length == this.questionnairesCount){
+                if (type){
+                    this.data = this.toolbox.filterArrayOfObjects(this.data, "type", type);
+                }
+                if (showDisabled != null && !showDisabled){
+                    this.data = this.toolbox.extractFromArray(this.data, "disabled", showDisabled, true);
+                }
+                this.data = this.toolbox.sortArrayOfObjects(this.data, this.sortKey);
                 callbackSuccess(this.data);
             }
         }
@@ -59,14 +68,14 @@ export class QuestionnaireService {
         }
     }
     
-    private successLoadQuestionnaires(data: any, callbackSuccess: Function, callbackFailure: Function){
+    private successLoadQuestionnaires(data: any, callbackSuccess: Function, callbackFailure: Function, type: string, showDisabled: boolean){
         if (data){
             let questionnaireIds = JSON.parse(data._body);
             this.questionnairesCount = questionnaireIds.length;
             for (var i = 0; i < questionnaireIds.length; i++){
                 let id = questionnaireIds[i].replace(".json", "");
                 this.loadQuestionnaire(
-                    (data: any) => this.successLoadQuestionnaire(data, callbackSuccess, id + ".json"), 
+                    (data: any) => this.successLoadQuestionnaire(data, callbackSuccess, id + ".json", type, showDisabled), 
                     (error: any) => this.failureLoadQuestionnaire(error, callbackFailure), 
                     id);
             }
@@ -81,12 +90,12 @@ export class QuestionnaireService {
     }
     
 
-    loadQuestionnaires(callbackSuccess: Function, callbackFailure: Function){
+    loadQuestionnaires(callbackSuccess: Function, callbackFailure: Function, type: string = null, showDisabled: boolean = null){
         this.questionnairesCount = 0;
         this.data = null;
         this.data = [];
         this.loadFiles(
-            (data: any) => this.successLoadQuestionnaires(data, callbackSuccess, callbackFailure),
+            (data: any) => this.successLoadQuestionnaires(data, callbackSuccess, callbackFailure, type, showDisabled),
             (error: any) => this.failureLoadQuestionnaires(error, callbackFailure)
         );
     }
@@ -96,7 +105,8 @@ export class QuestionnaireService {
         let date = this.toolbox.dateToDbString(new Date());
         let q = {
             "type": type,
-            "date": date,
+            "modificationDate": date,
+            "creationDate": date,
             "score": null,
             "startDate": null,
             "endDate": null,
@@ -104,7 +114,8 @@ export class QuestionnaireService {
             "title": "",
             "questions": [],
             "edit": true,
-            "showQuestions": true
+            "showQuestions": true,
+            "disabled": false
         };
         return q;
     }
@@ -229,9 +240,9 @@ export class QuestionnaireService {
             console.log("data url", url);
             let user = this.connexionService.getUser();
             let directory = user.email.toUpperCase();
-            let fileName = "questionnaire_" + q.id + ".json";
-            let date = new Date();
-            let body = {"type": "questionnaire", "dateTime": date, "directory": directory, "fileName": fileName, "content": JSON.stringify(q)};
+            let fileName = q.id + ".json";
+            q.modificationDate = this.toolbox.dateToDbString(new Date());
+            let body = {"directory": directory, "fileName": fileName, "content": JSON.stringify(q)};
             this.http.put(url, body).subscribe(
                 (data: any) => callbackSuccess(data),
                 (error: any) => callbackFailure(error)
@@ -263,14 +274,21 @@ export class QuestionnaireService {
         }
     }
 
-    checkQuestion(question: any, answer: string){
+    checkQuestion(question: any, answer: string, exactMatching: boolean){
         question.status = false;
         for (var i=0; i < question.answers.length; i++){
             if (!question.correctDistance || question.correctDistance == 0){
                 if (answer){
-                    if (answer == question.answers[i].answer || answer.toUpperCase() == question.answers[i].answer.toUpperCase()){
-                        question.status = true;
-                        break;
+                    if (exactMatching){
+                        if (answer == question.answers[i].answer){
+                            question.status = true;
+                            break;
+                        }
+                    }else{
+                        if (answer.toUpperCase() == question.answers[i].answer.toUpperCase()){
+                            question.status = true;
+                            break;
+                        }
                     }
                 }else{
                     if (answer == question.answers[i].answer){
@@ -429,5 +447,6 @@ export class QuestionnaireService {
             }
         }
         return res;
-    }    
+    }  
+    
 }

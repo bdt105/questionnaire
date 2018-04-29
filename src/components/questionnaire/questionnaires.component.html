@@ -1,6 +1,9 @@
 <div class="row"> <!-- Title -->
     <div class="col-10">
-        <h3>{{translate('Questionnaires')}} <span *ngIf="questionnaires" class="badge badge-primary badge-pill">{{questionnaires.length}}</span></h3>
+        <h3>
+            {{translate('Questionnaires')}}
+            <span *ngIf="questionnaires" class="badge badge-primary badge-pill"> {{questionnaires.length}}</span>
+        </h3>
     </div>
     <div class="col-2 text-right" style="cursor: pointer;">
         <div class="dropdown">
@@ -10,6 +13,15 @@
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" (click)="newQuestionnaire()"><i class="fa fa-plus"></i> {{translate('New questionnaire')}}</a>
                 <a class="dropdown-item" (click)="import()"><i class="fa fa-download"></i> {{translate('Import a questionnaire')}}</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" (click)="filter('questionnaire', showDisabled)"><i class="fa fa-filter"></i> {{translate('Questionnaires only')}}</a>
+                <a class="dropdown-item" (click)="filter('test', showDisabled)"><i class="fa fa-filter"></i> {{translate('Tests only')}}</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" (click)="filter(filterType, !showDisabled)">
+                    <i *ngIf="showDisabled" class="fa fa-check"></i> {{translate('Show disabled')}}
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" (click)="filter()"><i class="fa fa-filter"></i> {{translate('No filter')}}</a>
             </div>
         </div>
     </div>
@@ -19,8 +31,8 @@
 <div class="list-group">
 
     <!-- Questionnaires -->
-    <div *ngFor="let questionnaire of questionnaires" class="list-group-item">
-        <questionnaire [questionnaire]="questionnaire" [questionnaires]="questionnaires"></questionnaire>
+    <div *ngFor="let questionnaire of questionnaires" class="list-group-item" >
+        <questionnaire [questionnaire]="questionnaire" [questionnaires]="questionnaires" (deleted)="load()"></questionnaire>
     </div>
     
 </div>

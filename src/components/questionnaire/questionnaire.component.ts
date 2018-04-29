@@ -50,7 +50,7 @@ export class QuestionnaireComponent extends GenericComponent {
         return this.__id;
     };    
 
-    // @Output() change: EventEmitter<string> = new EventEmitter<string>();
+    @Output() deleted: EventEmitter<string> = new EventEmitter<string>();
 
     constructor(public configurationService: ConfigurationService, private modalService: BsModalService,
         public translateService: TranslateService, public questionnaireService: QuestionnaireService, private http: Http){
@@ -72,7 +72,8 @@ export class QuestionnaireComponent extends GenericComponent {
         this.bsModalRef = this.modalService.show(ConfirmationComponent);
         this.bsModalRef.content.modalRef = this.bsModalRef;
         this.bsModalRef.content.title = this.translate("Deleting a questionnaire");
-        this.bsModalRef.content.message = this.translate("Are you sure you want to delete questionnaire '" + this.questionnaire.title + "'");
+        this.bsModalRef.content.message = this.translate("Are you sure you want to delete questionnaire '" + 
+            (this.questionnaire.title ? this.questionnaire.title : this.questionnaire.defaultTitle) + "'");
         this.bsModalRef.content.button1Label = this.translate("Yes");
         this.bsModalRef.content.button2Label = this.translate("No");
         this.bsModalRef.content.button1Click.subscribe(result => {
@@ -130,7 +131,8 @@ export class QuestionnaireComponent extends GenericComponent {
     }
 
     delete(questionnaire: any){
-        this.questionnaireService.deleteQuestionnaire(this.questionnaires, questionnaire);       
+        this.questionnaireService.deleteQuestionnaire(this.questionnaires, questionnaire);  
+        this.deleted.emit(questionnaire); 
     }    
 
     export(){

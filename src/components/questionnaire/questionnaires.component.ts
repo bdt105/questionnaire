@@ -34,13 +34,19 @@ export class QuestionnairesComponent extends GenericComponent {
     public questionnairesToImport: string;
     public questionnairesToExport: string;
 
+    public filterType: string;
+    public showDisabled: boolean;
+
+    public sortKey: string ="title";
+
     constructor(public configurationService: ConfigurationService, private modalService: BsModalService, 
-        public translateService: TranslateService, public questionnaireService: QuestionnaireService,
-        public menuService: MenuService, private http: Http){
+        public translateService: TranslateService, public questionnaireService: QuestionnaireService, private http: Http){
         super(configurationService, translateService);
     }
 
     ngOnInit(){
+        this.filterType = "questionnaire";
+        this.showDisabled = false;   
         this.load();
     }
 
@@ -55,20 +61,11 @@ export class QuestionnairesComponent extends GenericComponent {
     load(){  
         this.questionnaireService.loadQuestionnaires(
             (data: any) => this.successLoad(data), 
-            (error: any) => this.failureLoad(error));
-    }
-
-    newQuestion(questionnaire: any){
-        this.questionnaireService.newQuestion(questionnaire);
+            (error: any) => this.failureLoad(error), this.filterType, this.showDisabled);
     }
 
     newQuestionnaire(){
         let q = this.questionnaireService.newQuestionnaire("questionnaire");
-        this.questionnaires.push(q);
-    }
-
-    newTest(){
-        let q = this.questionnaireService.newQuestionnaire("test");
         this.questionnaires.push(q);
     }
 
@@ -89,5 +86,10 @@ export class QuestionnairesComponent extends GenericComponent {
         })
     }
 
+    filter(type: string = null, showDisabled: boolean = null){
+        this.filterType = type;
+        this.showDisabled = showDisabled;
+        this.load();
+    }
 
 }

@@ -1,17 +1,31 @@
 <div class="row">
-    <div  class="col-11">
+    <div class="col-11">
         <div *ngIf="questionnaire.edit">
             <input type="text" class="form-control" placeholder="{{translate('Questionnaire name')}}" 
                 [(ngModel)]="questionnaire.title" name="title" (change)="save()">
             <br>
+            <input type="checkbox" id="defaultCheck1" [(ngModel)]="questionnaire.disabled" name="disabled" (change)="save()"> {{translate('Disable this questionnaire')}}
+            <br>
         </div>
-        <span *ngIf="!questionnaire.edit" (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
-            <h6>{{(questionnaire.title ? questionnaire.title : questionnaire.defaultTitle)}} 
-                <span class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span> 
-                <span class="badge badge-secondary">{{questionnaire.type}}{{questionnaire.score ? ' - ' + questionnaire.score.messagePourcentage : ""}}</span>
+        <div *ngIf="!questionnaire.edit" (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
+            <h6 style="margin-bottom: O">
+                <span [style.text-decoration]="questionnaire.disabled ? 'line-through' : ''">{{(questionnaire.title ? questionnaire.title : questionnaire.defaultTitle)}}</span>
+                <span *ngIf="questionnaire.questions" class="badge badge-primary badge-pill"> {{questionnaire.questions.length}}</span> 
+                <span class="badge badge-secondary">{{questionnaire.type}}</span>
             </h6>
-        </span>
-    </div>           
+            <small><i class="fa fa-star-o"></i> {{questionnaire.creationDate}}</small>
+            <small><i class="fa fa-pencil-square-o"></i> {{questionnaire.modificationDate}}</small>
+        </div>
+        <div *ngIf="questionnaire.type == 'test'">
+            <p class="mb-1">{{ translate('Date: ') }} <strong>{{questionnaire.startDate + ' - ' + questionnaire.endDate}}</strong></p>
+            <p class="mb-1" *ngIf="questionnaire.score"><i class="fa fa-percent"></i>  <strong>{{questionnaire.score.messagePourcentage}}</strong></p>
+            <p class="mb-1">
+                <span *ngIf="questionnaire.randomQuestions"><i class="fa fa-random"></i> {{translate('random questions')}}</span>
+                <span *ngIf="questionnaire.jeopardy"><i class="fa fa-exchange"></i> {{translate('jeopardy mode')}}</span>
+                <span *ngIf="questionnaire.exactMatching"><i class="fa fa-bars"></i> {{translate('exact matching')}}</span>
+            </p>
+        </div>   
+    </div>   
     <div class="col-1 text-right" style="cursor: pointer;padding:0; margin: 0">
         <div class="dropdown">
             <button style="background-color:transparent; border: 0" class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -30,5 +44,6 @@
 
 <!-- Questions -->
 <div *ngIf="questionnaire.showQuestions">
+    <br>
     <questions [questions]="questionnaire.questions" [questionnaire]="questionnaire" [editable]="true" (change)="save()"></questions>
 </div>

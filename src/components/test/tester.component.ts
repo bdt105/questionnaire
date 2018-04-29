@@ -19,10 +19,13 @@ import { QuestionnaireService } from '../../services/questionnaire.service';
 export class TesterComponent extends GenericComponent {
 
 
+    public filterType: string;
     private toolbox: Toolbox = new Toolbox();
     private rest: Rest = new Rest();
 
     public questionnaires: any;
+    public questionnairesFiltered: any;
+
     public error: any;
 
     public testInProgress = false;
@@ -34,6 +37,7 @@ export class TesterComponent extends GenericComponent {
     public currentQuestionIndex = 0;
 
     public showDefinition = true;
+    public showDisabled: boolean;
 
     constructor(public configurationService: ConfigurationService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
@@ -43,6 +47,8 @@ export class TesterComponent extends GenericComponent {
 
     ngOnInit(){
         this.test = this.questionnaireService.newQuestionnaire("test");
+        this.filterType = "questionnaire";
+        this.showDisabled = false;
         this.load();
     }
 
@@ -58,7 +64,7 @@ export class TesterComponent extends GenericComponent {
     load(){        
         this.questionnaireService.loadQuestionnaires(
             (data: any) => this.successLoadQuestionnaires(data), 
-            (error: any) => this.failureLoadQuestionnaires(error));
+            (error: any) => this.failureLoadQuestionnaires(error), this.filterType, this.showDisabled);
     }
 
     private nextQuestion(){
@@ -91,7 +97,7 @@ export class TesterComponent extends GenericComponent {
         if (this.currentQuestionIndex == this.test.questions.length - 1){
             this.test.endDate = this.toolbox.dateToDbString(new Date());
         }        
-        this.questionnaireService.checkQuestion(question, answer);
+        this.questionnaireService.checkQuestion(question, answer, this.test.exactMatching);
         if (this.test.nextIfCorrect && this.test.questions[this.currentQuestionIndex].status){
             this.nextQuestion();
         }
@@ -124,4 +130,17 @@ export class TesterComponent extends GenericComponent {
         this.test.defaultTitle = this.getTestTitle();
     }
 
+    selectAll(sel: boolean){
+        if (this.questionnairesFiltered){
+            for (var i = 0; i < this.questionnairesFiltered.length; i++){
+                this.questionnairesFiltered[i].test = sel;
+            }
+        }
+    }
+
+    filter(type: string = null, showDisabled: boolean = null){
+        this.filterType = type;
+        this.showDisabled = showDisabled;
+        this.load();
+    }    
 }

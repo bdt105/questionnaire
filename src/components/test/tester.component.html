@@ -1,16 +1,43 @@
 <!-- definitions -->
+<h3 (click)="showDefinition = !showDefinition" style="cursor: pointer;">{{translate('Define your test')}}</h3>
 <div class="list-group-item" *ngIf="test">
-    <h3 (click)="showDefinition = !showDefinition" style="cursor: pointer;">{{translate('Define your test')}}</h3>
     <form [hidden]="!showDefinition">
         <div class="form-group">
-            <div *ngIf="questionnaires" class="col-10" style="padding: 0;">
-                <div *ngFor="let questionnaire of questionnaires">
-                    <input type="checkbox" [(ngModel)]="questionnaire.test" id="defaultCheck1" name="qus" (change)="selectQuestionnaire()"> 
-                    {{(questionnaire.title ? questionnaire.title : questionnaire.defaultTitle)}}
-                    <span class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>  
-                    <span class="badge badge-secondary">{{questionnaire.type}}</span>              
+            <div class="row">
+                <div class="col-10">
+                    <h6>{{translate('Choose your questionnaires')}}</h6>
+                    <div *ngIf="questionnaires" class="col-10" style="padding: 0;">
+                        <div *ngFor="let questionnaire of questionnaires">
+                            <input type="checkbox" [(ngModel)]="questionnaire.test" id="defaultCheck1" name="qus" (change)="selectQuestionnaire()"> 
+                            <span [style.text-decoration]="questionnaire.disabled ? 'line-through' : ''">
+                                {{(questionnaire.title ? questionnaire.title : questionnaire.defaultTitle)}}
+                            </span>
+                            <span class="badge badge-primary badge-pill">{{questionnaire.questions.length}}</span>  
+                            <span class="badge badge-secondary">{{questionnaire.type}}</span>              
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div class="col-2 text-right" style="cursor: pointer;">
+                    <div class="dropdown">
+                        <button style="background-color:transparent; border: 0" class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i  class="fa fa-ellipsis-v"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" (click)="selectAll(true)"><i class="fa fa-square-o"></i> {{translate('Select all')}}</a>
+                            <a class="dropdown-item" (click)="selectAll(false)"><i class="fa fa-check-square-o"></i> {{translate('Deselect all')}}</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" (click)="filter('questionnaire', showDisabled)"><i class="fa fa-filter"></i> {{translate('Questionnaires only')}}</a>
+                            <a class="dropdown-item" (click)="filter('test', showDisabled)"><i class="fa fa-filter"></i> {{translate('Tests only')}}</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" (click)="filter(filterType, !showDisabled)">
+                                <i *ngIf="showDisabled" class="fa fa-check"></i> {{translate('Show disabled')}}
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" (click)="filter()"><i class="fa fa-filter"></i> {{translate('No filter')}}</a>
+                        </div>
+                    </div>
+                </div>  
+            </div>                  
         </div>
         <div *ngIf="!questionnaires || questionnaires.length == 0">
             {{translate('No questionnaire defined!')}} <a [routerLink]="'/inputs'">{{translate('Define one here.')}}</a>
@@ -34,14 +61,17 @@
         <div class="form-group" title="{{translate('Questions will be answers and answers will be questions')}}">
             <input type="checkbox" value="" id="defaultCheck1"  [(ngModel)]="test.jeopardy" name="nextIfCorrect"> {{translate('Jeopardy mode')}}
         </div>
+        <div class="form-group" title="{{translate('Accents and cape letters will be taken into account')}}">
+            <input type="checkbox" value="" id="defaultCheck1"  [(ngModel)]="test.exactMatching" name="exactMatching"> {{translate('Exact matching')}}
+        </div>
         <button type="submit" class="btn btn-primary" (click)="start()"><i class="fa fa-play"></i> {{translate('Let\'s go')}}</button>
     </form>
 </div>
 <br>
 
 <!-- test -->
+<h3 *ngIf="test && test.questions && test.questions[currentQuestionIndex]">{{translate('Test in progress')}}</h3>
 <div class="list-group-item" *ngIf="test && test.questions && test.questions[currentQuestionIndex]">
-    <h3>{{translate('Test in progress')}}</h3>
     <progressbar  type="warning" [max]="test.nbQuestions" [value]="currentQuestionIndex + 1">
         <span class="text-nowrap" style="color: black">{{test.score.messagePourcentage}}</span>
     </progressbar>
@@ -79,7 +109,7 @@
                     </span>
                     <br>
                     <div class="card-text">
-                        <input autocomplete="off" type="text" class="form-control" [(ngModel)]="test.questions[currentQuestionIndex].customAnswer" name="qus" style="margin-bottom:20px">
+                        <textarea class="form-control" [(ngModel)]="test.questions[currentQuestionIndex].customAnswer" name="qus" style="margin-bottom:20px"></textarea>
                     </div>
                     <div class="row">
                         <div class="col-2" (click)="previousQuestion()" style="cursor: pointer;">
