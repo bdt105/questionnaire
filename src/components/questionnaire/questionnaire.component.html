@@ -37,7 +37,7 @@
                 <a class="dropdown-item" (click)="toggleGroup()"><i *ngIf="questionnaire.showGroup" class="fa fa-check"></i> {{translate('Group by question label')}}</a>
                 <a class="dropdown-item" (click)="seeSeparatly()"><i class="fa fa-eye"></i> {{translate('See separatly')}}</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" (click)="toggleFavorite()"><i *ngIf="questionnaire.favoriteQuestions" class="fa fa-check"></i> {{translate('Favorites only')}}</a>
+                <a class="dropdown-item" (click)="toggleFavorite()"><i *ngIf="questionnaire.favoriteQuestions" class="fa fa-check"></i> {{translate('Favorite questions only')}}</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" (click)="edit(questionnaire)"><i class="fa fa-pencil"></i> {{translate('Edit')}}</a>
                 <a class="dropdown-item" (click)="newQuestion(questionnaire)"><i class="fa fa-plus"></i> {{translate('New question')}}</a>
