@@ -11,8 +11,6 @@
                             <span *ngIf="question.status == false" class="badge badge-pill badge-danger"><i class="fa fa-thumbs-down"></i></span>                    
                             <strong>{{question.customAnswer}}<br></strong>
                         </span>
-                        <!-- <em *ngIf="question.questionLabel">{{question.questionLabel}}<br></em> -->
-                        <!-- <strong *ngIf="question.question">{{question.question}}<br></strong> -->
                         <div *ngIf="question.question" [innerHTML]="question.question"></div>
                         <div *ngIf="question.detail" [innerHTML]="question.detail"></div>
                     </div>                    
@@ -42,7 +40,7 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" (click)="toggleEdit()"><i class="fa fa-pencil"></i> {{translate('Edit')}}</a>
                         <a class="dropdown-item" (click)="newAnswer(question)"><i class="fa fa-plus"></i> {{translate('New answer')}}</a>
-                        <a class="dropdown-item" (click)="deleteWithConfirmationQuestion(question)"><i class="fa fa-trash"></i> {{translate('Delete this question')}}</a>
+                        <!-- <a class="dropdown-item" (click)="deleteWithConfirmationQuestion(question)"><i class="fa fa-trash"></i> {{translate('Delete this question')}}</a> -->
                     </div>
                 </div>
             </div>

@@ -13,7 +13,7 @@
         <div class="list-group" *ngIf="object.showGroupedQuestions">
             <br>
             <div *ngFor="let question of object.value" class="list-group-item">
-                <questionGroup [question]="question" [editable]="editable" (change)="changed()" [showAnswers]="true"></questionGroup>
+                <questionGroup [question]="question" [questionnaire]="questionnaire" [editable]="editable" (change)="changed()" [showAnswers]="true"></questionGroup>
             </div>
         </div>
     </div>

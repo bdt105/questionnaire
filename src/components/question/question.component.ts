@@ -14,7 +14,7 @@ import { ConfirmationComponent } from '../standard/confirmation.component';
 
 export class QuestionComponent extends GenericComponent {
 
-    private toolbox: Toolbox = new Toolbox();
+    public toolbox: Toolbox = new Toolbox();
     public showResults = false;
     public bsModalRef: BsModalRef;
 

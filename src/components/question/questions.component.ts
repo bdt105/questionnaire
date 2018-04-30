@@ -58,6 +58,12 @@ export class QuestionsComponent extends GenericComponent {
     }
 
     changed(){
+        // // To trigger a refresh of the pipe
+        // let questions  = this.toolbox.cloneObject(this.__questions);
+        // this.questions = null;
+        // this.questions = questions;
+        // // this.__questions = questions;
+
         this.change.emit(this.questions);
     }
     
