@@ -22,6 +22,7 @@ export class TesterComponent extends GenericComponent {
     activatedRoute: any;
     public filterType: string;
     public showDisabled: boolean;
+    public nbQuestions: number;
 
     private toolbox: Toolbox = new Toolbox();
     private rest: Rest = new Rest();
@@ -98,7 +99,9 @@ export class TesterComponent extends GenericComponent {
         this.test.currentQuestionIndex = 0;
         this.testInProgress = true;
         this.showResults = false;
-        let questions = this.questionnaireService.generateQuestions(this.questionnaires, this.test.randomQuestions, this.test.jeopardy, this.test.nbQuestions);
+        this.test.nbQuestions = this.nbQuestions;
+        let questions = this.questionnaireService.generateQuestions(
+            this.questionnaires, this.test.randomQuestions, this.test.jeopardy, this.test.nbQuestions, this.test.favoriteOnly);
         this.test.questions = questions;
         if (!this.test.nbQuestions){
             this.test.nbQuestions = this.test.questions.length;

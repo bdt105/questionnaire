@@ -1,0 +1,54 @@
+<div>
+    <!-- Modifications -->
+    <div>
+        <button type="button" (click)="newQuestion(questionnaire, question)" class="btn btn-primary" title="{{translate('New question after this question')}}"><i class="fa fa-plus"></i></button>
+        <button type="button" class="btn btn-danger" (click)="deleteWithConfirmationQuestion(question)"><i class="fa fa-trash"></i></button>
+        <button type="button" (click)="toggleEdit()" class="btn btn-primary"><i class="fa fa-pencil"></i></button>
+        <br>
+        <br>
+        <h5>{{translate('Question')}}</h5>
+        <form>
+            <div class="row">
+                <div class="form-group col-sm-5"> 
+                    <input type="text" name="questionLabel" class="form-control" placeholder="{{translate('Question label')}}" [(ngModel)]="question.questionLabel" (change)="changed()">
+                </div>
+                <div class="form-group col-sm-3"> 
+                    <textarea class="form-control" name="question" placeholder="{{translate('Question')}}" [(ngModel)]="question.question" (change)="changed()"></textarea>
+                </div>
+                <div class="form-group col-sm-3"> 
+                    <textarea class="form-control" name="detail" placeholder="{{translate('Detail')}}" [(ngModel)]="question.detail" (change)="changed()"></textarea>     
+                </div>
+                <div class="form-group col-sm-1"> 
+                </div>
+            </div>
+        </form>
+
+        <h5>{{translate('Answers')}}&nbsp;
+            <button type="button" (click)="newAnswer(question)" class="btn btn-primary" title="{{translate('New answer')}}"><i class="fa fa-plus"></i></button>
+        </h5>
+
+        <div *ngFor="let answer of question.answers">
+            <form style="margin-top: 10px;">
+                <div class="row">
+                    <div class="form-group col-sm-5">       
+                        <textarea class="form-control" placeholder="{{translate('Answer')}}" [(ngModel)]="answer.answer" name="answer" (change)="changed()"></textarea> 
+                    </div>
+                    <div class="form-group col-sm-4">       
+                        <textarea class="form-control" placeholder="{{translate('Detail')}}" [(ngModel)]="answer.detail" name="detail" (change)="changed()"></textarea> 
+                    </div>
+                    <div class="form-group col-sm-1">                        
+                        <input type="number" class="form-control" placeholder="{{translate('Correct answer distance')}}" title="{{translate('Correct answer distance')}}" [(ngModel)]="answer.correctDistance" name="correctDistance" (change)="changed()"> 
+                    </div>
+                    <div class="form-group col-sm-1">                        
+                        <input type="number" class="form-control" placeholder="{{translate('Correct answer reward')}}" title="{{translate('Correct answer reward')}}" [(ngModel)]="answer.point" name="point" (change)="changed()"> 
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-danger" (click)="deleteWithConfirmationAnswer(answer)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

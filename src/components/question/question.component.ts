@@ -89,5 +89,12 @@ export class QuestionComponent extends GenericComponent {
     newQuestion(questionnaire: any, insertAfterQuestion: any = null){
         this.questionnaireService.newQuestion(questionnaire, insertAfterQuestion);
     }    
+
+    setFavorite(question: any, favorite: boolean){
+        if (question){
+            question.favorite = favorite;
+            this.change.emit(this.question);
+        }
+    }
     
 }

@@ -21,7 +21,7 @@ import { ConfirmationComponent } from '../standard/confirmation.component';
 
 export class QuestionnaireOneComponent extends GenericComponent {
 
-    private __questionnaire: any;
+    public __questionnaire: any;
     private __id: any;
 
     private toolbox: Toolbox = new Toolbox();
@@ -68,7 +68,7 @@ export class QuestionnaireOneComponent extends GenericComponent {
         this.error = error;
     }
 
-    private load(id: string){
+    public load(id: string){
         let fileName = id + ".json";
         this.questionnaireService.loadQuestionnaire(
             (data: any) => this.successLoad(data), 

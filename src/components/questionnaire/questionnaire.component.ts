@@ -157,4 +157,9 @@ export class QuestionnaireComponent extends GenericComponent {
         this.__questionnaire.showGroup = !this.__questionnaire.showGroup;
         this.save();
     }
+
+    toggleFavorite(){
+        this.__questionnaire.favoriteQuestions = !this.__questionnaire.favoriteQuestions;
+        this.save();
+    }
 }

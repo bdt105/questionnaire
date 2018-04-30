@@ -394,7 +394,7 @@ export class QuestionnaireService {
         return score;
     }
 
-    generateQuestions(data: any, randomQuestions: boolean, jeopardy: boolean, nbQuestion: number){
+    generateQuestions(data: any, randomQuestions: boolean, jeopardy: boolean, nbQuestion: number, favoriteQuestionsOnly: boolean){
         let questions  = [];
         for (var i=0; i < data.length; i++){
             if (data[i].test){
@@ -404,6 +404,9 @@ export class QuestionnaireService {
                     questions.push(q);
                 }
             }
+        }
+        if (favoriteQuestionsOnly){
+            questions = this.toolbox.filterArrayOfObjects(questions, "favorite", true);
         }
         if (randomQuestions){
             questions = this.toolbox.shuffleArray(questions);

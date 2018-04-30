@@ -1,9 +1,0 @@
-<div *ngIf="data">
-    <h4>{{data.title}}<span *ngIf="data.score" class="badge badge-secondary">{{data.score.messagePourcentage}}</span></h4>
-    <span>{{data.startDateString}} <i class="fa fa-arrow-right"></i> {{data.endDateString}}</span>
-    <br>
-    <br>
-    <div *ngFor="let question of data.questions" class="list-group-item">
-        <questionCheck [question]="question"></questionCheck>
-    </div>
-</div>

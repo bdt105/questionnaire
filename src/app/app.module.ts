@@ -15,6 +15,7 @@ import { QuestionnairesComponent } from '../components/questionnaire/questionnai
 import { TesterComponent } from '../components/test/tester.component';
 import { QuestionSimpleComponent } from '../components/question/questionSimple.component';
 import { QuestionGroupComponent } from '../components/question/questionGroup.component';
+import { QuestionEditComponent } from '../components/question/questionEdit.component';
 import { QuestionsComponent } from '../components/question/questions.component';
 import { QuestionCheckComponent } from '../components/question/questionCheck.component';
 import { QuestionnaireComponent } from '../components/questionnaire/questionnaire.component';
@@ -76,6 +77,7 @@ export function init (config: ConfigurationService) {
         ConfirmationComponent,
         QuestionSimpleComponent,
         QuestionGroupComponent,
+        QuestionEditComponent,        
         QuestionsComponent,
         QuestionCheckComponent,
         SearchComponent,
