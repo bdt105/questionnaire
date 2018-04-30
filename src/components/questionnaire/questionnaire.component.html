@@ -1,28 +1,30 @@
-<div class="row">
+<div class="row" *ngIf="__questionnaire">
     <div class="col-11">
-        <div *ngIf="questionnaire.edit">
+        <div *ngIf="__questionnaire.edit">
             <input type="text" class="form-control" placeholder="{{translate('Questionnaire name')}}" 
-                [(ngModel)]="questionnaire.title" name="title" (change)="save()">
+                [(ngModel)]="__questionnaire.title" name="title" (change)="save()">
             <br>
-            <input type="checkbox" id="defaultCheck1" [(ngModel)]="questionnaire.disabled" name="disabled" (change)="save()"> {{translate('Disable this questionnaire')}}
+            <input type="checkbox" id="defaultCheck1" [(ngModel)]="__questionnaire.disabled" name="disabled" (change)="save()"> {{translate('Disable this questionnaire')}}
             <br>
         </div>
-        <div *ngIf="!questionnaire.edit" (click)="questionnaire.showQuestions = !questionnaire.showQuestions" style="cursor: pointer;">
+        <div *ngIf="!__questionnaire.edit">
             <h6 style="margin-bottom: O">
-                <span [style.text-decoration]="questionnaire.disabled ? 'line-through' : ''">{{(questionnaire.title ? questionnaire.title : questionnaire.defaultTitle)}}</span>
-                <span *ngIf="questionnaire.questions" class="badge badge-primary badge-pill"> {{questionnaire.questions.length}}</span> 
-                <span class="badge badge-secondary">{{questionnaire.type}}</span>
+                <span style="cursor: pointer;" (click)="showQuestions = !showQuestions"  [style.text-decoration]="__questionnaire.disabled ? 'line-through' : ''">
+                    {{(__questionnaire.title ? __questionnaire.title : __questionnaire.defaultTitle)}}
+                    <span *ngIf="__questionnaire.questions" class="badge badge-primary badge-pill"> {{__questionnaire.questions.length}}</span> 
+                    <span class="badge badge-secondary">{{__questionnaire.type}}</span>
+                </span>
+            <i  style="cursor: pointer;" class="fa fa-eye" (click)="seeSeparatly()" title="{{translate('See separatly')}}"></i>
             </h6>
-            <small><i class="fa fa-star-o"></i> {{questionnaire.creationDate}}</small>
-            <small><i class="fa fa-pencil-square-o"></i> {{questionnaire.modificationDate}}</small>
+            <small>{{__questionnaire.creationDate}} <i class="fa fa-arrow-right"></i> {{__questionnaire.modificationDate}}</small>
         </div>
-        <div *ngIf="questionnaire.type == 'test'">
-            <p class="mb-1">{{ translate('Date: ') }} <strong>{{questionnaire.startDate + ' - ' + questionnaire.endDate}}</strong></p>
-            <p class="mb-1" *ngIf="questionnaire.score"><i class="fa fa-percent"></i>  <strong>{{questionnaire.score.messagePourcentage}}</strong></p>
+        <div *ngIf="__questionnaire.type == 'test'">
+            <p class="mb-1">{{ translate('Date: ') }} <strong>{{__questionnaire.startDate + ' - ' + __questionnaire.endDate}}</strong></p>
+            <p class="mb-1" *ngIf="__questionnaire.score"><i class="fa fa-percent"></i>  <strong>{{__questionnaire.score.messagePourcentage}}</strong></p>
             <p class="mb-1">
-                <span *ngIf="questionnaire.randomQuestions"><i class="fa fa-random"></i> {{translate('random questions')}}</span>
-                <span *ngIf="questionnaire.jeopardy"><i class="fa fa-exchange"></i> {{translate('jeopardy mode')}}</span>
-                <span *ngIf="questionnaire.exactMatching"><i class="fa fa-bars"></i> {{translate('exact matching')}}</span>
+                <span *ngIf="__questionnaire.randomQuestions"><i class="fa fa-random"></i> {{translate('random questions')}}</span>
+                <span *ngIf="__questionnaire.jeopardy"><i class="fa fa-exchange"></i> {{translate('jeopardy mode')}}</span>
+                <span *ngIf="__questionnaire.exactMatching"><i class="fa fa-bars"></i> {{translate('exact matching')}}</span>
             </p>
         </div>   
     </div>   
@@ -32,6 +34,9 @@
                 <i  class="fa fa-ellipsis-v"></i>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" (click)="toggleGroup()"><i class="fa fa-object-group"></i> {{translate('Group by question label')}}</a>
+                <a class="dropdown-item" (click)="seeSeparatly()"><i class="fa fa-eye"></i> {{translate('See separatly')}}</a>
+                <div class="dropdown-divider"></div>
                 <a class="dropdown-item" (click)="edit(questionnaire)"><i class="fa fa-pencil"></i> {{translate('Edit')}}</a>
                 <a class="dropdown-item" (click)="newQuestion(questionnaire)"><i class="fa fa-plus"></i> {{translate('New question')}}</a>
                 <a class="dropdown-item" (click)="export()"><i class="fa fa-upload"></i> {{translate('Export questionnaire')}}</a>
@@ -43,7 +48,7 @@
 </div>
 
 <!-- Questions -->
-<div *ngIf="questionnaire.showQuestions">
+<div *ngIf="__questionnaire && showQuestions">
     <br>
-    <questions [questions]="questionnaire.questions" [questionnaire]="questionnaire" [editable]="true" (change)="save()"></questions>
+    <questions [questions]="__questionnaire.questions" [questionnaire]="questionnaire" [editable]="true" (change)="save()" [group]="__questionnaire.showGroup"></questions>
 </div>

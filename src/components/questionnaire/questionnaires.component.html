@@ -31,7 +31,7 @@
 <div class="list-group">
 
     <!-- Questionnaires -->
-    <div *ngFor="let questionnaire of questionnaires" class="list-group-item" >
+    <div *ngFor="let questionnaire of questionnaires; let i = index" class="list-group-item"  [style.background-color]="i%2 == 0 ? 'whitesmoke': 'transparent'">
         <questionnaire [questionnaire]="questionnaire" [questionnaires]="questionnaires" (deleted)="load()"></questionnaire>
     </div>
     

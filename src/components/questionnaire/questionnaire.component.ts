@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { GenericComponent } from '../generic.component';
+import { Router } from '@angular/router';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -28,14 +29,17 @@ export class QuestionnaireComponent extends GenericComponent {
 
     public error: any;
 
-    private __questionnaire: any;
+    public __questionnaire: any;
     private __id: any;
 
     @Input() questionnaires: any;
+    @Input() showQuestions: boolean;
 
     @Input() set questionnaire(value: any){
         this.__questionnaire = value;
-        this.__id = this.__questionnaire.id;
+        if(this.__questionnaire){
+            this.__id = this.__questionnaire.id;
+        }
     };
 
     @Input() set id(value: string){
@@ -52,7 +56,7 @@ export class QuestionnaireComponent extends GenericComponent {
 
     @Output() deleted: EventEmitter<string> = new EventEmitter<string>();
 
-    constructor(public configurationService: ConfigurationService, private modalService: BsModalService,
+    constructor(public configurationService: ConfigurationService, private modalService: BsModalService, public router: Router,
         public translateService: TranslateService, public questionnaireService: QuestionnaireService, private http: Http){
         super(configurationService, translateService);
     }
@@ -143,5 +147,14 @@ export class QuestionnaireComponent extends GenericComponent {
         this.bsModalRef.content.bodyMessage = this.translate("Copy the content below");;
         
         this.bsModalRef.content.message = JSON.stringify(this.questionnaire);
+    }
+
+    seeSeparatly(){
+        this.router.navigate(["/questionnaire/" + this.__questionnaire.id]);
+    }
+
+    toggleGroup(){
+        this.__questionnaire.showGroup = !this.__questionnaire.showGroup;
+        this.save();
     }
 }

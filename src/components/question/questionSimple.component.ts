@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { GenericComponent } from '../generic.component';
+import { QuestionComponent } from './question.component';
 
 import { MenuService } from '../../services/menu.service';
 import { ConfigurationService } from '../../services/configuration.service';
@@ -9,35 +10,26 @@ import { Http } from '@angular/http';
 
 import { Toolbox, Rest } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { ConfirmationComponent } from '../standard/confirmation.component';
 
 @Component({
-    selector: 'questions',
-    templateUrl: './questions.component.html',
+    selector: 'questionSimple',
+    templateUrl: './questionSimple.component.html',
     providers: []
 })
 
-export class QuestionsComponent extends GenericComponent {
+export class QuestionSimpleComponent extends QuestionComponent {
 
-    private toolbox: Toolbox = new Toolbox();
-    public showResults = false;
-    
-    @Input() questions: any;
-    @Input() questionnaire: any;
-    @Input() editable: boolean = true;
-    @Input() group: boolean = false;
-    @Output() change: EventEmitter<string> = new EventEmitter<string>();
-
-    constructor(public configurationService: ConfigurationService, 
+    constructor(public configurationService: ConfigurationService, public modalService: BsModalService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
-        public menuService: MenuService, private http: Http){
-        super(configurationService, translateService);
+        public menuService: MenuService, public http: Http){
+
+        super(configurationService, modalService, translateService, questionnaireService, menuService, http);
     }
 
     ngOnInit(){
     }
 
-    changed(){
-        this.change.emit(this.questions);
-    }
     
 }

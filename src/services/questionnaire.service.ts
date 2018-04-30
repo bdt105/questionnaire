@@ -213,8 +213,7 @@ export class QuestionnaireService {
     cleanQuestionnaire(questionnaire: any){
         let x = 0;
         delete(questionnaire.edit);
-        delete(questionnaire.showQuestions);
-        delete(questionnaire.qestionsToImport);
+        delete(questionnaire.questionsToImport);
         if (questionnaire.questions){
             for (var j=0 ; j< questionnaire.questions.length; j++){
                 delete(questionnaire.questions[j].edit);

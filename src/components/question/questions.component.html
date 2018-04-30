@@ -1,14 +1,17 @@
-<div>
+<div *ngIf="!group" >
     <div *ngFor="let question of questions" class="list-group-item">
-        <question [question]="question" [questionnaire]="questionnaire" [editable]="editable" (change)="changed()"></question>
+        <questionSimple [question]="question" [questionnaire]="questionnaire" [editable]="editable" (change)="changed()"></questionSimple>
     </div>
 </div>
-<div class="list-group">
-    <div *ngFor="let object of questions | groupBy:'questionLabel'" class="list-group-item">
-        <strong>{{object.key}}</strong>
-        <div class="list-group">
+<div *ngIf="group" class="list-group">
+    <div *ngFor="let object of questions | groupBy:'questionLabel'; let i = index" class="list-group-item" [style.background-color]="i%2 == 0 ? 'whitesmoke': 'transparent'">
+        <h5 (click)="object.showGroupedQuestions = !object.showGroupedQuestions" style="cursor: pointer">
+            {{object.key}}
+            <span class="badge badge-primary badge-pill"> {{object.value.length}}</span>
+        </h5>
+        <div class="list-group" *ngIf="object.showGroupedQuestions">
             <div *ngFor="let question of object.value" class="list-group-item">
-                <question [question]="question" [editable]="false"></question>
+                <questionGroup [question]="question" [editable]="editable" (change)="changed()" [showAnswers]="true"></questionGroup>
             </div>
         </div>
     </div>

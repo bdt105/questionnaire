@@ -12,12 +12,6 @@ import { QuestionnaireService } from '../../services/questionnaire.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ConfirmationComponent } from '../standard/confirmation.component';
 
-@Component({
-    selector: 'question',
-    templateUrl: './question.component.html',
-    providers: []
-})
-
 export class QuestionComponent extends GenericComponent {
 
     private toolbox: Toolbox = new Toolbox();
@@ -27,11 +21,12 @@ export class QuestionComponent extends GenericComponent {
     @Input() question: any;
     @Input() questionnaire: any;
     @Input() editable: boolean = true;
+    @Input() showAnswers: boolean = false;
     @Output() change: EventEmitter<string> = new EventEmitter<string>();
 
-    constructor(public configurationService: ConfigurationService, private modalService: BsModalService, 
+    constructor(public configurationService: ConfigurationService, public modalService: BsModalService, 
         public translateService: TranslateService, public questionnaireService: QuestionnaireService,
-        public menuService: MenuService, private http: Http){
+        public menuService: MenuService, public http: Http){
         super(configurationService, translateService);
     }
 

@@ -13,10 +13,12 @@ import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { UserComponent } from '../components/user/user.component';
 import { QuestionnairesComponent } from '../components/questionnaire/questionnaires.component';
 import { TesterComponent } from '../components/test/tester.component';
-import { QuestionComponent } from '../components/question/question.component';
+import { QuestionSimpleComponent } from '../components/question/questionSimple.component';
+import { QuestionGroupComponent } from '../components/question/questionGroup.component';
 import { QuestionsComponent } from '../components/question/questions.component';
 import { QuestionCheckComponent } from '../components/question/questionCheck.component';
 import { QuestionnaireComponent } from '../components/questionnaire/questionnaire.component';
+import { QuestionnaireOneComponent } from '../components/questionnaire/questionnaireOne.component';
 import { ConfirmationComponent } from '../components/standard/confirmation.component';
 import { SearchComponent } from '../components/search/search.component';
 
@@ -69,9 +71,11 @@ export function init (config: ConfigurationService) {
         AboutComponent,
         QuestionnairesComponent,
         QuestionnaireComponent,
+        QuestionnaireOneComponent,
         TesterComponent,
         ConfirmationComponent,
-        QuestionComponent,
+        QuestionSimpleComponent,
+        QuestionGroupComponent,
         QuestionsComponent,
         QuestionCheckComponent,
         SearchComponent,
