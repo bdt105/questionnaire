@@ -107,7 +107,7 @@ export class QuestionnaireComponent extends GenericComponent {
 
     newQuestion(questionnaire: any){
         this.questionnaireService.newQuestion(questionnaire);
-        this.questionnaire.showQuestions = true;
+        this.showQuestions = true;
     }
 
     private successSave(data: any){

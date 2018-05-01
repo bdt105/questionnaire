@@ -443,4 +443,16 @@ export class QuestionnaireService {
         return res;
     }  
 
+
+    isQuestionEmpty(question: any){
+        if (!question.questionLabel && !question.question && ! question.detail){
+            if (question.answers && question.answers.length == 1){
+                if (!question.answers[0].answer && !question.answers[0].detail && question.answers[0].correctDistance == 0 &&
+                    question.answers[0].point == 1){
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
 }

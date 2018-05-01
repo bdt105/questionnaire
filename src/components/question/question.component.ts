@@ -54,15 +54,19 @@ export class QuestionComponent extends GenericComponent {
     }
 
     deleteWithConfirmationQuestion(question: any) {
-        this.bsModalRef = this.modalService.show(ConfirmationComponent);
-        this.bsModalRef.content.modalRef = this.bsModalRef;
-        this.bsModalRef.content.title = this.translate("Deleting a questionnaire");
-        this.bsModalRef.content.message = this.translate("Are you sure you want to delete question '" + question.question + "'");
-        this.bsModalRef.content.button1Label = this.translate("Yes");
-        this.bsModalRef.content.button2Label = this.translate("No");        
-        this.bsModalRef.content.button1Click.subscribe(result => {
+        if (this.questionnaireService.isQuestionEmpty(question)){
             this.deleteQuestion(this.questionnaire, question);
-        })
+        }else{
+            this.bsModalRef = this.modalService.show(ConfirmationComponent);
+            this.bsModalRef.content.modalRef = this.bsModalRef;
+            this.bsModalRef.content.title = this.translate("Deleting a questionnaire");
+            this.bsModalRef.content.message = this.translate("Are you sure you want to delete question '" + question.question + "'");
+            this.bsModalRef.content.button1Label = this.translate("Yes");
+            this.bsModalRef.content.button2Label = this.translate("No");        
+            this.bsModalRef.content.button1Click.subscribe(result => {
+                this.deleteQuestion(this.questionnaire, question);
+            })
+        }
     }    
 
     deleteWithConfirmationAnswer(answer: any) {
