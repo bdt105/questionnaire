@@ -16,7 +16,7 @@
                 </span>
             <i  style="cursor: pointer;" class="fa fa-eye" (click)="seeSeparatly()" title="{{translate('See separatly')}}"></i>
             </h5>
-            <small>{{questionnaire.creationDate}} <i class="fa fa-arrow-right"></i> {{questionnaire.modificationDate}}</small>
+            <small *ngIf="questionnaire.type=='test'">{{questionnaire.creationDate}} <i class="fa fa-arrow-right"></i> {{questionnaire.modificationDate}}</small>
         </div>
         <div *ngIf="questionnaire.type == 'test'">
             <p class="mb-1">{{ translate('Date: ') }} <strong>{{questionnaire.startDate + ' - ' + questionnaire.endDate}}</strong></p>
