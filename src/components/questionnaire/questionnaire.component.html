@@ -41,8 +41,10 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" (click)="edit(questionnaire)"><i class="fa fa-pencil"></i> {{translate('Edit')}}</a>
                 <a *ngIf="!questionnaire.showGroup" class="dropdown-item" (click)="newQuestion(questionnaire)"><i class="fa fa-plus"></i> {{translate('New question')}}</a>
-                <a class="dropdown-item" (click)="export()"><i class="fa fa-upload"></i> {{translate('Export questionnaire')}}</a>
                 <a class="dropdown-item" (click)="deleteWithConfirmation()"><i class="fa fa-trash"></i> {{translate('Delete this questionnaire')}}</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" (click)="export()"><i class="fa fa-upload"></i> {{translate('Export questionnaire')}}</a>
+                <a *ngIf="!questionnaire.showGroup" class="dropdown-item" (click)="importQuestion()"><i class="fa fa-upload"></i> {{translate('Import question')}}</a>
             </div>
         </div>
                           

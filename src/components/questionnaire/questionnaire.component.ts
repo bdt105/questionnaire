@@ -124,10 +124,24 @@ export class QuestionnaireComponent extends GenericComponent {
             (error: any) => this.failureSave(error), this.__questionnaire);
     }
 
-    importQuestionsCsv(questionnaire: any, importQuestions: string){
-        this.questionnaireService.importQuestionsCsv(questionnaire, importQuestions);
-        this.save();
-    }
+    // importQuestionsCsv(questionnaire: any, importQuestions: string){
+    //     this.questionnaireService.importQuestionsCsv(questionnaire, importQuestions);
+    //     this.save();
+    // }
+
+    importQuestion(){
+        this.bsModalRef = this.modalService.show(ConfirmationComponent);
+        this.bsModalRef.content.modalRef = this.bsModalRef;
+        this.bsModalRef.content.title = this.translate("Importing a question");
+        this.bsModalRef.content.readOnly = false;
+        this.bsModalRef.content.bodyMessage = this.translate("Paste json format below and import");
+        this.bsModalRef.content.button2Label = this.translate("Cancel");
+        this.bsModalRef.content.button1Label = this.translate("Import");
+        this.bsModalRef.content.button1Click.subscribe(result => {
+            let json = this.bsModalRef.content.message;
+            this.questionnaireService.importQuestion(json, this.questionnaire, 0);
+        })
+    }    
 
     edit(questionnaire: any){
         questionnaire.edit = !questionnaire.edit;

@@ -25,6 +25,8 @@
                         <a class="dropdown-item" (click)="toggleEdit()"><i class="fa fa-pencil"></i> {{translate('Edit')}}</a>
                         <a class="dropdown-item" (click)="newAnswer(question)"><i class="fa fa-plus"></i> {{translate('New answer')}}</a>
                         <a class="dropdown-item" (click)="deleteWithConfirmationQuestion(question)"><i class="fa fa-trash"></i> {{translate('Delete this question')}}</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" (click)="export()"><i class="fa fa-upload"></i> {{translate('Export this question')}}</a>
                     </div>
                 </div>
             </div>

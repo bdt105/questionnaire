@@ -455,4 +455,15 @@ export class QuestionnaireService {
         }
         return false;
     }
+
+    importQuestion(question: string, questionnaire: any, position: number){
+        if (questionnaire && question && this.toolbox.isJson(question)){
+            let q = JSON.parse(question);
+            q.id = this.toolbox.getUniqueId();
+            questionnaire.questions.splice(position, 0, q);
+            let fake = (data: any)=>{}
+            this.saveQuestionnaire(fake, fake, questionnaire);
+        }
+    }
+    
 }

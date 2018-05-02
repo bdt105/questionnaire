@@ -100,5 +100,16 @@ export class QuestionComponent extends GenericComponent {
             this.change.emit(this.question);
         }
     }
-    
+
+    export(){
+        this.bsModalRef = this.modalService.show(ConfirmationComponent);
+        this.bsModalRef.content.modalRef = this.bsModalRef;
+        this.bsModalRef.content.title = this.translate("Exporting a questionnaire");
+        this.bsModalRef.content.readOnly = false;
+        this.bsModalRef.content.bodyMessage = this.translate("Copy the content below");;
+        
+        this.bsModalRef.content.message = JSON.stringify(this.question);
+    }
+
+
 }
