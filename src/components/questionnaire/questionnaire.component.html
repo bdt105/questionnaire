@@ -8,14 +8,20 @@
             <br>
         </div>
         <div *ngIf="!questionnaire.edit">
-            <h5 style="margin-bottom: O">
-                <span style="cursor: pointer;" (click)="showQuestions = !showQuestions"  [style.text-decoration]="questionnaire.disabled ? 'line-through' : ''">
-                    {{(questionnaire.title ? questionnaire.title : questionnaire.defaultTitle)}}
+            <div class="row">
+                <div class="col-10">
+                    <h5 style="margin-bottom: O">
+                        <span style="cursor: pointer;" (click)="showQuestions = !showQuestions"  [style.text-decoration]="questionnaire.disabled ? 'line-through' : ''">
+                            {{(questionnaire.title ? questionnaire.title : questionnaire.defaultTitle)}}
+                            <span class="badge badge-secondary">{{questionnaire.type}}</span>
+                        </span>
+                        <i  style="cursor: pointer;" class="fa fa-eye" (click)="seeSeparatly()" title="{{translate('See separatly')}}"></i>
+                    </h5>
+                </div>
+                <div class="col-2 text-right">
                     <span *ngIf="questionnaire.questions" class="badge badge-primary badge-pill"> {{questionnaire.questions.length}}</span> 
-                    <span class="badge badge-secondary">{{questionnaire.type}}</span>
-                </span>
-            <i  style="cursor: pointer;" class="fa fa-eye" (click)="seeSeparatly()" title="{{translate('See separatly')}}"></i>
-            </h5>
+                </div>
+            </div>
             <small *ngIf="questionnaire.type=='test'">{{questionnaire.creationDate}} <i class="fa fa-arrow-right"></i> {{questionnaire.modificationDate}}</small>
         </div>
         <div *ngIf="questionnaire.type == 'test'">
