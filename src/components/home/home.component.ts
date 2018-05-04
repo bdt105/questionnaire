@@ -5,6 +5,8 @@ import { MenuService } from '../../services/menu.service';
 import { ConfigurationService } from '../../services/configuration.service';
 import { TranslateService } from '../../services/translate.service';
 
+declare const gapi : any;
+
 @Component({
     selector: 'home',
     templateUrl: './home.component.html',
@@ -19,9 +21,10 @@ export class HomeComponent extends GenericComponent{
         super(configurationService, translateService);
     }
 
-
     ngOnInit(){
-        
+        gapi.load('auth2', function () {
+            gapi.auth2.init()
+        });
     }
 
     getApplicationTitle(){
@@ -32,4 +35,13 @@ export class HomeComponent extends GenericComponent{
         return null;
     }
 
+
+    googleLogin() {
+        let googleAuth = gapi.auth2.getAuthInstance();
+        googleAuth.then(() => {
+           googleAuth.signIn({scope: 'profile email'}).then(googleUser => {
+              console.log(googleUser.getBasicProfile());
+           });
+        });
+     }
 }

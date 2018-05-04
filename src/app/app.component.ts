@@ -12,7 +12,6 @@ export class AppComponent {
     public sidebarOpened = false;
 
     constructor(private translateService: TranslateService, private connexionService: ConnexionService){
-
     }
     
     title = 'app';

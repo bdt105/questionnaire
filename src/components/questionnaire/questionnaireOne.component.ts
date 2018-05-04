@@ -40,12 +40,13 @@ export class QuestionnaireOneComponent extends GenericComponent {
         public menuService: MenuService, public http: Http){
 
         super(configurationService, translateService);
+      
     }
 
     ngOnInit(){
         this.activatedRoute.params.subscribe(params => {
             this.getParams();
-        });       
+        });
     }
 
     getParams (){
