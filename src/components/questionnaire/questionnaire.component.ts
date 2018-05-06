@@ -5,15 +5,9 @@ import { Router } from '@angular/router';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { MenuService } from '../../services/menu.service';
-import { ConfigurationService } from '../../services/configuration.service';
-import { TranslateService } from '../../services/translate.service';
-
-import { Http } from '@angular/http';
-
-import { Toolbox } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
 import { ConfirmationComponent } from '../standard/confirmation.component';
+import { MiscellaneousService } from '../../services/miscellaneous.service';
 
 @Component({
     selector: 'questionnaire',
@@ -24,8 +18,6 @@ import { ConfirmationComponent } from '../standard/confirmation.component';
 export class QuestionnaireComponent extends GenericComponent {
 
     public bsModalRef: BsModalRef;
-
-    private toolbox: Toolbox = new Toolbox();
 
     public error: any;
 
@@ -56,9 +48,9 @@ export class QuestionnaireComponent extends GenericComponent {
 
     @Output() deleted: EventEmitter<string> = new EventEmitter<string>();
 
-    constructor(public configurationService: ConfigurationService, private modalService: BsModalService, public router: Router,
-        public translateService: TranslateService, public questionnaireService: QuestionnaireService, private http: Http){
-        super(configurationService, translateService);
+    constructor(private modalService: BsModalService, public router: Router,
+        public questionnaireService: QuestionnaireService, public miscellaneousService: MiscellaneousService){
+        super(miscellaneousService);
     }
 
     private getFileName(){

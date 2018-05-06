@@ -1,24 +1,19 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { GenericComponent } from '../generic.component';
-
-import { MenuService } from '../../services/menu.service';
-import { ConfigurationService } from '../../services/configuration.service';
-import { TranslateService } from '../../services/translate.service';
+import { MiscellaneousService } from '../../services/miscellaneous.service';
 
 declare const gapi : any;
 
 @Component({
     selector: 'home',
     templateUrl: './home.component.html',
-    providers: [MenuService]
+    providers: []
 })
 
 export class HomeComponent extends GenericComponent{
 
-    constructor(public configurationService: ConfigurationService, 
-        public translateService: TranslateService,
-        public menuService: MenuService){
-        super(configurationService, translateService);
+    constructor(public miscellaneousService: MiscellaneousService){
+        super(miscellaneousService);
     }
 
     ngOnInit(){
@@ -28,7 +23,7 @@ export class HomeComponent extends GenericComponent{
     }
 
     getApplicationTitle(){
-        let menu = this.menuService.getMenu();
+        let menu = this.miscellaneousService.configuration().common.applicationName;
         if (menu){
             return menu.title;
         }

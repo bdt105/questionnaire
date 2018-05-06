@@ -1,16 +1,13 @@
 import { Component, Input, Output, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Toolbox } from 'bdt105toolbox/dist';
 
 import { GenericComponent } from '../../components/generic.component';
-import { TranslateService } from '../../services/translate.service';
-import { ConfigurationService } from '../../services/configuration.service';
-import { ConnexionService } from '../../services/connexion.service';
+import { ConnexionTokenService } from 'bdt105angularconnexionservice';
 import { QuestionnaireService } from '../../services/questionnaire.service';
-
 
 import { ViewEncapsulation, ElementRef, PipeTransform, Pipe } from '@angular/core';
 import { DomSanitizer } from "@angular/platform-browser";
+import { MiscellaneousService } from '../../services/miscellaneous.service';
 
 @Component({
     selector: 'login',
@@ -21,22 +18,27 @@ import { DomSanitizer } from "@angular/platform-browser";
 export class LoginComponent extends GenericComponent{
     loginUrl: any;
     
-    private toolbox: Toolbox = new Toolbox();
     public isConnected = false;
+    public loadComplete = false;
 
     @Output() connected: EventEmitter<any> = new EventEmitter<any>();
     @Output() disconnected: EventEmitter<any> = new EventEmitter<any>();
 
     constructor(private router: Router, 
-        public configurationService: ConfigurationService, 
-        public translateService: TranslateService, 
-        public connexionService: ConnexionService, private sanitizer: DomSanitizer,
-        public questionnaireService: QuestionnaireService) {
-        super(configurationService, translateService);
-        this.init();
+        public connexionService: ConnexionTokenService, private sanitizer: DomSanitizer,
+        public questionnaireService: QuestionnaireService, public miscellaneousService: MiscellaneousService){
+            super(miscellaneousService);
     }
 
     init(){
+//        this.loadComplete = this.miscellaneousService.configuration() && this.miscellaneousService.translation();
+        if (!this.loadComplete){
+            let load = this.miscellaneousService.getConfigurationPromise().
+            then(()=>{
+                this.loadComplete = true;
+                this.loginUrl = this.miscellaneousService.configuration().common.loginUrl;                
+            });
+        }
         window.addEventListener('message', (event) => {
             if (event.data){
                 if (event.data.type == "connexion"){
@@ -53,7 +55,7 @@ export class LoginComponent extends GenericComponent{
     }
 
     ngOnInit(){
-        this.loginUrl = this.configurationService.get().common.loginUrl;
+        this.init();        
     }
     
     private refresh(){
@@ -65,7 +67,7 @@ export class LoginComponent extends GenericComponent{
     }
 
     getApplicationName(){
-        return this.configurationService.get().common.applicationName;
+        return this.miscellaneousService.configuration().common.applicationName;
     }
 
 }

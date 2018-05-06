@@ -1,21 +1,15 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { TranslateService } from '../services/translate.service';
-import { ConfigurationService } from '../services/configuration.service';
+
+import { MiscellaneousService } from '../services/miscellaneous.service';
+import { Toolbox } from 'bdt105toolbox/dist';
 
 export class GenericComponent implements OnInit{
 
-    // public canDisplay: boolean = false;
-    
-    // private canDisplaySuccess(data: any){
-    //     this.canDisplay = (data != null);
-    // }
+    public toolbox: Toolbox = new Toolbox();
+    private translateName = "translateAuthentification";
+    private configurationName: "configurationAuthentification";
 
-    // private canDisplayFailure(data: any){
-    //     this.canDisplay = false;
-    // }
-
-    constructor(public configurationService: ConfigurationService, public translateService: TranslateService){
-        // this.configurationService.init((data: any) => this.canDisplaySuccess(data), (error: any) => this.canDisplayFailure(error));
+    constructor(public miscellaneousService: MiscellaneousService){
     }
 
     ngOnInit(){
@@ -23,6 +17,10 @@ export class GenericComponent implements OnInit{
     }
 
     translate(text: string){
-        return this.translateService.translate(text);
-    }    
+        return this.miscellaneousService.translate(text);
+    } 
+
+    configuration(){
+        return this.miscellaneousService.configuration();
+    }     
 }

@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from '../components/home/home.component';
 import { AboutComponent } from '../components/about/about.component';
 import { LoginComponent } from '../components/login/login.component';
-import { UserComponent } from '../components/user/user.component';
 import { QuestionnairesComponent } from '../components/questionnaire/questionnaires.component';
 import { QuestionnaireOneComponent } from '../components/questionnaire/questionnaireOne.component';
 import { TesterComponent } from '../components/test/tester.component';
@@ -19,7 +18,6 @@ const routes: Routes = [
     { path: 'questionnaire/:id', component: QuestionnaireOneComponent, canActivate: [AuthGuard] },
     { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
     { path: 'search/:search', component: SearchComponent, canActivate: [AuthGuard] },
-    { path: 'user', component: UserComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

@@ -1,16 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { GenericComponent } from '../generic.component';
 
-import { MenuService } from '../../services/menu.service';
-import { ConfigurationService } from '../../services/configuration.service';
-import { TranslateService } from '../../services/translate.service';
-
-import { Http } from '@angular/http';
-
 import { Toolbox } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ConfirmationComponent } from '../standard/confirmation.component';
+import { MiscellaneousService } from '../../services/miscellaneous.service';
 
 @Component({
     selector: 'questionnaires',
@@ -19,8 +14,6 @@ import { ConfirmationComponent } from '../standard/confirmation.component';
 })
 
 export class QuestionnairesComponent extends GenericComponent {
-
-    private toolbox: Toolbox = new Toolbox();
 
     public bsModalRef: BsModalRef;
 
@@ -39,9 +32,9 @@ export class QuestionnairesComponent extends GenericComponent {
 
     public sortKey: string ="title";
 
-    constructor(public configurationService: ConfigurationService, private modalService: BsModalService, 
-        public translateService: TranslateService, public questionnaireService: QuestionnaireService, private http: Http){
-        super(configurationService, translateService);
+    constructor(private modalService: BsModalService, 
+        public questionnaireService: QuestionnaireService, public miscellaneousService: MiscellaneousService){
+            super(miscellaneousService);
     }
 
     ngOnInit(){

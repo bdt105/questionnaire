@@ -2,9 +2,8 @@ import { Component, TemplateRef, Input, EventEmitter, Output } from '@angular/co
 import { GenericComponent } from '../generic.component';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { TranslateService } from '../../services/translate.service';
 import { QuestionnaireService } from '../../services/questionnaire.service';
-import { ConfigurationService } from '../../services/configuration.service';
+import { MiscellaneousService } from '../../services/miscellaneous.service';
 import { Subject } from 'rxjs/Subject';
  
 @Component({
@@ -28,8 +27,8 @@ export class ConfirmationComponent extends GenericComponent {
     
     public modalRef: BsModalRef;
 
-    constructor(private modalService: BsModalService, public configurationService: ConfigurationService, public translateService: TranslateService, public questionnaireService: QuestionnaireService) {
-        super(configurationService, translateService);
+    constructor(private modalService: BsModalService, public questionnaireService: QuestionnaireService, public miscellaneousService: MiscellaneousService){
+        super(miscellaneousService);
     }
 
     ngOnInit() {

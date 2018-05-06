@@ -23,6 +23,8 @@
     "@angular/router": "^5.2.7",
     "angular-confirmation-popover": "~4.1.0",
     "bdt105toolbox": "^1.0.85",
+    "bdt105angularconnexionservice": "^1.0.23",
+    "bdt105angularconfigurationservice": "^2.0.0",
     "bootstrap": "^4.0.0",
     "core-js": "^2.5.3",
     "font-awesome": "^4.7.0",

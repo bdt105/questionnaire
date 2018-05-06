@@ -3,8 +3,8 @@ import { Toolbox } from 'bdt105toolbox/dist';
 import { Http } from '@angular/http';
 
 import { TranslateService } from './translate.service';
-import { ConfigurationService } from './configuration.service';
-import { ConnexionService } from './connexion.service';
+import { ConfigurationService } from 'bdt105angularconfigurationservice';
+import { ConnexionService } from 'bdt105angularconnexionservice';
 
 @Injectable()
 export class UserService {
@@ -16,7 +16,7 @@ export class UserService {
     private url = './assets/translate' + this.language + '.json';
     private storageKey = "connexion";
 
-    constructor(private http: Http, private configurationService: ConfigurationService, private translateService: TranslateService, 
+    constructor(private http: Http, private configurationService: ConfigurationService, private translateService: TranslateLocalService, 
         private connexionService: ConnexionService){
     }
 
@@ -52,7 +52,7 @@ export class UserService {
             body.object = usr;
             body.idFieldName = "iduser";
             console.log(JSON.stringify(body));
-            this.http.put(this.configurationService.get().common.authentificationApiBaseUrl + "user", body).subscribe(
+            this.http.put(this.miscellaneousService.configuration().common.authentificationApiBaseUrl + "user", body).subscribe(
                 (data: any) => this.successSave(callbackSuccess, callbackFailure, data, user),
                 (error: any) => this.failureSave(callbackFailure, error)
             );
@@ -62,7 +62,7 @@ export class UserService {
     public delete(callbackSuccess: Function, callbackFailure: Function, user: any){
         let token = this.connexionService.getToken();        
         if (user){
-            this.http.delete(this.configurationService.get().common.authentificationApiBaseUrl + "get", user).subscribe(
+            this.http.delete(this.miscellaneousService.configuration().common.authentificationApiBaseUrl + "get", user).subscribe(
                 (data: any) => this.successSave(callbackSuccess, callbackFailure, data, user),
                 (error: any) => this.failureSave(callbackFailure, error)
             );

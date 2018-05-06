@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { RouterModule }   from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http } from '@angular/http';
 
 // Components
 import { HomeComponent } from '../components/home/home.component';
@@ -10,7 +10,6 @@ import { AboutComponent } from '../components/about/about.component';
 import { LoginComponent } from '../components/login/login.component';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
-import { UserComponent } from '../components/user/user.component';
 import { QuestionnairesComponent } from '../components/questionnaire/questionnaires.component';
 import { TesterComponent } from '../components/test/tester.component';
 import { QuestionSimpleComponent } from '../components/question/questionSimple.component';
@@ -45,21 +44,20 @@ import { AppRoutingModule } from './app-routing.module';
 
 // Services
 import { MenuService } from '../services/menu.service';
-import { ConfigurationService } from '../services/configuration.service';
-import { TranslateService } from '../services/translate.service';
-import { ConnexionService } from '../services/connexion.service';
-import { UserService } from '../services/user.service';
+import { ConfigurationService } from 'bdt105angularconfigurationservice';
+import { ConnexionTokenService } from 'bdt105angularconnexionservice';
 import { FormValidationService } from '../services/fromValidation.service';
 import { AuthGuard } from '../services/auth.guard';
 import { QuestionnaireService } from '../services/questionnaire.service';
 import { GroupByPipe } from '../services/groupBy.pipe';
 import { SafePipe } from '../services/safe.pipe';
+import { MiscellaneousService } from '../services/miscellaneous.service';
 
-export function init (config: ConfigurationService) {
-    config.load();
+export function init(configurationService: ConfigurationService) {
     return () => {
-        return config.load(); // add return
-    };
+        configurationService.load("configurationQuestionnaire", "./assets/configuration.json", false);
+        configurationService.load("translateQuestionnaire", "./assets/translateFR.json", false);
+    }
 }
 
 @NgModule({
@@ -69,7 +67,6 @@ export function init (config: ConfigurationService) {
         NavbarComponent,
         SidebarComponent,
         LoginComponent,
-        UserComponent,
         AboutComponent,
         QuestionnairesComponent,
         QuestionnaireComponent,
@@ -108,8 +105,8 @@ export function init (config: ConfigurationService) {
             'deps': [ ConfigurationService ],
             'multi': true
         },
-        AuthGuard, MenuService, AccordionConfig, ConfigurationService, TranslateService, 
-        ConnexionService, FormValidationService, UserService, QuestionnaireService],
+        AuthGuard, MenuService, AccordionConfig, ConfigurationService, MiscellaneousService, 
+        ConnexionTokenService, FormValidationService, QuestionnaireService],
         bootstrap: [ AppComponent ]
     }
 )

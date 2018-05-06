@@ -3,7 +3,7 @@ import { Toolbox } from 'bdt105toolbox/dist';
 import { Http } from '@angular/http';
 
 import { TranslateService } from './translate.service';
-import { ConfigurationService } from './configuration.service';
+import { ConfigurationService } from 'bdt105angularconfigurationservice';
 
 @Injectable()
 export class ConnexionService {
@@ -15,7 +15,7 @@ export class ConnexionService {
     private url = './assets/translate' + this.language + '.json';
     private storageKey = "connexion";
 
-    constructor(private http: Http, private configurationService: ConfigurationService, private translateService: TranslateService){
+    constructor(private http: Http, private configurationService: ConfigurationService, private translateService: TranslateLocalService){
     }
 
     public connectNoPassword (callbackSuccess: Function, callbackFailure: Function, log: string, passwd: string, forever: boolean = false){
@@ -28,7 +28,7 @@ export class ConnexionService {
         let data: any = {};
         data._body = JSON.stringify(fake);
         this.connexionSuccess(callbackSuccess, data, forever)
-        // this.http.post(this.configurationService.get().common.authentificationApiBaseUrl + "get", body).subscribe(
+        // this.http.post(this.miscellaneousService.configuration().common.authentificationApiBaseUrl + "get", body).subscribe(
         //     (data: any) => this.connexionSuccess(callbackSuccess, data, forever),
         //     (error: any) => this.connexionFailure(callbackFailure, error)
         // );
@@ -40,7 +40,7 @@ export class ConnexionService {
         let body: any = {};
         body.login = log;
         body.password = passwd;
-        this.http.post(this.configurationService.get().common.authentificationApiBaseUrl + "get", body).subscribe(
+        this.http.post(this.miscellaneousService.configuration().common.authentificationApiBaseUrl + "get", body).subscribe(
             (data: any) => this.connexionSuccess(callbackSuccess, data, forever),
             (error: any) => this.connexionFailure(callbackFailure, error)
         );

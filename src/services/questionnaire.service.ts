@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Toolbox } from 'bdt105toolbox/dist';
 import { Http } from '@angular/http';
-import { ConfigurationService } from './configuration.service';
-import { ConnexionService } from './connexion.service';
+import { ConnexionTokenService } from 'bdt105angularconnexionservice';
+import { MiscellaneousService } from './miscellaneous.service';
 
 @Injectable()
 export class QuestionnaireService {
@@ -16,11 +16,11 @@ export class QuestionnaireService {
 
     private sortKey = "title";
 
-    constructor (private configurationService: ConfigurationService, private connexionService: ConnexionService, private http: Http){
+    constructor ( private connexionService: ConnexionTokenService, private http: Http, public miscellaneousService: MiscellaneousService){
     }
 
     loadFiles(callbackSuccess: Function, callbackFailure: Function){
-        let url = this.configurationService.get().common.saveApiBaseUrl;
+        let url = this.miscellaneousService.configuration().common.saveApiBaseUrl;
         let user = this.connexionService.getUser();
         let directory = user.email.toUpperCase();
         console.log("data url", url);
@@ -32,7 +32,7 @@ export class QuestionnaireService {
     }
 
     loadQuestionnaire(callbackSuccess: Function, callbackFailure: Function, id: string){
-        let url = this.configurationService.get().common.saveApiBaseUrl;
+        let url = this.miscellaneousService.configuration().common.saveApiBaseUrl;
         let user = this.connexionService.getUser();
         let directory = user.email.toUpperCase();
         console.log("data url", url);
@@ -186,7 +186,7 @@ export class QuestionnaireService {
 
     deleteQuestionnaire(questionnaires: any, questionnaire: any){
         if (questionnaire.fileName){
-            let url = this.configurationService.get().common.saveApiBaseUrl;
+            let url = this.miscellaneousService.configuration().common.saveApiBaseUrl;
             let user = this.connexionService.getUser();
             let directory = user.email.toUpperCase();
             console.log("data url", url);
@@ -236,7 +236,7 @@ export class QuestionnaireService {
         if (questionnaire){
             let q = this.toolbox.cloneObject(questionnaire);
             this.cleanQuestionnaire(q);
-            let url = this.configurationService.get().common.saveApiBaseUrl;
+            let url = this.miscellaneousService.configuration().common.saveApiBaseUrl;
             console.log("data url", url);
             let user = this.connexionService.getUser();
             let directory = user.email.toUpperCase();

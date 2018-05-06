@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { TranslateService } from '../services/translate.service';
-import { ConnexionService } from '../services/connexion.service';
+import { ConnexionTokenService } from "bdt105angularconnexionservice"
 
 @Component({
     selector: 'app-root',
@@ -11,7 +10,7 @@ export class AppComponent {
 
     public sidebarOpened = false;
 
-    constructor(private translateService: TranslateService, private connexionService: ConnexionService){
+    constructor(private connexionService: ConnexionTokenService){
     }
     
     title = 'app';
@@ -20,10 +19,6 @@ export class AppComponent {
 		this.sidebarOpened = !this.sidebarOpened;
     }
     
-    public translate(text: string){
-        return this.translateService.translate(text);
-    }
-
 	sideMenuClick(){
 		this.sidebarOpened = false;
 	}    

@@ -1,14 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { GenericComponent } from '../generic.component';
 
-import { MenuService } from '../../services/menu.service';
-import { ConfigurationService } from '../../services/configuration.service';
-import { TranslateService } from '../../services/translate.service';
-
-import { Http } from '@angular/http';
-
-import { Toolbox, Rest } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
+import { MiscellaneousService } from '../../services/miscellaneous.service';
 
 @Component({
     selector: 'tester',
@@ -23,9 +17,6 @@ export class TesterComponent extends GenericComponent {
     public filterType: string;
     public showDisabled: boolean;
     public nbQuestions: number;
-
-    private toolbox: Toolbox = new Toolbox();
-    private rest: Rest = new Rest();
 
     public questionnaires: any;
     public questionnairesFiltered: any;
@@ -42,10 +33,8 @@ export class TesterComponent extends GenericComponent {
 
     private id: string;
 
-    constructor(public configurationService: ConfigurationService, 
-        public translateService: TranslateService, public questionnaireService: QuestionnaireService,
-        public menuService: MenuService, private http: Http){
-        super(configurationService, translateService);
+    constructor(public questionnaireService: QuestionnaireService, public miscellaneousService: MiscellaneousService){
+        super(miscellaneousService);
     }
 
     ngOnInit(){
