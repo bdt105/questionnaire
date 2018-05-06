@@ -36,13 +36,14 @@ export class LoginComponent extends GenericComponent{
             let load = this.miscellaneousService.getConfigurationPromise().
             then(()=>{
                 this.loadComplete = true;
+                console.log("load is complete");
                 this.loginUrl = this.miscellaneousService.configuration().common.loginUrl;                
             });
         }
         window.addEventListener('message', (event) => {
             if (event.data){
                 if (event.data.type == "connexion"){
-                    this.toolbox.writeToStorage("connexion", event.data, true);
+                    this.toolbox.writeToStorage("connexion", event.data, false);
                     this.router.navigate(["/home"]);
                     this.refresh();
                 }

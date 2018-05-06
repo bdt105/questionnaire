@@ -3,6 +3,7 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 import { MenuService } from '../../services/menu.service';
 import { GenericComponent } from '../generic.component';
 import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { ConnexionTokenService } from 'bdt105angularconnexionservice';
 
 @Component({
     selector: 'navbar',
@@ -11,13 +12,12 @@ import { MiscellaneousService } from '../../services/miscellaneous.service';
 })
 
 export class NavbarComponent extends GenericComponent {
-    public connexion: any;
     public menu: any;
     public inputZone: string;
     
     @Output() clickSidebarMenu: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    constructor (private menuService: MenuService, public miscellaneousService: MiscellaneousService){
+    constructor (private menuService: MenuService, public miscellaneousService: MiscellaneousService, public connexionTokenService: ConnexionTokenService){
         super(miscellaneousService);
     }
     
@@ -36,5 +36,10 @@ export class NavbarComponent extends GenericComponent {
 
     private menuLoadedFailure(data: any){
         console.log(data);
+    }
+
+    getCurrentUser(){
+        let conn = this.connexionTokenService.get();
+        return conn.decoded;
     }
 }

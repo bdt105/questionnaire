@@ -24,12 +24,10 @@ export class MiscellaneousService {
     }
 
     configuration(){
-        console.log("Ask for " + this.configurationKey);
         return this.get(this.configurationKey, 3000);
     }
 
     translate(text: string){
-        console.log("Ask for " + this.translateKey);
         let translateData = this.get(this.translateKey, 3000);
         if (translateData){
             let t = this.toolbox.filterArrayOfObjects(translateData, "key", text);

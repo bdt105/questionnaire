@@ -33,6 +33,7 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
+                <small *ngIf="getCurrentUser()" style="padding: 10px"><i class="fa fa-user"></i> {{getCurrentUser().email}}</small>
                 <form *ngIf="menu.inputZone" class="form-inline">
                     <div class="input-group">
                         <input [(ngModel)]="inputZone" type="text" class="form-control" placeholder="{{menu.inputPlaceHolder}}" [ngModelOptions]="{standalone: true}">
