@@ -46,7 +46,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MenuService } from '../services/menu.service';
 import { ConfigurationService } from 'bdt105angularconfigurationservice';
 import { ConnexionTokenService } from 'bdt105angularconnexionservice';
-import { FormValidationService } from '../services/fromValidation.service';
+// import { FormValidationService } from '../services/fromValidation.service';
 import { AuthGuard } from '../services/auth.guard';
 import { QuestionnaireService } from '../services/questionnaire.service';
 import { GroupByPipe } from '../services/groupBy.pipe';
@@ -106,7 +106,7 @@ export function init(configurationService: ConfigurationService) {
             'multi': true
         },
         AuthGuard, MenuService, AccordionConfig, ConfigurationService, MiscellaneousService, 
-        ConnexionTokenService, FormValidationService, QuestionnaireService],
+        ConnexionTokenService, QuestionnaireService],
         bootstrap: [ AppComponent ]
     }
 )
