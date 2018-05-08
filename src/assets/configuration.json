@@ -6,7 +6,7 @@
         "logToFile": true,
         "logToConsole": true,
         "loginUrl1": "http://vps453669.ovh.net/authentificationmanager/login",
-        "loginUrl": "http://localhost:4300/login",
+        "loginUrl": "http://localhost:4300/login/questionnaire",
         "userUrl": "http://vps453669.ovh.net/authentificationmanager/user",
         "language": "FR",
         "saveApiBaseUrl": "http://vps453669.ovh.net/fs/",

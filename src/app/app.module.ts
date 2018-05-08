@@ -38,6 +38,9 @@ import {
 // Confirmations https://mattlewis92.github.io/angular-confirmation-popover/
 import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 
+// https://github.com/maxisam/ngx-clipboard
+import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
+
 // App
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -46,6 +49,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MenuService } from '../services/menu.service';
 import { ConfigurationService } from 'bdt105angularconfigurationservice';
 import { ConnexionTokenService } from 'bdt105angularconnexionservice';
+
 // import { FormValidationService } from '../services/fromValidation.service';
 import { AuthGuard } from '../services/auth.guard';
 import { QuestionnaireService } from '../services/questionnaire.service';
@@ -96,7 +100,8 @@ export function init(configurationService: ConfigurationService) {
         ProgressbarModule.forRoot(),
         PaginationModule.forRoot(),
         ConfirmationPopoverModule.forRoot({"confirmButtonType": "danger"}),
-        SidebarModule.forRoot()
+        SidebarModule.forRoot(),
+        ClipboardModule
     ],
     providers: [
         {
@@ -106,7 +111,7 @@ export function init(configurationService: ConfigurationService) {
             'multi': true
         },
         AuthGuard, MenuService, AccordionConfig, ConfigurationService, MiscellaneousService, 
-        ConnexionTokenService, QuestionnaireService],
+        ConnexionTokenService, QuestionnaireService, ClipboardService],
         bootstrap: [ AppComponent ]
     }
 )

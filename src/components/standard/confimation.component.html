@@ -5,8 +5,18 @@
     </button>
 </div>    
 <div class="modal-body text-center">
-    <p *ngIf="bodyMessage" style="text-align: left">{{bodyMessage}}</p>
-    <p *ngIf="message && readOnly">{{message}}</p>
+    <div class="row">
+        <div class="col-10">
+            <p *ngIf="bodyMessage" style="text-align: left">{{bodyMessage}}</p>
+            <p *ngIf="message && readOnly">{{message}}</p>
+        </div>
+        <div class="col-2">
+            <button class="btn btn-default text-right" type="button" ngxClipboard [cbContent]="message" title="{{translate('Copy to clipboard')}}">
+                <i class="fa fa-clipboard"></i>
+            </button>
+        </div>
+    </div>
+    <br>
     <textarea *ngIf="!readOnly" class="form-control" placeholder="{{message}}" [(ngModel)]="message"></textarea>
     <br>
     <button *ngIf="button1Label" type="button" class="btn btn-default" (click)="button1Clicked()">{{button1Label}}</button>
