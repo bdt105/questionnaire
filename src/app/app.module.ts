@@ -41,6 +41,9 @@ import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 // https://github.com/maxisam/ngx-clipboard
 import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
 
+// https://github.com/igghera/floating-action-menu
+import { FloatingActionMenuModule } from 'ng2-floating-action-menu';
+
 // App
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -101,7 +104,8 @@ export function init(configurationService: ConfigurationService) {
         PaginationModule.forRoot(),
         ConfirmationPopoverModule.forRoot({"confirmButtonType": "danger"}),
         SidebarModule.forRoot(),
-        ClipboardModule
+        ClipboardModule,
+        FloatingActionMenuModule
     ],
     providers: [
         {

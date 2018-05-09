@@ -23,6 +23,9 @@ export class QuestionnaireComponent extends GenericComponent {
 
     public __questionnaire: any;
     private __id: any;
+    private __searchTerm: string;
+
+    public showSearch = false;
 
     @Input() questionnaires: any;
     @Input() showQuestions: boolean;
@@ -65,16 +68,20 @@ export class QuestionnaireComponent extends GenericComponent {
     }
 
     deleteWithConfirmation() {
-        this.bsModalRef = this.modalService.show(ConfirmationComponent);
-        this.bsModalRef.content.modalRef = this.bsModalRef;
-        this.bsModalRef.content.title = this.translate("Deleting a questionnaire");
-        this.bsModalRef.content.message = this.translate("Are you sure you want to delete " + this.questionnaire.type + " '" + 
-            (this.questionnaire.title ? this.questionnaire.title : this.questionnaire.defaultTitle) + "'");
-        this.bsModalRef.content.button1Label = this.translate("Yes");
-        this.bsModalRef.content.button2Label = this.translate("No");
-        this.bsModalRef.content.button1Click.subscribe(result => {
+        if (this.questionnaireService.isQuestionnaireEmpty(this.__questionnaire)){
             this.delete(this.__questionnaire);
-        })
+        }else{
+            this.bsModalRef = this.modalService.show(ConfirmationComponent);
+            this.bsModalRef.content.modalRef = this.bsModalRef;
+            this.bsModalRef.content.title = this.translate("Deleting a questionnaire");
+            this.bsModalRef.content.message = this.translate("Are you sure you want to delete " + this.questionnaire.type + " '" + 
+                (this.questionnaire.title ? this.questionnaire.title : this.questionnaire.defaultTitle) + "'");
+            this.bsModalRef.content.button1Label = this.translate("Yes");
+            this.bsModalRef.content.button2Label = this.translate("No");
+            this.bsModalRef.content.button1Click.subscribe(result => {
+                this.delete(this.__questionnaire);
+            });
+        }
     }
         
     private successLoad(data: any){
@@ -168,4 +175,5 @@ export class QuestionnaireComponent extends GenericComponent {
         this.__questionnaire.favoriteQuestions = !this.__questionnaire.favoriteQuestions;
         this.save();
     }
+    
 }

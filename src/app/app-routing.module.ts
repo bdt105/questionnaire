@@ -17,6 +17,7 @@ const routes: Routes = [
     { path: 'questionnaires', component: QuestionnairesComponent, canActivate: [AuthGuard] },
     { path: 'questionnaire/:id', component: QuestionnaireOneComponent, canActivate: [AuthGuard] },
     { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
+    { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
     { path: 'search/:search', component: SearchComponent, canActivate: [AuthGuard] },
 ];
 

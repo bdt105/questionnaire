@@ -5,6 +5,7 @@
             <span *ngIf="questionnaires" class="badge badge-primary badge-pill"> {{questionnaires.length}}</span>
         </h3>
     </div>
+
     <div class="col-2 text-right" style="cursor: pointer;">
         <div class="dropdown">
             <button style="background-color:transparent; border: 0" class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -36,3 +37,13 @@
     </div>
     
 </div>
+
+<ng2-floating-action-menu
+[placement]="config.placement"
+[effect]="config.effect"
+[label]="config.label"
+[iconClass]="config.iconClass"
+[activeIconClass]="config.activeIconClass"
+[toggle]="config.toggle"
+[buttons]="flatingButtons">
+</ng2-floating-action-menu>

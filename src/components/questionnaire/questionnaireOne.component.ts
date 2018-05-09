@@ -1,14 +1,16 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { GenericComponent } from '../generic.component';
 
 import { ConfigurationService } from 'bdt105angularconfigurationservice';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Toolbox, Rest } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '../../services/questionnaire.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ConfirmationComponent } from '../standard/confirmation.component';
 import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { FloatingActionButton } from 'ng2-floating-action-menu';
+import { QuestionnaireComponent } from './questionnaire.component';
 
 @Component({
     selector: 'questionnaireOne',
@@ -23,6 +25,35 @@ export class QuestionnaireOneComponent extends GenericComponent {
 
     public error: any;
 
+    @ViewChild('questionnaire') private questionnaireCV: QuestionnaireComponent;	
+
+    public flatingButtons: Array<FloatingActionButton> = [
+        {
+            iconClass: 'fa fa-plus',
+            label: this.translate("Add a new question"),
+            onClick: () => {
+                this.newQuestion();
+            }
+        },
+        {
+            iconClass: 'fa fa-search',
+            label: this.translate("Search"),
+            onClick: () => {
+                this.search();
+            }
+        }
+    ];
+
+    config = {
+        placment: 'br',
+        effect: 'mfb-slidein',
+        label: this.translate("More actions"),
+        iconClass: 'fa fa-caret-up',
+        activeIconClass: 'fa fa-caret-down',
+        toggle: 'click',
+        buttons: this.flatingButtons
+    };
+
     @Input() set questionnaire(value: any){
         this.__questionnaire = value;
         this.__id = this.__questionnaire.id;
@@ -31,10 +62,9 @@ export class QuestionnaireOneComponent extends GenericComponent {
     private id: string;
 
     constructor(public configurationService: ConfigurationService, public modalService: BsModalService, 
-        private activatedRoute: ActivatedRoute, public questionnaireService: QuestionnaireService,
+        private activatedRoute: ActivatedRoute, public questionnaireService: QuestionnaireService, public router: Router,
         public miscellaneousService: MiscellaneousService){
         super(miscellaneousService);
-      
     }
 
     ngOnInit(){
@@ -68,6 +98,14 @@ export class QuestionnaireOneComponent extends GenericComponent {
         this.questionnaireService.loadQuestionnaire(
             (data: any) => this.successLoad(data), 
             (error: any) => this.failureLoad(error), id);
+    }
+
+    public newQuestion(){
+        this.questionnaireCV.newQuestion(this.__questionnaire);
+    }
+
+    public search(){
+        this.router.navigate(["/search"]);
     }
     
     

@@ -214,6 +214,9 @@ export class QuestionnaireService {
         let x = 0;
         delete(questionnaire.edit);
         delete(questionnaire.questionsToImport);
+        delete(questionnaire.showAnswers);
+        delete(questionnaire.showQuestions);
+        delete(questionnaire.showSearch);
         if (questionnaire.questions){
             for (var j=0 ; j< questionnaire.questions.length; j++){
                 delete(questionnaire.questions[j].edit);
@@ -454,6 +457,10 @@ export class QuestionnaireService {
             }
         }
         return false;
+    }
+
+    isQuestionnaireEmpty(questionnaire: any){
+        return !questionnaire.title && (!questionnaire.questions || questionnaire.questions.length == 0);
     }
 
     importQuestion(question: string, questionnaire: any, position: number){

@@ -124,3 +124,13 @@ a.notificationRedText {
 .panel{
     margin-top: 10px;
 }
+
+.mfb-component__button--main[_ngcontent-c4], .mfb-component__button--main[_ngcontent-c3] {
+    background-color: #008cba !important;
+    color: white !important;
+}
+
+.mfb-component__button--child {
+    background-color: lightskyblue !important;
+    color: white !important;
+}

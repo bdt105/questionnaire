@@ -17,9 +17,6 @@ export class HomeComponent extends GenericComponent{
     }
 
     ngOnInit(){
-        gapi.load('auth2', function () {
-            gapi.auth2.init()
-        });
     }
 
     getApplicationTitle(){

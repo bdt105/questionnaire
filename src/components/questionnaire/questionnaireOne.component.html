@@ -1,4 +1,17 @@
 <h3>{{translate('Questionnaire')}}</h3>
 <div class="list-group-item">
-    <questionnaire [questionnaire]="__questionnaire" [showQuestions]="true"></questionnaire>
+    <questionnaire #questionnaire [questionnaire]="__questionnaire" [showQuestions]="true"></questionnaire>
 </div>
+<style>
+
+
+</style>
+<ng2-floating-action-menu
+[placement]="config.placment"
+[effect]="config.effect"
+[label]="config.label"
+[iconClass]="config.iconClass"
+[activeIconClass]="config.activeIconClass"
+[toggle]="config.toggle"
+[buttons]="flatingButtons">
+</ng2-floating-action-menu>

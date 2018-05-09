@@ -6,6 +6,8 @@ import { QuestionnaireService } from '../../services/questionnaire.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ConfirmationComponent } from '../standard/confirmation.component';
 import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { FloatingActionButton } from 'ng2-floating-action-menu';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'questionnaires',
@@ -15,6 +17,8 @@ import { MiscellaneousService } from '../../services/miscellaneous.service';
 
 export class QuestionnairesComponent extends GenericComponent {
 
+    public showSearch: any;
+    public searchTerm: any;
     public bsModalRef: BsModalRef;
 
     public questionnaires: any;
@@ -32,8 +36,35 @@ export class QuestionnairesComponent extends GenericComponent {
 
     public sortKey: string ="title";
 
+    public flatingButtons: Array<FloatingActionButton> = [
+        {
+            iconClass: 'fa fa-plus',
+            label: this.translate("Add a new questionnaire"),
+            onClick: () => {
+                this.newQuestionnaire();
+            }
+        },
+        {
+            iconClass: 'fa fa-search',
+            label: this.translate("Search"),
+            onClick: () => {
+                this.toggleSearch();
+            }
+        }
+    ];    
+
+    public config = {
+        placement: 'br',
+        effect: 'mfb-slidein',
+        label: this.translate("More actions"),
+        iconClass: 'fa fa-caret-up',
+        activeIconClass: 'fa fa-caret-down',
+        toggle: 'click',
+        buttons: this.flatingButtons
+    };    
+
     constructor(private modalService: BsModalService, 
-        public questionnaireService: QuestionnaireService, public miscellaneousService: MiscellaneousService){
+        public questionnaireService: QuestionnaireService, public miscellaneousService: MiscellaneousService, public router: Router){
             super(miscellaneousService);
     }
 
@@ -93,6 +124,10 @@ export class QuestionnairesComponent extends GenericComponent {
         this.filterType = type;
         this.showDisabled = (showDisabled == null ? true : showDisabled);
         this.load();
+    }
+
+    toggleSearch(): any {
+        this.router.navigate(['/search/']);
     }
 
 }
