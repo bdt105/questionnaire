@@ -13,7 +13,7 @@ import { MiscellaneousService } from '../../services/miscellaneous.service';
 
 export class SearchComponent extends GenericComponent{
 
-    private search: string;
+    public search: string;
     
     private questionnaires: any;
 
@@ -52,7 +52,7 @@ export class SearchComponent extends GenericComponent{
         console.log(error);
     }
     
-    private load(){
+    public load(){
         this.questionnaireService.loadQuestionnaires(
             (data: any) => this.successLoad(data),
             (error: any) => this.failureLoad(error), this.filterType, this.showDisabled
