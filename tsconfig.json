@@ -17,12 +17,12 @@
       "dom"
     ],
     "paths": {
-      "@appSharedServices/*": ["appShared/services/*"],
-      "@appSharedComponents/*": ["appShared/components/*"],
+      "@appSharedServices/*": ["questionnaireShared/services/*"],
+      "@appSharedComponents/*": ["questionnaireShared/components/*"],
       "@services/*": ["services/*"],
       "@components/*": ["components/*"],
-      "@sharedServices/*": ["shared/services/*"],
-      "@sharedComponents/*": ["shared/components/*"]
+      "@sharedServices/*": ["angularShared/services/*"],
+      "@sharedComponents/*": ["angularShared/components/*"]
     }
   }
 }

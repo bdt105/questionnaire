@@ -8,92 +8,27 @@ import { ConfirmationComponent } from '../standard/confirmation.component';
 import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
 import { FloatingActionButton } from 'ng2-floating-action-menu';
 import { Router } from '@angular/router';
+import { QuestionnairesComponent } from '@appSharedComponents/questionnaires.component';
 
 @Component({
-    selector: 'questionnaires',
-    templateUrl: './questionnaires.component.html',
+    selector: 'questionnairesLocal',
+    templateUrl: './questionnairesLocal.component.html',
     providers: []
 })
 
-export class QuestionnairesComponent extends GenericComponent {
+export class QuestionnairesLocalComponent extends QuestionnairesComponent {
 
-    public showSearch: any;
-    public searchTerm: any;
     public bsModalRef: BsModalRef;
-
-    public questionnaires: any;
-    public error: any;
-
-    public importQuestionnaires = false;
-    public exportQuestionnaires = false;
-    public overWriteImport = false;
-
-    public questionnairesToImport: string;
-    public questionnairesToExport: string;
-
-    public filterType: string;
-    public showDisabled: boolean;
-
-    public sortKey: string ="title";
-
-    public flatingButtons: Array<FloatingActionButton> = [
-        {
-            iconClass: 'fa fa-plus',
-            label: this.translate("Add a new questionnaire"),
-            onClick: () => {
-                this.newQuestionnaire();
-            }
-        },
-        {
-            iconClass: 'fa fa-search',
-            label: this.translate("Search"),
-            onClick: () => {
-                this.toggleSearch();
-            }
-        }
-    ];    
-
-    public config = {
-        placement: 'br',
-        effect: 'mfb-slidein',
-        label: this.translate("More actions"),
-        iconClass: 'fa fa-caret-up',
-        activeIconClass: 'fa fa-caret-down',
-        toggle: 'click',
-        buttons: this.flatingButtons
-    };    
-
+    
     constructor(private modalService: BsModalService, 
         public questionnaireService: QuestionnaireService, public miscellaneousService: MiscellaneousService, public router: Router){
-            super(miscellaneousService);
+            super(questionnaireService, miscellaneousService, router);
     }
 
     ngOnInit(){
         this.filterType = "questionnaire";
         this.showDisabled = false;   
         this.load();
-    }
-
-    private successLoad(data: any){
-        this.questionnaires = data;
-    }
-
-    private failureLoad(error: any){
-        this.error = error;
-    }
-
-    load(){  
-        this.questionnaireService.loadQuestionnaires(
-            (data: any) => this.successLoad(data), 
-            (error: any) => this.failureLoad(error), this.filterType, this.showDisabled);
-    }
-
-    newQuestionnaire(){
-        let q = this.questionnaireService.newQuestionnaire("questionnaire");
-        if (!this.questionnaires){
-            this.questionnaires = [];
-        }
-        this.questionnaires.push(q);
     }
 
     import(){
@@ -118,16 +53,6 @@ export class QuestionnairesComponent extends GenericComponent {
                 this.questionnaires = this.questionnaireService.importQuestionnaire(questionnaire, this.questionnaires);
             }
         })
-    }
-
-    filter(type: string = null, showDisabled: boolean = null){
-        this.filterType = type;
-        this.showDisabled = (showDisabled == null ? true : showDisabled);
-        this.load();
-    }
-
-    toggleSearch(): any {
-        this.router.navigate(['/search/']);
     }
 
 }

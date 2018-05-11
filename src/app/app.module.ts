@@ -10,7 +10,7 @@ import { AboutComponent } from '@components/about/about.component';
 import { LoginComponent } from '@components/login/login.component';
 import { NavbarComponent } from '@components/navbar/navbar.component';
 import { SidebarComponent } from '@components/sidebar/sidebar.component';
-import { QuestionnairesComponent } from '@components/questionnaire/questionnaires.component';
+import { QuestionnairesLocalComponent } from '@components/questionnaire/questionnairesLocal.component';
 import { TesterComponent } from '@components/test/tester.component';
 import { QuestionSimpleComponent } from '@components/question/questionSimple.component';
 import { QuestionGroupComponent } from '@components/question/questionGroup.component';
@@ -75,7 +75,7 @@ export function init(configurationService: ConfigurationService) {
         SidebarComponent,
         LoginComponent,
         AboutComponent,
-        QuestionnairesComponent,
+        QuestionnairesLocalComponent,
         QuestionnaireComponent,
         QuestionnaireOneComponent,
         TesterComponent,
