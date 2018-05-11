@@ -1,8 +1,8 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 
-import { MenuService } from '../../services/menu.service';
-import { GenericComponent } from '../generic.component';
-import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { MenuService } from '@sharedServices/menu.service';
+import { GenericComponent } from '@sharedComponents/generic.component';
+import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
 import { ConnexionTokenService } from 'bdt105angularconnexionservice';
 
 @Component({

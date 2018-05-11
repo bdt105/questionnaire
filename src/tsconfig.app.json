@@ -4,7 +4,15 @@
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
     "module": "es2015",
-    "types": []
+    "types": [],
+    "paths": {
+      "@appSharedServices/*": ["appShared/services/*"],
+      "@appSharedComponents/*": ["appShared/components/*"],
+      "@services/*": ["services/*"],
+      "@components/*": ["components/*"],
+      "@sharedServices/*": ["shared/services/*"],
+      "@sharedComponents/*": ["shared/components/*"]
+    }
   },
   "exclude": [
     "test.ts",

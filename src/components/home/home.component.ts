@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { GenericComponent } from '../generic.component';
-import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { GenericComponent } from '@sharedComponents/generic.component';
+import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
 
 declare const gapi : any;
 

@@ -1,13 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { GenericComponent } from '../generic.component';
+import { GenericComponent } from '@sharedComponents/generic.component';
 import { Router } from '@angular/router';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { QuestionnaireService } from '../../services/questionnaire.service';
+import { QuestionnaireService } from '@appSharedServices/questionnaire.service';
 import { ConfirmationComponent } from '../standard/confirmation.component';
-import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
 
 @Component({
     selector: 'questionnaire',

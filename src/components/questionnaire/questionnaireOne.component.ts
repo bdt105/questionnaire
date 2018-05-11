@@ -1,14 +1,14 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { GenericComponent } from '../generic.component';
+import { GenericComponent } from '@sharedComponents/generic.component';
 
 import { ConfigurationService } from 'bdt105angularconfigurationservice';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Toolbox, Rest } from 'bdt105toolbox/dist';
-import { QuestionnaireService } from '../../services/questionnaire.service';
+import { QuestionnaireService } from '@appSharedServices/questionnaire.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ConfirmationComponent } from '../standard/confirmation.component';
-import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
 import { FloatingActionButton } from 'ng2-floating-action-menu';
 import { QuestionnaireComponent } from './questionnaire.component';
 

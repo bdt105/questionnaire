@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { GenericComponent } from '../generic.component';
+import { GenericComponent } from '@sharedComponents/generic.component';
 
 import { Toolbox } from 'bdt105toolbox/dist';
-import { QuestionnaireService } from '../../services/questionnaire.service';
+import { QuestionnaireService } from '@appSharedServices/questionnaire.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ConfirmationComponent } from '../standard/confirmation.component';
-import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
 import { FloatingActionButton } from 'ng2-floating-action-menu';
 import { Router } from '@angular/router';
 

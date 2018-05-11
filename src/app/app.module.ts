@@ -5,22 +5,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule, Http } from '@angular/http';
 
 // Components
-import { HomeComponent } from '../components/home/home.component';
-import { AboutComponent } from '../components/about/about.component';
-import { LoginComponent } from '../components/login/login.component';
-import { NavbarComponent } from '../components/navbar/navbar.component';
-import { SidebarComponent } from '../components/sidebar/sidebar.component';
-import { QuestionnairesComponent } from '../components/questionnaire/questionnaires.component';
-import { TesterComponent } from '../components/test/tester.component';
-import { QuestionSimpleComponent } from '../components/question/questionSimple.component';
-import { QuestionGroupComponent } from '../components/question/questionGroup.component';
-import { QuestionEditComponent } from '../components/question/questionEdit.component';
-import { QuestionsComponent } from '../components/question/questions.component';
-import { QuestionCheckComponent } from '../components/question/questionCheck.component';
-import { QuestionnaireComponent } from '../components/questionnaire/questionnaire.component';
-import { QuestionnaireOneComponent } from '../components/questionnaire/questionnaireOne.component';
-import { ConfirmationComponent } from '../components/standard/confirmation.component';
-import { SearchComponent } from '../components/search/search.component';
+import { HomeComponent } from '@components/home/home.component';
+import { AboutComponent } from '@components/about/about.component';
+import { LoginComponent } from '@components/login/login.component';
+import { NavbarComponent } from '@components/navbar/navbar.component';
+import { SidebarComponent } from '@components/sidebar/sidebar.component';
+import { QuestionnairesComponent } from '@components/questionnaire/questionnaires.component';
+import { TesterComponent } from '@components/test/tester.component';
+import { QuestionSimpleComponent } from '@components/question/questionSimple.component';
+import { QuestionGroupComponent } from '@components/question/questionGroup.component';
+import { QuestionEditComponent } from '@components/question/questionEdit.component';
+import { QuestionsLocalComponent } from '@components/question/questionsLocal.component';
+import { QuestionCheckComponent } from '@components/question/questionCheck.component';
+import { QuestionnaireComponent } from '@components/questionnaire/questionnaire.component';
+import { QuestionnaireOneComponent } from '@components/questionnaire/questionnaireOne.component';
+import { ConfirmationComponent } from '@components/standard/confirmation.component';
+import { SearchComponent } from '@components/search/search.component';
 
 // Sidebar module https://github.com/arkon/ng-sidebar
 import { SidebarModule } from 'ng-sidebar';
@@ -49,16 +49,16 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 // Services
-import { MenuService } from '../services/menu.service';
+import { MenuService } from '@sharedServices/menu.service';
 import { ConfigurationService } from 'bdt105angularconfigurationservice';
 import { ConnexionTokenService } from 'bdt105angularconnexionservice';
 
 // import { FormValidationService } from '../services/fromValidation.service';
-import { AuthGuard } from '../services/auth.guard';
-import { QuestionnaireService } from '../services/questionnaire.service';
-import { GroupByPipe } from '../services/groupBy.pipe';
-import { SafePipe } from '../services/safe.pipe';
-import { MiscellaneousService } from '../services/miscellaneous.service';
+import { AuthGuard } from '@sharedServices/auth.guard';
+import { QuestionnaireService } from '@appSharedServices/questionnaire.service';
+import { GroupByPipe } from '@sharedServices/groupBy.pipe';
+import { SafePipe } from '@sharedServices/safe.pipe';
+import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
 
 export function init(configurationService: ConfigurationService) {
     return () => {
@@ -83,7 +83,7 @@ export function init(configurationService: ConfigurationService) {
         QuestionSimpleComponent,
         QuestionGroupComponent,
         QuestionEditComponent,        
-        QuestionsComponent,
+        QuestionsLocalComponent,
         QuestionCheckComponent,
         SearchComponent,
         GroupByPipe,

@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { GenericComponent } from '../generic.component';
+import { GenericComponent } from '@sharedComponents/generic.component';
 
-import { QuestionnaireService } from '../../services/questionnaire.service';
-import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { QuestionnaireService } from '@appSharedServices/questionnaire.service';
+import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
 
 @Component({
     selector: 'questionCheck',
@@ -15,7 +15,6 @@ export class QuestionCheckComponent extends GenericComponent {
     public showResults = false;
 
     @Input() question: any;
-    // @Output() goTo: EventEmitter<string> = new EventEmitter<string>();
 
     constructor(public questionnaireService: QuestionnaireService,
         public miscellaneousService: MiscellaneousService){

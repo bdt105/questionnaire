@@ -6,7 +6,7 @@ import { LoginComponent } from '../components/login/login.component';
 import { QuestionnairesComponent } from '../components/questionnaire/questionnaires.component';
 import { QuestionnaireOneComponent } from '../components/questionnaire/questionnaireOne.component';
 import { TesterComponent } from '../components/test/tester.component';
-import { AuthGuard } from '../services/auth.guard';
+import { AuthGuard } from '@sharedServices/auth.guard';
 import { SearchComponent } from '../components/search/search.component';
 
 const routes: Routes = [

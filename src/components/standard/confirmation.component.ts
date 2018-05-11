@@ -1,9 +1,9 @@
 import { Component, TemplateRef, Input, EventEmitter, Output } from '@angular/core';
-import { GenericComponent } from '../generic.component';
+import { GenericComponent } from '@sharedComponents/generic.component';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { QuestionnaireService } from '../../services/questionnaire.service';
-import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { QuestionnaireService } from '@appSharedServices/questionnaire.service';
+import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
 import { Subject } from 'rxjs/Subject';
  
 @Component({

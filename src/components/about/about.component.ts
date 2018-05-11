@@ -1,7 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { GenericComponent } from '../generic.component';
+import { GenericComponent } from '@sharedComponents/generic.component';
 
-import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
+
+import {} from '@'
 
 @Component({
     selector: 'about',
@@ -12,7 +14,7 @@ import { MiscellaneousService } from '../../services/miscellaneous.service';
 export class AboutComponent extends GenericComponent{
 
     constructor(public miscellaneousService: MiscellaneousService){
-        super(miscellaneousService);
+        super(miscellaneousService);    
     }
 
 

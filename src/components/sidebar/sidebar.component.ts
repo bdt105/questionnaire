@@ -1,9 +1,9 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import { Router } from '@angular/router';
 
-import { GenericComponent } from '../../components/generic.component';
-import { MenuService } from '../../services/menu.service';
-import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { GenericComponent } from '@sharedComponents/generic.component';
+import { MenuService } from '@sharedServices/menu.service';
+import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
 
 @Component({
     selector: 'sidebar',

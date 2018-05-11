@@ -1,48 +1,22 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { GenericComponent } from '../generic.component';
+import { GenericComponent } from '@sharedComponents/generic.component';
 
-import { QuestionnaireService } from '../../services/questionnaire.service';
+import { QuestionnaireService } from '@appSharedServices/questionnaire.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ConfirmationComponent } from '../standard/confirmation.component';
-import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
+import { QuestionComponent } from '@appSharedComponents/question.component';
 
-export class QuestionComponent extends GenericComponent {
+export class QuestionLocalComponent extends QuestionComponent {
 
-    public showResults = false;
     public bsModalRef: BsModalRef;
-
-    @Input() question: any;
-    @Input() questionnaire: any;
-    @Input() editable: boolean = true;
-    @Input() showAnswers: boolean = false;
-    @Output() change: EventEmitter<string> = new EventEmitter<string>();
 
     constructor(public modalService: BsModalService, 
         public questionnaireService: QuestionnaireService, public miscellaneousService: MiscellaneousService){
-            super(miscellaneousService);
+        super(questionnaireService, miscellaneousService);
     }
 
     ngOnInit(){
-    }
-
-    canEdit(){
-        return this.question.edit && this.editable;
-    }
-
-    toggleEdit(){
-        this.question.edit = !this.question.edit;
-        this.question.showAnswers = this.question.edit;
-    }
-
-    newAnswer(question: any){
-        this.question.showAnswers = true;      
-        this.question.edit = true;      
-        this.questionnaireService.newAnswer(question);  
-    }
-
-    deleteAnswer(question: any, answer: any){
-        this.questionnaireService.deleteAnswer(question, answer);
-        this.changed();
     }
 
     deleteWithConfirmationQuestion(question: any) {
@@ -72,26 +46,6 @@ export class QuestionComponent extends GenericComponent {
             this.deleteAnswer(this.question, answer);
         })
     }    
-
-    deleteQuestion(questionnaire: any, question: any){
-        this.questionnaireService.deleteQuestion(questionnaire, question);
-        this.changed();        
-    }
-
-    changed(){
-        this.change.emit(this.question);
-    }
-
-    newQuestion(questionnaire: any, insertAfterQuestion: any = null){
-        this.questionnaireService.newQuestion(questionnaire, insertAfterQuestion);
-    }    
-
-    setFavorite(question: any, favorite: boolean){
-        if (question){
-            question.favorite = favorite;
-            this.change.emit(this.question);
-        }
-    }
 
     export(){
         this.bsModalRef = this.modalService.show(ConfirmationComponent);

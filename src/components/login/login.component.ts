@@ -1,13 +1,13 @@
 import { Component, Input, Output, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { GenericComponent } from '../../components/generic.component';
+import { GenericComponent } from '@sharedComponents/generic.component';
 import { ConnexionTokenService } from 'bdt105angularconnexionservice';
-import { QuestionnaireService } from '../../services/questionnaire.service';
+import { QuestionnaireService } from '@appSharedServices/questionnaire.service';
 
 import { ViewEncapsulation, ElementRef, PipeTransform, Pipe } from '@angular/core';
 import { DomSanitizer } from "@angular/platform-browser";
-import { MiscellaneousService } from '../../services/miscellaneous.service';
+import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
 
 @Component({
     selector: 'login',
