@@ -17,7 +17,7 @@ import { QuestionGroupComponent } from '@components/question/questionGroup.compo
 import { QuestionEditComponent } from '@components/question/questionEdit.component';
 import { QuestionsLocalComponent } from '@components/question/questionsLocal.component';
 import { QuestionCheckComponent } from '@components/question/questionCheck.component';
-import { QuestionnaireComponent } from '@components/questionnaire/questionnaire.component';
+import { QuestionnaireLocalComponent } from '@components/questionnaire/questionnaireLocal.component';
 import { QuestionnaireOneComponent } from '@components/questionnaire/questionnaireOne.component';
 import { ConfirmationComponent } from '@components/standard/confirmation.component';
 import { SearchComponent } from '@components/search/search.component';
@@ -40,9 +40,6 @@ import { ConfirmationPopoverModule } from 'angular-confirmation-popover';
 
 // https://github.com/maxisam/ngx-clipboard
 import { ClipboardModule, ClipboardService } from 'ngx-clipboard';
-
-// https://github.com/igghera/floating-action-menu
-import { FloatingActionMenuModule } from 'ng2-floating-action-menu';
 
 // App
 import { AppComponent } from './app.component';
@@ -76,7 +73,7 @@ export function init(configurationService: ConfigurationService) {
         LoginComponent,
         AboutComponent,
         QuestionnairesLocalComponent,
-        QuestionnaireComponent,
+        QuestionnaireLocalComponent,
         QuestionnaireOneComponent,
         TesterComponent,
         ConfirmationComponent,
@@ -104,8 +101,7 @@ export function init(configurationService: ConfigurationService) {
         PaginationModule.forRoot(),
         ConfirmationPopoverModule.forRoot({"confirmButtonType": "danger"}),
         SidebarModule.forRoot(),
-        ClipboardModule,
-        FloatingActionMenuModule
+        ClipboardModule
     ],
     providers: [
         {

@@ -33,17 +33,7 @@
 
     <!-- Questionnaires -->
     <div *ngFor="let questionnaire of questionnaires; let i = index" class="list-group-item"  [style.background-color]="i%2 == 0 ? 'whitesmoke': 'transparent'">
-        <questionnaire [questionnaire]="questionnaire" [questionnaires]="questionnaires" (deleted)="load()"></questionnaire>
+        <questionnaireLocal [questionnaire]="questionnaire" [questionnaires]="questionnaires" (deleted)="load()"></questionnaireLocal>
     </div>
     
 </div>
-
-<!-- <ng2-floating-action-menu
-[placement]="config.placement"
-[effect]="config.effect"
-[label]="config.label"
-[iconClass]="config.iconClass"
-[activeIconClass]="config.activeIconClass"
-[toggle]="config.toggle"
-[buttons]="flatingButtons">
-</ng2-floating-action-menu> -->

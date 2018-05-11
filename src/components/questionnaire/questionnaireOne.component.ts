@@ -7,10 +7,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Toolbox, Rest } from 'bdt105toolbox/dist';
 import { QuestionnaireService } from '@appSharedServices/questionnaire.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
-import { ConfirmationComponent } from '../standard/confirmation.component';
 import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
-import { FloatingActionButton } from 'ng2-floating-action-menu';
-import { QuestionnaireComponent } from './questionnaire.component';
+import { QuestionnaireLocalComponent } from './questionnaireLocal.component';
 
 @Component({
     selector: 'questionnaireOne',
@@ -25,34 +23,7 @@ export class QuestionnaireOneComponent extends GenericComponent {
 
     public error: any;
 
-    @ViewChild('questionnaire') private questionnaireCV: QuestionnaireComponent;	
-
-    public flatingButtons: Array<FloatingActionButton> = [
-        {
-            iconClass: 'fa fa-plus',
-            label: this.translate("Add a new question"),
-            onClick: () => {
-                this.newQuestion();
-            }
-        },
-        {
-            iconClass: 'fa fa-search',
-            label: this.translate("Search"),
-            onClick: () => {
-                this.search();
-            }
-        }
-    ];
-
-    config = {
-        placment: 'br',
-        effect: 'mfb-slidein',
-        label: this.translate("More actions"),
-        iconClass: 'fa fa-caret-up',
-        activeIconClass: 'fa fa-caret-down',
-        toggle: 'click',
-        buttons: this.flatingButtons
-    };
+    @ViewChild('questionnaire') private questionnaireCV: QuestionnaireLocalComponent;	
 
     @Input() set questionnaire(value: any){
         this.__questionnaire = value;

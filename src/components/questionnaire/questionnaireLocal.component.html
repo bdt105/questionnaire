@@ -59,6 +59,6 @@
 <!-- Questions -->
 <div *ngIf="questionnaire && showQuestions">
     <br>
-    <questions [questions]="questionnaire.questions" [questionnaire]="questionnaire" 
-        [editable]="true" (change)="save()" [group]="questionnaire.showGroup" [favoriteOnly]="questionnaire.favoriteQuestions"></questions>
+    <questionsLocal [questions]="questionnaire.questions" [questionnaire]="questionnaire" 
+        [editable]="true" (change)="save()" [group]="questionnaire.showGroup" [favoriteOnly]="questionnaire.favoriteQuestions"></questionsLocal>
 </div>

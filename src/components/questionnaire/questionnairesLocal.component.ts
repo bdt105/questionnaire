@@ -6,7 +6,6 @@ import { QuestionnaireService } from '@appSharedServices/questionnaire.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ConfirmationComponent } from '../standard/confirmation.component';
 import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
-import { FloatingActionButton } from 'ng2-floating-action-menu';
 import { Router } from '@angular/router';
 import { QuestionnairesComponent } from '@appSharedComponents/questionnaires.component';
 

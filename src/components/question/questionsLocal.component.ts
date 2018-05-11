@@ -6,7 +6,7 @@ import { MiscellaneousService } from '@sharedServices/miscellaneous.service';
 import { QuestionsComponent } from '@appSharedComponents/questions.component';
 
 @Component({
-    selector: 'questions',
+    selector: 'questionsLocal',
     templateUrl: './questionsLocal.component.html',
     providers: []
 })

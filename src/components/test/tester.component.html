@@ -96,7 +96,7 @@
             <br>
             <span (click)="saveTest()" style="cursor: pointer"><i class="fa fa-floppy-o"></i> {{translate('Save this test')}}</span>
             <br>
-            <questionnaire *ngIf="test" [questionnaire]="test"></questionnaire>
+            <questionnaireLocal *ngIf="test" [questionnaire]="test"></questionnaireLocal>
         </div>
     </div>
 
